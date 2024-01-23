@@ -1,15 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
-import Signin from "./components/Signin";
-import Register from "./components/Register";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login"
+import Navbar from "./layouts/Header/Header"
 
 function App() {
   return (
-    <>   
-      <Header />
+    <>
+      <Navbar />
       <Routes>
-        <Route path="/login" element={<Signin />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );
