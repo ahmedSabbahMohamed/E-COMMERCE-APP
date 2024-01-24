@@ -8,7 +8,7 @@ import SubmitBtn from "./SubmitBtn"
 function LoginForm() {
 
   const validationSchema = Yup.object({
-    email: Yup.string().required("email is required"),
+    email: Yup.string().required("email is required").email("invalid email address"),
     password: Yup.string().required("password is required")
   })
 
