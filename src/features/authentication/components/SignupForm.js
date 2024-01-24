@@ -8,11 +8,29 @@ import SubmitBtn from "./SubmitBtn";
 function SignupForm() {
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("name is required"),
-    email: Yup.string().required("email is required").email("invalid email"),
-    password: Yup.string().required("password is required"),
-    dateOfBirth: Yup.string().required("date of birth is required")
-  })
+    name: Yup.string()
+      .required("name is required")
+      .min(2, "name is so short")
+      .max(30, "name is too long"),
+    email: Yup.string()
+      .required("email is required")
+      .email("invalid email")
+      .matches(
+        /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/,
+        "wront format"
+      ),
+    password: Yup.string()
+      .required("password is required")
+      .matches(
+        /^(?=.*[!@#$%^&*()_+,\-./:;<=>?@[\\\]^_`{|}~])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/
+      , "weak password"),
+    dateOfBirth: Yup.string()
+      .required("date of birth is required")
+      .matches(
+        /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}$/,
+        "wrong format"
+      ),
+  });
 
   const initialValues = {
     name: '',
