@@ -1,0 +1,11 @@
+.form-container {
+    min-height: calc(100vh - 70px);
+}
+
+.form-img {
+    background-image: url('../images/commerce.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 300px;
+}
