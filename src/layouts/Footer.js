@@ -6,10 +6,11 @@ import { FaFacebook } from "react-icons/fa6";
 import { FaTwitter, FaInstagramSquare, FaPhoneAlt } from "react-icons/fa";
 import data from "../data/navData.json"
 import { Link } from "react-router-dom";
+import "./assets/styles/Footer.css"
 
 function Footer() {
   return (
-    <footer className="bg-dark py-3">
+    <footer className="py-3">
       <Container>
         <Logo />
         <Row className="gap-5 gap-md-3 gap-lg-0">
@@ -42,7 +43,7 @@ function Footer() {
           <Col sm={12} md={5} lg={3}>
             <h4 className="text-white fw-bold px-0">NavLinks</h4>
             <nav>
-              <ul className="d-grid gap-2 px-0">
+              <ul className="d-grid gap-2 px-0 list-unstyled">
                 {data.mobileNavbar.map((category) => {
                   return (
                     <li key={category.id}>
@@ -62,7 +63,7 @@ function Footer() {
           <Col sm={12} md={5} lg={2}>
             <h4 className="text-white fw-bold px-0">Categories</h4>
             <nav>
-              <ul className="d-grid gap-2 px-0">
+              <ul className="d-grid gap-2 px-0 list-unstyled">
                 {data.categories.map((category) => {
                   return (
                     <li key={category.id}>
