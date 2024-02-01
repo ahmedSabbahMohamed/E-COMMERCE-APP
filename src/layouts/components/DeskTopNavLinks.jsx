@@ -14,7 +14,7 @@ function DeskTopNavLinks() {
           </li>
         );
       })}
-      navStyle={"d-none d-lg-flex rounded-pill p-1 desktop-nav-style"}
+      navStyle={"d-none d-md-flex rounded-pill p-1 desktop-nav-style"}
       ulStyles={"list-unstyled d-flex gap-1 align-items-center mb-0"}
     />
   );
