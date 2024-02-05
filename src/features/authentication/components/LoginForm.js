@@ -4,13 +4,14 @@ import * as Yup from "yup"
 import { Container, Row, Col } from "react-bootstrap"
 import Input from "../../../components/form/Input"
 import SubmitBtn from "./SubmitBtn"
+import "../assets/styles/FormContainer.css"
 
 function LoginForm() {
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email("invalid email address")
-      .required("email is required"),
+    .email("invalid email address")
+    .required("email is required"),
     password: Yup.string().required("password is required"),
   });
 
@@ -31,7 +32,7 @@ function LoginForm() {
                   initialValues={{}}
                   validationSchema={validationSchema}
                   validateOnBlur
-                  validateOnChange
+                  validateOnChange                  
                   onSubmit={handleSubmit}
                 >
                   {(formikProps) => (
@@ -41,17 +42,12 @@ function LoginForm() {
                         name={"email"}
                         type={"email"}
                         id={"email"}
-                        onChange={formikProps.handleChange}
-                        onBlur={formikProps.handleBlur}
                       />
-                      {/* {console.log(formikProps)} */}
                       <Input
                         label={"Password:"}
                         name={"password"}
                         type={"password"}
                         id={"password"}
-                        onChange={formikProps.handleChange}
-                        onBlur={formikProps.handleBlur}
                       />
 
                       <SubmitBtn btnTxt={"Login"} />

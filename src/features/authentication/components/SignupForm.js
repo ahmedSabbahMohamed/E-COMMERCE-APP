@@ -1,9 +1,12 @@
 import { Form, Formik } from "formik";
-import FormContainer from "./FormContainer"
 import * as Yup from "yup"
+import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom"
 import Input from "../../../components/form/Input";
 import SubmitBtn from "./SubmitBtn";
+import "../assets/styles/FormContainer.css"
+import { API } from "../../../api";
+import swal from "sweetalert";
 
 function SignupForm() {
 
@@ -32,55 +35,72 @@ function SignupForm() {
       ),
   });
 
-  const initialValues = {
-    name: '',
-    email: '',
-    password: '',
-    dateOfBirth: ''
-  }
-
   const handleSubmit = (values) => {
     console.log(values)
+    API.post("/api/user/register", values)
+      .then(() => swal("signup successfully"))
+      .catch((err) => swal(err?.response?.data?.message));
+    
+    
   }
 
   return (
-    <FormContainer
-      form={
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          <Form className="mx-auto d-grid gap-2">
-            <Input label={"Name:"} name={"name"} type={"text"} id={"name"} />
-            <Input
-              label={"Email:"}
-              name={"email"}
-              type={"email"}
-              id={"email"}
-            />
-            <Input
-              label={"Password:"}
-              name={"password"}
-              type={"password"}
-              id={"password"}
-            />
-            <Input
-              label={"Date of birth:"}
-              name={"dateOfBirth"}
-              type={"text"}
-              id={"dateOfBirth"}
-            />
+    <div className="form-container d-flex align-items-center justify-content-center">
+      <Container className="">
+        <Row className="rounded mx-2 shadow overflow-hidden">
+          <Col className="p-0 form-img" sm={12} md={4}></Col>
+          <Col className="py-4" sm={12} md={8}>
+            <Row>
+              <Col>
+                <Formik
+                  initialValues={{}}
+                  validationSchema={validationSchema}
+                  onSubmit={false}
+                >
+                  {(formikProps) => (
+                    <Form className="mx-auto d-grid gap-2">
+                      <Input
+                        label={"Name:"}
+                        name={"name"}
+                        type={"text"}
+                        id={"name"}
+                      />
+                      <Input
+                        label={"Email:"}
+                        name={"email"}
+                        type={"email"}
+                        id={"email"}
+                      />
+                      <Input
+                        label={"Password:"}
+                        name={"password"}
+                        type={"password"}
+                        id={"password"}
+                      />
+                      <Input
+                        label={"Date of birth:"}
+                        name={"date_of_birth"}
+                        type={"date"}
+                        id={"dateOfBirth"}
+                      />
 
-            <SubmitBtn btnTxt={"Signup"} />
-            <p className="text-center">
-              already have an account? <Link to={"/login"}>login</Link>
-            </p>
-          </Form>
-        </Formik>
-      }
-      authType={"Signup"}
-    />
+                      <SubmitBtn
+                        onClick={() => handleSubmit(formikProps.values)}
+                        btnTxt={"Signup"}
+                      />
+                      <p className="text-center">
+                        already have an account?{" "}
+                        <Link to={"/login"}>login</Link>
+                      </p>
+                    </Form>
+                  )}
+                </Formik>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 
