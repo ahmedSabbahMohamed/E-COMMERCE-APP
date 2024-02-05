@@ -1,23 +1,23 @@
 import { useFormikContext } from "formik";
 
 const Input = ({ label, name, ...props }) => {
-  const { errors, touched } = useFormikContext();
-
-  console.log(touched)
+  const { errors, setFieldValue } = useFormikContext();
 
   return (
     <div className="form-group">
 
       <label
         htmlFor={name}
-        className={`d-block ${errors[name] && touched[name] ? "text-danger" : ""}`}
+        className={`d-block ${errors[name] ? "text-danger" : ""}`}
       >
-        {errors[name] && touched[name] ? errors[name] : label}
+        {errors[name] ? errors[name] : label}
       </label>
 
       <input
         {...props}
-        className={`form-control mt-1 ${errors[name] && touched[name] ? "is-invalid" : ""}`}
+        onChange={(e) => setFieldValue(name, e.target.value)}
+        name={name}
+        className={`form-control mt-1 ${errors[name] ? "is-invalid" : ""}`}
       />
 
     </div>
