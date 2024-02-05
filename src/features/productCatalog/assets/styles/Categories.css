@@ -1,0 +1,21 @@
+.categories-container {
+    justify-content: center;
+}
+
+.category {
+    width: 260px;
+    height: 400px;
+    border-radius: 30px;
+    background-size: cover;
+    background-position: center;
+    transition: .3s ease-in-out;
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+@media (min-width: 992px) {
+    .categories-container {
+        justify-content: normal;
+    }
+}
