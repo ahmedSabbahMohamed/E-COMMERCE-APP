@@ -4,6 +4,7 @@ import ProductDetails from "../features/productCatalog/components/ProductDetails
 import Signup from "../pages/Signup"
 import Login from "../pages/Login"
 import CategoryProducts from "../features/productCatalog/components/CategoryProducts";
+import NotFoundPage from "../components/ui/NotFoundPage"
 
 function PublicRoutes() {
   return (
@@ -16,6 +17,7 @@ function PublicRoutes() {
         path="/categories/:categoryProducts"
         element={<CategoryProducts />}
       />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
