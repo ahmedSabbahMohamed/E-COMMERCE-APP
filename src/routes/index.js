@@ -2,7 +2,7 @@ import AdminRoutes from "./AdminRoutes";
 import PublicRoutes from "./PublicRoutes";
 import UserRoutes from "./UserRoutes";
 
-const role = localStorage.getItem("role").toString().replaceAll(`"`, "")
+const role = localStorage?.getItem("role")?.toString().replaceAll(`"`, "")
 
 let router;
 
