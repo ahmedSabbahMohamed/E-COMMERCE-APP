@@ -9,12 +9,16 @@ import { Link } from "react-router-dom";
 import "./assets/styles/Footer.css"
 
 function Footer() {
+
+  const user = localStorage.getItem("user")
+  console.log(user)
+
   return (
     <footer className="py-3">
       <Container>
         <Logo />
         <Row className="gap-5 gap-md-3 gap-lg-0">
-          <Col sm={12} md={5} className="d-grid gap-2">
+          <Col sm={12} md={6} className="d-grid gap-2">
             <div className="d-flex gap-2">
               <div className="icon text-white">
                 <IoLocation />
@@ -40,12 +44,11 @@ function Footer() {
             </div>
           </Col>
 
-          <Col sm={12} md={5} lg={3}>
+          <Col sm={12} md={4}>
             <h4 className="text-white fw-bold px-0">NavLinks</h4>
             <nav>
               <ul className="d-grid gap-2 px-0 list-unstyled">
-                {data.mobileNavbar.map((category) => {
-                  return (
+                {user? data.privateMobileNavbar.map((category) => (
                     <li key={category.id}>
                       <Link
                         className="text-light text-decoration-none px-0"
@@ -54,18 +57,7 @@ function Footer() {
                         {category.link}
                       </Link>
                     </li>
-                  );
-                })}
-              </ul>
-            </nav>
-          </Col>
-
-          <Col sm={12} md={5} lg={2}>
-            <h4 className="text-white fw-bold px-0">Categories</h4>
-            <nav>
-              <ul className="d-grid gap-2 px-0 list-unstyled">
-                {data.categories.map((category) => {
-                  return (
+                )) : data.publicMobileNavbar.map((category) => (
                     <li key={category.id}>
                       <Link
                         className="text-light text-decoration-none px-0"
@@ -73,14 +65,12 @@ function Footer() {
                       >
                         {category.link}
                       </Link>
-                    </li>
-                  );
-                })}
+                    </li>))}
               </ul>
             </nav>
           </Col>
 
-          <Col sm={12} md={5} lg={2}>
+          <Col sm={12} md={1}>
             <div className="d-flex gap-3 text-white fs-3">
               <Link className="text-light" to={"/"}>
                 <FaFacebook />
@@ -94,7 +84,9 @@ function Footer() {
             </div>
           </Col>
         </Row>
-        <pre className="text-light text-start text-md-end mt-4 mt-lg-0">@copy rights. All rights reserved.</pre>
+        <pre className="text-light text-start text-md-end mt-4 mt-lg-0">
+          @copy rights. All rights reserved.
+        </pre>
       </Container>
     </footer>
   );

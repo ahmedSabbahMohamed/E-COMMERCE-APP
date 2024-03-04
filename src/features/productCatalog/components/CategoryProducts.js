@@ -4,7 +4,7 @@ function CategoryProducts() {
     const { categoryProducts } = useParams()
 
   return (
-    <div className="container">{categoryProducts}</div>
+    <div className="container min-vh-100">{categoryProducts}</div>
   )
 }
 

@@ -1,0 +1,24 @@
+.sidebar a {
+    transition: .3s ease;
+    color: #198754;
+}
+
+.sidebar aside ul li .active {
+    background-color: gray;
+    color: white;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        background-color: #73ccac;
+        height: fit-content;
+        a {
+            color: white;
+            &:hover {
+                background-color: transparent;
+                padding: 0;
+                color: blueviolet;
+            }
+        }
+    }
+}

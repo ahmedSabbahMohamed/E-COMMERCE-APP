@@ -1,7 +1,30 @@
 import axios from "axios"
 
-const BASE_API = `https://1ed6-154-183-32-217.ngrok-free.app`;
+const BASE_API = `https://e-commerce-sand-eight-18.vercel.app/api/api`;
+
+const getToken = () => {
+  const token = localStorage.getItem("token");
+
+  return token ? `Bearer ${token}` : null;
+};
+
+const getHeaders = () => {
+  const token = getToken();
+
+  if (token) {
+    return {
+      Authorization: token,
+
+      "Content-Type": "multipart/form-data",
+    };
+  } else {
+    return {
+      "Content-Type": "multipart/form-data",
+    };
+  }
+};
 
 export const API = axios.create({
     baseURL: BASE_API,
+    headers: getHeaders()
 })

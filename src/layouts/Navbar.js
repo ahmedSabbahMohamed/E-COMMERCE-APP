@@ -10,11 +10,12 @@ import { IoCartOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
 
 function Navbar() {
+  const user = localStorage.getItem("user")
 
     const iconStyle = "text-secondary fs-1 d-inline-block bg-white border-0";
 
   return (
-    <header className="">
+    <header className="shadow-sm">
       <Container>
         <div className="d-flex align-items-center justify-content-between gap-2">
           <div className="d-flex gap-3 align-items-center">
@@ -32,12 +33,14 @@ function Navbar() {
                   <IoCartOutline />
                   {/* <span className="d-inline-block position-absolute btn btn-danger top-0 end-0">2</span> */}
                 </Link>
-                <Link
-                  to={"/login"}
-                  className={`${iconStyle} d-none d-lg-block`}
-                >
-                  <AiOutlineUser />
-                </Link>
+                {!user && (
+                  <Link
+                    to={"/login"}
+                    className={`${iconStyle} d-none d-lg-block`}
+                  >
+                    <AiOutlineUser />
+                  </Link>
+                )}
                 <MobileNavLinks />
               </div>
             </div>

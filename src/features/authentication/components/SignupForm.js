@@ -1,9 +1,9 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup"
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Input from "../../../components/form/Input";
-import SubmitBtn from "./SubmitBtn";
+import SubmitBtn from "../../../components/form/SubmitBtn";
 import "../assets/styles/FormContainer.css"
 import { API } from "../../../api";
 import swal from "sweetalert";
@@ -35,10 +35,16 @@ function SignupForm() {
       ),
   });
 
+  const navigate = useNavigate()
+
   const handleSubmit = (values) => {
-    console.log(values)
-    API.post("/api/user/register", values)
-      .then(() => swal("signup successfully"))
+    API.post("/user/register", values)
+      .then(() => {
+        swal("signup successfully").then(() => {
+          navigate("/login")
+        })
+
+      })
       .catch((err) => swal(err?.response?.data?.message));
     
     

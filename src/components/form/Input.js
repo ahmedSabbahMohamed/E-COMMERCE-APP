@@ -1,27 +1,33 @@
 import { useFormikContext } from "formik";
 
-const Input = ({ label, name, ...props }) => {
-  const { errors, setFieldValue } = useFormikContext();
+const Input = ({ label, name, type= "text", ...props }) => {
+
+  const { setFieldValue, touched, errors, handleBlur } = useFormikContext()
+
+  const handleChange = (e) => {
+    setFieldValue(name, e.target.value);
+  };
+
+  const hasError = touched[name] && errors[name];
 
   return (
-    <div className="form-group">
-
+    <div>
       <label
         htmlFor={name}
-        className={`d-block ${errors[name] ? "text-danger" : ""}`}
+        className={`d-block ${hasError ? "text-danger" : ""}`}
       >
-        {errors[name] ? errors[name] : label}
+        {hasError ? errors[name] : label}
       </label>
-
       <input
         {...props}
-        onChange={(e) => setFieldValue(name, e.target.value)}
         name={name}
-        className={`form-control mt-1 ${errors[name] ? "is-invalid" : ""}`}
+        type={type}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`form-control mt-1 ${hasError ? "is-invalid" : ""}`}
       />
-
     </div>
   );
-}
+};
 
-export default Input
+export default Input;

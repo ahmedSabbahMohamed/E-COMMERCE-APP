@@ -5,7 +5,7 @@ import { IoCartOutline } from "react-icons/io5";
 
 function ProductDetails() {
   return (
-    <Container className="product-details my-5">
+    <Container className="product-details vh-100 d-flex align-items-center justify-content-center">
       <Row className="m-0 gap-4">
         <Col
           sm={12}
@@ -29,9 +29,7 @@ function ProductDetails() {
             <Col>
               <Count />
             </Col>
-            <Col
-              className="d-flex gap-2 align-items-center justify-content-center btn btn-success fw-bold"
-            >
+            <Col className="d-flex gap-2 align-items-center justify-content-center btn btn-success fw-bold">
               <IoCartOutline />
               <div>Add to cart</div>
             </Col>
