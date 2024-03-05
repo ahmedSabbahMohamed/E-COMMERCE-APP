@@ -4,11 +4,17 @@ import SubmitBtn from "../../../../components/form/SubmitBtn"
 import { addCategorySchema } from "../../../../actions/validationSchema"
 import { toFormData } from "axios";
 import ImageHandler from "../../../../components/form/ImageHandler";
+import { API } from "../../../../api";
+import swal from "sweetalert";
 
 function AddCategoryForm() {
 
   const handleSubmit = (values) => {
-    console.log(toFormData(values))
+    const data = toFormData(values);
+    API.post("/admin/category", data)
+       .then((res) => console.log(res))
+       .catch(err => console.log(err))
+    console.log(data)
   }
 
   return (
@@ -24,7 +30,7 @@ function AddCategoryForm() {
         >
           {(formikProps) => (
             <Form className="d-grid gap-3 my-4">
-              <Input label={"Category"} name={"category"} />
+              <Input label={"Category"} name={"name"} />
               <ImageHandler label={"image"} name={'picture'} />
               <SubmitBtn onClick={handleSubmit(formikProps.values)} btnTxt={"Add Category"} />
             </Form>

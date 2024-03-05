@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Form, Formik } from "formik"
 import { Link, useNavigate } from "react-router-dom"
 import * as Yup from "yup"
@@ -9,6 +10,7 @@ import swal from "sweetalert"
 import { API } from "../../../api"
 
 function LoginForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -19,25 +21,27 @@ function LoginForm() {
 
     const navigate = useNavigate();
 
-  const handleSubmit = (values) => {
-    API.post("/user/login", values)
+    const handleSubmit = (values) => {
+      setIsSubmitting(true)
+      API.post("/user/login", values)
       .then((res) => {
-        localStorage.setItem("token", res?.data?.access_token);
-        localStorage.setItem("user", JSON.stringify(res?.data?.user));
-        localStorage.setItem("role", JSON.stringify(res?.data?.user?.user_type));
-        swal("signedin successfully").then(() => {
-          if (res?.data?.user?.user_type === "admin") {
-            navigate("/admin")
-          } else {
-            navigate("/")
-          }
-        });
-      })
-      .catch((err) => swal(err?.response?.data.error || "error"));
+          localStorage.setItem("token", res?.data?.access_token);
+          localStorage.setItem("user", JSON.stringify(res?.data?.user));
+          localStorage.setItem(
+            "role",
+            JSON.stringify(res?.data?.user?.user_type)
+          );
+          swal("signedin successfully").then(() => {
+            navigate("/");
+          });
+        })
+        .catch((err) => {
+          swal(err?.response?.data.error || "error");
+        }).finally(() => setIsSubmitting(false))
   };
 
   return (
-    <div className="form-container d-flex align-items-center justify-content-center">
+    <div className="form-container my-4 d-flex align-items-center justify-content-center">
       <Container className="">
         <Row className="rounded mx-2 shadow overflow-hidden">
           <Col className="p-0 form-img" sm={12} md={4}></Col>
@@ -68,7 +72,7 @@ function LoginForm() {
                           id={"password"}
                         />
 
-                        <SubmitBtn disabled={formikProps.isSubmitting} btnTxt={"Login"} />
+                        <SubmitBtn disabled={isSubmitting} id={"login"} btnTxt={"Login"} />
                         <p className="text-center">
                           don't have an account?{" "}
                           <Link to={"/signup"}>Signup</Link>

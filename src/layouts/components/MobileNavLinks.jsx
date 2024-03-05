@@ -8,6 +8,7 @@ import { showMobileNav, closeMobileNav } from "../../actions/events";
 
 function MobileNavLinks() {
   const user = JSON.parse(localStorage.getItem("user"))
+  console.log(user)
 
   return (
     <div className="d-lg-none">

@@ -7,8 +7,11 @@ import SubmitBtn from "../../../components/form/SubmitBtn";
 import "../assets/styles/FormContainer.css"
 import { API } from "../../../api";
 import swal from "sweetalert";
+import { useState } from "react";
 
 function SignupForm() {
+
+  const [isSubmitting, setisSubmitting] = useState(false)
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -38,14 +41,15 @@ function SignupForm() {
   const navigate = useNavigate()
 
   const handleSubmit = (values) => {
+    setisSubmitting(true)
     API.post("/user/register", values)
       .then(() => {
         swal("signup successfully").then(() => {
           navigate("/login")
         })
-
       })
-      .catch((err) => swal(err?.response?.data?.message));
+      .catch((err) => swal(err?.response?.data?.message))
+      .finally(() => setisSubmitting(false))
     
     
   }
@@ -91,6 +95,7 @@ function SignupForm() {
                       />
 
                       <SubmitBtn
+                        disabled={isSubmitting}
                         onClick={() => handleSubmit(formikProps.values)}
                         btnTxt={"Signup"}
                       />
