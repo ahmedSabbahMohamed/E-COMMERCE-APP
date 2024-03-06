@@ -9,9 +9,7 @@ import { Link } from "react-router-dom";
 import "./assets/styles/Footer.css"
 
 function Footer() {
-
   const user = localStorage.getItem("user")
-  console.log(user)
 
   return (
     <footer className="py-3">

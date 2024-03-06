@@ -1,37 +1,26 @@
-// import { Route, Routes } from "react-router-dom";
-// import Signup from "./pages/Signup";
-// import Login from "./pages/Login"
 import Navbar from "./layouts/Navbar";
 import Footer from "./layouts/Footer";
-// import CategoryProducts from "./features/productCatalog/components/CategoryProducts";
-// import HomePage from "./pages/HomePage";
-// import ProductDetails from "./features/productCatalog/components/ProductDetails";
-// import Admin from "./pages/Admin";
-import { router } from "./routes";
+import { useLocation } from "react-router-dom";
+import AppRouter from "./routes/AppRoutes";
+import { useEffect, useState } from "react";
 
 function App() {
-  // const role = JSON.parse(localStorage.getItem("role"))
+  const location = useLocation()
+  const isAuthPage = location.pathname
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const userLoggedIn = localStorage.getItem("token")
+    setLoggedIn(userLoggedIn);
+  }, [isAuthPage]);
 
   return (
-    <div className="grid">
-      <Navbar />
-      {/* <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/product" element={<ProductDetails />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/categories/:categoryProducts"
-          element={<CategoryProducts />}
-        />
-        {role === "admin"? 
-          <Route path="/admin/*" element={<Admin />} /> : null
-        }
-      </Routes> */}
-      {/* {role === "admin"? <AdminRoutes /> : <PublicRoutes />} */}
-      { router }
-      <Footer />
-    </div>
+    <>
+      {isAuthPage === "/login" || isAuthPage === "/signup" ? null : <Navbar />}
+      <AppRouter loggedIn={loggedIn} />
+      {isAuthPage === "/login" || isAuthPage === "/signup" ? null : <Footer />}
+    </>
   );
 }
 

@@ -12,8 +12,8 @@ function AddCategoryForm() {
   const handleSubmit = (values) => {
     const data = toFormData(values);
     API.post("/admin/category", data)
-       .then((res) => console.log(res))
-       .catch(err => console.log(err))
+       .then((res) => swal(res?.data?.message))
+       .catch(err => swal(err || "error"))
     console.log(data)
   }
 

@@ -6,19 +6,21 @@ import Login from "../pages/Login"
 import CategoryProducts from "../features/productCatalog/components/CategoryProducts";
 import NotFoundPage from "../components/ui/NotFoundPage"
 
-function PublicRoutes() {
+function PublicRoutes() { 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/product" element={<ProductDetails />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/categories/:categoryProducts"
-        element={<CategoryProducts />}
-      />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/product" element={<ProductDetails />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/categories/:categoryProducts"
+          element={<CategoryProducts />}
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 }
 
