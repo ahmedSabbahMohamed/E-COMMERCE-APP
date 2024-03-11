@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Form, Formik } from "formik"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import * as Yup from "yup"
 import { Container, Row, Col } from "react-bootstrap"
 import Input from "../../../components/form/Input"
@@ -19,8 +19,6 @@ function LoginForm() {
     password: Yup.string().required("password is required"),
   });
 
-    const navigate = useNavigate();
-
     const handleSubmit = (values) => {
       setIsSubmitting(true)
       API.post("/user/login", values)
@@ -32,7 +30,7 @@ function LoginForm() {
             JSON.stringify(res?.data?.user?.user_type)
           );
           swal("signedin successfully").then(() => {
-            navigate("/");
+            window.location.pathname = "/"
           });
         })
         .catch((err) => {

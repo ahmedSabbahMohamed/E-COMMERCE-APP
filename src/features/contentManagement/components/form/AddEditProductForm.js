@@ -4,19 +4,17 @@ import ImageHandler from "../../../../components/form/ImageHandler"
 import SubmitBtn from "../../../../components/form/SubmitBtn"
 import { addProductSchema } from "../../../../actions/validationSchema"
 import { useParams } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { API } from "../../../../api"
 
 
 function AddEditProductForm({btnTxt}) {
     const {productId} = useParams()
 
-    const categories = [
-    { id: 1, type: "electronics", desc: "electronic devices" },
-    { id: 2, type: "books", desc: "books ..........." },
-    { id: 3, type: "fashion", desc: "clothes ........." },
-    { id: 4, type: "furniture", desc: "furniture ......." },
-    { id: 5, type: "handbag", desc: "handbag ......." },
-    { id: 6, type: "sneakers", desc: "sneakers ........." },
-  ];
+    const { data } = useQuery({
+      queryKey: 'category',
+      queryFn: () => API.get("/admin/categories")
+    })
 
   return (
     <>
@@ -50,9 +48,9 @@ function AddEditProductForm({btnTxt}) {
                   type={"text"}
                 />
                 <select className="form-select select">
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.type}>
-                      {category.type}
+                  {data?.data?.data?.map((category) => (
+                    <option key={category?.id} value={category?.name}>
+                      {category?.name}
                     </option>
                   ))}
                 </select>

@@ -1,8 +1,9 @@
 import { useFormikContext } from "formik";
+import { get } from "lodash";
 
 const Input = ({ label, name, type= "text", ...props }) => {
 
-  const { setFieldValue, touched, errors, handleBlur } = useFormikContext()
+  const { setFieldValue, touched, errors, handleBlur, values } = useFormikContext()
 
   const handleChange = (e) => {
     setFieldValue(name, e.target.value);
@@ -20,6 +21,7 @@ const Input = ({ label, name, type= "text", ...props }) => {
       </label>
       <input
         {...props}
+        value={get(values, name, undefined)}
         name={name}
         type={type}
         onChange={handleChange}

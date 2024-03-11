@@ -1,14 +1,25 @@
-import { useFormikContext } from 'formik';
-import React from 'react'
+import { useFormikContext } from "formik";
 
-function ImageHandler( { name, label }) {
+function ImageHandler({ name, label }) {
+  const { values, setFieldValue, touched, errors, handleBlur } =
+    useFormikContext();
+  const handleChange = (e) => {
+    setFieldValue(name, e.target.files[0]);
+  };
+  const hasError = touched[name] && errors[name];
 
-    const { setFieldValue, touched, errors, handleBlur } = useFormikContext();
-    const handleChange = (e) => {
-      console.log(e.target.files)
-        setFieldValue(name, e.target.files[0])
-    }
-    const hasError = touched[name] && errors[name];
+  // console.log("values:", values);
+  // console.log("values[name]:", values && values[name]);
+
+  const file = values && values[name] ? values[name] : null;
+
+  // console.log("file:", file);
+
+  let imageUrl = null;
+  if (file instanceof File) {
+    imageUrl = URL.createObjectURL(file);
+    // console.log("imageUrl:", imageUrl);
+  }
 
   return (
     <div>
@@ -18,16 +29,44 @@ function ImageHandler( { name, label }) {
       >
         {hasError ? errors[name] : label}
       </label>
+      <label
+        htmlFor={name}
+        style={{ display: "inline-block", cursor: "pointer" }}
+      >
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="uploaded image"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              borderRadius: "50%",
+              marginTop: "30px",
+            }}
+          />
+        ) : (
+          <img
+            src={values?.picture}
+            alt="uploaded image"
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginTop: "30px",
+            }}
+          />
+        )}
+      </label>
       <input
         type="file"
-        multiple
+        id={name}
         name={name}
         onChange={handleChange}
         onBlur={handleBlur}
-        className={`form-control mt-1 ${hasError ? "is-invalid" : ""}`}
+        style={{ display: "none" }}
       />
     </div>
   );
 }
 
-export default ImageHandler
+export default ImageHandler;

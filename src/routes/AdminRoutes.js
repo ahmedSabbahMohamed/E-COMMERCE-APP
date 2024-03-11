@@ -18,6 +18,7 @@ function AdminRoutes() {
         />
         <Route path="/categories" element={<Categories />} />
         <Route path="/add-category" element={<AddCategoryForm />} />
+        <Route path="/edit-category/:categoryId" element={<AddCategoryForm />} />
       </Route>
         <Route path="*" element={<NotFoundPage />} />
     </Routes>
