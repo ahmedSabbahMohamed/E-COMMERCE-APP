@@ -7,7 +7,7 @@ function AdminRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Admin />}>
-        <Route index element={<Products />} />
+        <Route index element={<Categories />} />
         <Route
           path="/add-product"
           element={<AddEditProductForm btnTxt={"Add Product"} />}
@@ -16,7 +16,7 @@ function AdminRoutes() {
           path="/edit_product/:productId"
           element={<AddEditProductForm btnTxt={"Edit Product"} />}
         />
-        <Route path="/categories" element={<Categories />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/add-category" element={<AddCategoryForm />} />
         <Route path="/edit-category/:categoryId" element={<AddCategoryForm />} />
       </Route>

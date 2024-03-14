@@ -33,11 +33,11 @@ function AddCategoryForm() {
   }
 
     const handleEdit = (formikProps) => {
-      console.log("after submit", formikProps.values)
       const data = toFormData(formikProps.values);
       API.post(`/admin/category/${categoryId}`, data)
       .then((res) => {
           swal(res?.data?.message);
+          window.location.pathname = "/categories"
         })
         .catch((err) => swal(err?.response?.data?.message || "error"))
     };
@@ -59,7 +59,6 @@ function AddCategoryForm() {
             enableReinitialize
           >
             {(formikProps) => {
-              console.log("before submit", formikProps.values)
               return (
                 <Form className="d-grid gap-3 my-4">
                   <Input label={"Category"} name={"name"} />

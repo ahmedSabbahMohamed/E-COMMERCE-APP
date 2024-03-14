@@ -28,3 +28,9 @@ export const toFormData = (jsonData) => {
 
   return formData;
 }
+
+export const logOut = () => {
+  localStorage.clear()
+  window.location.pathname = "/"
+  return
+}

@@ -5,6 +5,7 @@ import { IoIosClose } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import links from "../../data/navData.json";
 import { showMobileNav, closeMobileNav } from "../../actions/events";
+import Logout from "../../components/ui/Logout"
 
 function MobileNavLinks() {
   const user = JSON.parse(localStorage.getItem("user"))
@@ -37,7 +38,7 @@ function MobileNavLinks() {
                     <IoMdPerson />
                   </div>
                   <Link className="btn text-light text-start d-block text-decoration-none p-2">
-                    {user? user.name : "Profile"}
+                    {user ? user.name : "Profile"}
                   </Link>
                 </div>
               </div>
@@ -66,6 +67,11 @@ function MobileNavLinks() {
                       </li>
                     );
                   })}
+              {user && (
+                <div className="p-2">
+                  <Logout />
+                </div>
+              )}
             </>
           }
           navStyle={"d-grid"}

@@ -4,9 +4,9 @@ import "../../assets/styles/Sidebar.css";
 
 function Sidebar() {
   const adminSidebarLinks = [
-    { id: 1, href: "/categories", text: "All categories" },
+    { id: 1, href: "/", text: "All categories" },
     { id: 2, href: "/add-category", text: "Add new category" },
-    { id: 3, href: "/", text: "All products" },
+    { id: 3, href: "/products", text: "All products" },
     { id: 4, href: "/add-product", text: "Add new product" },
   ];
 

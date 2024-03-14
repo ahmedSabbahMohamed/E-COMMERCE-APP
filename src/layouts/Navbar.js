@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
+import Logout from "../components/ui/Logout";
 
 function Navbar() {
   const user = localStorage.getItem("user")
@@ -33,13 +34,17 @@ function Navbar() {
                   <IoCartOutline />
                   {/* <span className="d-inline-block position-absolute btn btn-danger top-0 end-0">2</span> */}
                 </Link>
-                {!user && (
+                {!user ? (
                   <Link
                     to={"/login"}
                     className={`${iconStyle} d-none d-lg-block`}
                   >
                     <AiOutlineUser />
                   </Link>
+                ) : (
+                  <div className="d-none d-lg-block">
+                    <Logout />
+                  </div>
                 )}
                 <MobileNavLinks />
               </div>
