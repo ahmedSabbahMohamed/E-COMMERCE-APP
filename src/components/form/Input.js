@@ -1,7 +1,9 @@
 import { useFormikContext } from "formik";
 import { get } from "lodash";
+import { useLocation } from "react-router-dom";
 
 const Input = ({ label, name, type= "text", ...props }) => {
+  const location = useLocation()
 
   const { setFieldValue, touched, errors, handleBlur, values } = useFormikContext()
 
@@ -21,7 +23,11 @@ const Input = ({ label, name, type= "text", ...props }) => {
       </label>
       <input
         {...props}
-        value={get(values, name, undefined)}
+        value={
+          location.pathname === "/add-category"
+            ? ""
+            : get(values, name, undefined)
+        }
         name={name}
         type={type}
         onChange={handleChange}

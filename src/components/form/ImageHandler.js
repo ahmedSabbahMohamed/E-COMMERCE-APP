@@ -1,10 +1,13 @@
 import { useFormikContext } from "formik";
 import { IoMdCloudUpload } from "react-icons/io";
 import "../../assets/styles/ImageHandler.css";
+import { useLocation } from "react-router-dom";
 
 function ImageHandler({ name, label }) {
-  const { values, setFieldValue, touched, errors, handleBlur } =
-    useFormikContext();
+  const location = useLocation()
+  
+  const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext();
+  // location.pathname === "/add-category"? console.log(values) : ""
   const handleChange = (e) => {
     setFieldValue(name, e.target.files[0]);
   };
@@ -40,17 +43,15 @@ function ImageHandler({ name, label }) {
         }}
       >
         {imageUrl ? (
-          <div>
-            <img
-              src={imageUrl}
-              alt="uploaded image"
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            />
-          </div>
-        ) : values?.picture ? (
+          <img
+            src={imageUrl}
+            alt="uploaded image"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        ) : values?.picture && location.pathname !== "/add-category" ? (
           <img
             src={values?.picture}
             alt="uploaded image"

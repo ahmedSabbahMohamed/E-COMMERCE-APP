@@ -8,12 +8,13 @@ import { API } from "../../../../api";
 import swal from "sweetalert";
 import { Case, Default, Switch } from "react-if";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 function AddCategoryForm() {
   const [loading, setLoading] = useState(false)
   const {categoryId} = useParams()
+  const location = useLocation()
 
   const {data} = useQuery({
     queryFn: ["category id"],

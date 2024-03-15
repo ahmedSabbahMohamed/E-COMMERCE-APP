@@ -44,7 +44,7 @@ function Categories() {
   return (
     <>
       <h2 className="text-success fw-bold h2 p-4">All categories</h2>
-      <Table bordered responsive className="m-0 p-0">
+      <Table bordered responsive className="text-center">
         <thead>
           <tr>
             <th>ID</th>
