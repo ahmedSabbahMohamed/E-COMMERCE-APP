@@ -1,13 +1,14 @@
 import { useFormikContext } from "formik";
+import { useLocation } from "react-router-dom";
+import { Case, Default, Switch } from "react-if";
 import { IoMdCloudUpload } from "react-icons/io";
 import "../../assets/styles/ImageHandler.css";
-import { useLocation } from "react-router-dom";
 
 function ImageHandler({ name, label }) {
   const location = useLocation()
   
   const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext();
-  // location.pathname === "/add-category"? console.log(values) : ""
+
   const handleChange = (e) => {
     setFieldValue(name, e.target.files[0]);
   };
@@ -42,29 +43,35 @@ function ImageHandler({ name, label }) {
           height: "100px",
         }}
       >
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="uploaded image"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        ) : values?.picture && location.pathname !== "/add-category" ? (
-          <img
-            src={values?.picture}
-            alt="uploaded image"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        ) : (
-          <div className="w-100 h-100 fs-1 d-flex justify-content-center align-items-center">
-            <IoMdCloudUpload />
-          </div>
-        )}
+        <Switch>
+          <Default>
+            <div className="w-100 h-100 fs-1 d-flex justify-content-center align-items-center">
+              <IoMdCloudUpload />
+            </div>
+          </Default>
+          <Case condition={imageUrl}>
+            <img
+              src={imageUrl}
+              alt="uploaded image"
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </Case>
+          <Case
+            condition={values?.picture && location.pathname !== "/add-category"}
+          >
+            <img
+              src={values?.picture}
+              alt="uploaded image"
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </Case>
+        </Switch>
       </label>
       {imageUrl ? (
         <button
