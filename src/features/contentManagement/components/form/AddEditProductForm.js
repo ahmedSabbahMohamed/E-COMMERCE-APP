@@ -28,43 +28,43 @@ function AddEditProductForm() {
         });
 
       const handleSubmit = (values) => {
-        // const data = toFormData(formikProps.values);
-        // console.log(data)
-        // API.post("/admin/product", data)
-        //   .then((res) => {
-        //     swal(res?.data?.message);
-        //     formikProps.setValues({});
-        //     setLoading(true);
-        //   })
-        //   .catch((err) => swal(err?.response?.data?.message || "error"))
-        //   .finally(() =>
-        //     setTimeout(() => {
-        //       setLoading(false);
-        //     }, 300)
-        //   );
-
-        const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("description", values.description);
-        formData.append("price", values.price);
-        formData.append("category_id", values.category_id);
-        values.images.forEach((img, index) => {
-          formData.append(`picture[${index}]`, img);
-        });
-        formData.append("picture", values.picture)
-
-        console.log(formData)
-        console.log(values)
-        API.post("/admin/product", formData)
+        const data = toFormData(values);
+        console.log(data)
+        API.post("/admin/product", data)
           .then((res) => {
             swal(res?.data?.message);
-            values = {};
+            values = {}
             setLoading(true);
           })
-          .catch(err => swal(err?.response?.data?.message || "error"))
-          .finally(() => {
-            setTimeout(() => { setLoading(false) }, 300)
-          })
+          .catch((err) => swal(err?.response?.data?.message || "error"))
+          .finally(() =>
+            setTimeout(() => {
+              setLoading(false);
+            }, 300)
+          );
+
+        // const formData = new FormData();
+        // formData.append("name", values.name);
+        // formData.append("description", values.description);
+        // formData.append("price", values.price);
+        // formData.append("category_id", values.category_id);
+        // values.images.forEach((img, index) => {
+        //   formData.append(`picture[${index}]`, img);
+        // });
+        // formData.append("picture", values.picture)
+
+        // console.log(formData)
+        // console.log(values)
+        // API.post("/admin/product", formData)
+        //   .then((res) => {
+        //     swal(res?.data?.message);
+        //     values = {};
+        //     setLoading(true);
+        //   })
+        //   .catch(err => swal(err?.response?.data?.message || "error"))
+        //   .finally(() => {
+        //     setTimeout(() => { setLoading(false) }, 300)
+        //   })
       };
 
       const handleEdit = (formikProps) => {
