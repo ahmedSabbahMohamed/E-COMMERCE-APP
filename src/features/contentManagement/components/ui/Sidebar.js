@@ -1,5 +1,6 @@
+import React from "react";
 import { Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../../assets/styles/Sidebar.css";
 
 function Sidebar() {
@@ -12,29 +13,26 @@ function Sidebar() {
 
   const admin = JSON.parse(localStorage.getItem("user"));
 
-  const handleClick = (e) => {
-    let route = document.querySelectorAll(".sidebar aside ul li a")
-    route.forEach(ele => {
-      ele.classList.remove("active")
-    })
-    e.currentTarget.classList.add("active")
-  }
+  const location = useLocation();
 
   return (
-    <Col sm={12} md={3} className="shadow sidebar p-4">
+    <Col sm={12} md={3} className="shadow sidebar p-0">
       <aside>
-        <p className="text-secondary fw-bold d-none d-md-block">
-          Welcome,
-          <br />
-          {admin.name}
-        </p>
-        <ul className="d-flex flex-row flex-wrap flex-md-column gap-3 list-unstyled mb-0">
+        <div className="sidebar-header">
+          <p className="text-secondary fw-bold ps-3 py-3 fs-5 border-bottom d-none d-sm-block">
+            Welcome,
+            <br />
+            {admin.name}
+          </p>
+        </div>
+        <ul className="d-flex gap-3 flex-md-column list-unstyled sidebar-links">
           {adminSidebarLinks.map((link) => (
-            <li key={link.id}>
+            <li className="nav-item" key={link.id}>
               <Link
-                onClick={handleClick}
                 to={link.href}
-                className="text-decoration-none fw-bold p-2 rounded"
+                className={`nav-link p-2 text-decoration-none sidebar-link ${
+                  location.pathname === link.href ? "active" : ""
+                }`}
               >
                 {link.text}
               </Link>

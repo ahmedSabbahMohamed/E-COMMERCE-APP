@@ -17,17 +17,13 @@ const Input = ({ label, name, type= "text", ...props }) => {
     <div>
       <label
         htmlFor={name}
-        className={`d-block ${hasError ? "text-danger" : ""}`}
+        className={`d-block text-black-50 ${hasError ? "text-danger" : ""}`}
       >
         {hasError ? errors[name] : label}
       </label>
       <input
         {...props}
-        value={
-          location.pathname === "/add-category"
-            ? ""
-            : get(values, name, undefined)
-        }
+        value={get(values, name, undefined)}
         name={name}
         type={type}
         onChange={handleChange}

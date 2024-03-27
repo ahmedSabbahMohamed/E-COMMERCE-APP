@@ -1,24 +1,32 @@
-import axios from 'axios'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { API } from "../../../../api"
+import { IoEye } from "react-icons/io5";
+import swal from 'sweetalert'
+import ProductModal from './ProductModal'
+import ProductCard from '../../../../components/ui/ProductCard'
 
 function Products() {
+  // a;sdlfaskd
 
-  const [products, setProducts] = useState([])
   const [productId, setProductId] = useState('')
-  useEffect(() => {
-    axios.get("https://fakestoreapi.com/products")
-      .then((res) => setProducts(res))
-      .catch(err => console.log(err))
-  }, [])
+  const [modalShow, setModalShow] = React.useState(false);
+  const [productData, setProductData] = useState({})
+  const query = useQueryClient()
+
+      const { data: products } = useQuery({
+        queryKey: ["prodcut id"],
+        queryFn: () => API.get("/admin/products"),
+      });
 
   let deleteProductDialog = document.getElementById("delete-dialog");
 
-  const deleteProduct = (e) => {
+  const deleteProduct = (id) => {
     deleteProductDialog.classList.remove("d-none")
     deleteProductDialog.classList.add("d-flex");
-    setProductId(e.currentTarget.getAttribute("id"));
+    setProductId(id);
   }
 
   const cancelDeleteProduct = () => {
@@ -26,38 +34,70 @@ function Products() {
     deleteProductDialog.classList.add("d-none")
   }
 
-   const confirmDeleteProduct = () => {
-    deleteProductDialog.classList.remove("d-flex");
-    deleteProductDialog.classList.add("d-none")
-   }
+  const confirmDeleteProduct = () => {
+    API.delete(`/admin/product/${productId}`)
+      .then((res) => {
+        swal(res?.data?.message);
+        query.invalidateQueries("prodcut id");
+      })
+      .catch((err) => swal(err?.response?.data?.message || "error"))
+      .finally(() => {
+        deleteProductDialog.classList.remove("d-flex");
+        deleteProductDialog.classList.add("d-none");
+      });
+  };
+
+  const viewProduct = (id) => {
+    setProductId(id)
+    setModalShow(true);
+  }
+
+  useEffect(() => {
+    {productId &&
+      API.get(`/admin/product/${productId}`).then(res => setProductData(res?.data?.data))}
+  }, [productId])
 
   return (
     <>
       <h2 className="text-success fw-bold h2 p-4">Products page</h2>
-      <Table striped bordered responsive className="m-0 p-0">
-        <thead>
+      <Table bordered responsive hover className="m-0 p-0">
+        <thead className="table-dark text-center">
           <tr>
             <th>ID</th>
-            <th>Tittle</th>
+            <th>Product Name</th>
+            <th>Discription</th>
             <th>Price</th>
+            <th>View</th>
             <th>Operations</th>
           </tr>
         </thead>
-        <tbody>
-          {products?.data?.map((product) => (
-            <tr key={product.id}>
-              <td>{product.id}</td>
-              <td>{product.title}</td>
-              <td>{product.price}</td>
-              <td className="d-flex gap-2 flex-md-row flex-column">
+        <tbody className="text-center">
+          {products?.data?.data?.map((product, index) => (
+            <tr key={index} className="" style={{ fontWeight: "bold" }}>
+              <td>{index + 1}</td>
+              <td>{product?.name}</td>
+              <td>{`${product?.description?.slice(
+                0,
+                40
+              )}...`}</td>
+              <td>{product?.price}</td>
+              <td>
+                <Button onClick={() => viewProduct(product?.id)} variant="">
+                  <IoEye />
+                </Button>
+              </td>
+              <td className="d-flex gap-2 flex-md-row flex-column align-items-center justify-content-center">
                 <Button
-                  onClick={deleteProduct}
-                  id={product.id}
-                  variant="danger"
+                  onClick={() => deleteProduct(product?.id)}
+                  id={product?.id}
+                  variant="outline-danger"
                 >
                   Delete
                 </Button>
-                <Link className="btn btn-primary" to={`/edit_product/${product.id}`}>
+                <Link
+                  className="btn btn-outline-primary"
+                  to={`/edit-product/${product?.id}`}
+                >
                   Edit
                 </Link>
               </td>
@@ -92,6 +132,21 @@ function Products() {
           </div>
         </div>
       </dialog>
+
+      <ProductModal
+        heading={"Product name"}
+        body={
+          productData && (
+            <ProductCard
+              img={productData?.picture}
+              name={productData?.name}
+              text={productData?.description}
+            />
+          )
+        }
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     </>
   );
 }

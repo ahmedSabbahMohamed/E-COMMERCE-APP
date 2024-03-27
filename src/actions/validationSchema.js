@@ -6,10 +6,8 @@ export const addProductSchema = Yup.object({
     .min(20, "product description is too short")
     .required("product description is required"),
   product_price: Yup.number("price must be a number").required("product price is required"),
-  prodcut_img_one: Yup.mixed().required("please select an image"),
-  prodcut_img_two: Yup.mixed().required("please select an image"),
-  prodcut_img_three: Yup.mixed().required("please select an image"),
-});
+  // picture: Yup.array().required("picture field is required").max(4, "max is 4")
+})
 
 export const addCategorySchema = Yup.object({
   category: Yup.string().required("category name is required"),

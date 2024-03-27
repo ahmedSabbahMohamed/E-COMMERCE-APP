@@ -1,97 +1,105 @@
 import { useFormikContext } from "formik";
-import { useLocation } from "react-router-dom";
-import { Case, Default, Switch } from "react-if";
-import { IoMdCloudUpload } from "react-icons/io";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import "../../assets/styles/ImageHandler.css";
+import { Case, Default, Switch } from "react-if";
+import { useLocation, useParams } from "react-router-dom";
 
-function ImageHandler({ name, label }) {
-  const location = useLocation()
-  
+function ImageHandler({ name, label, multiple = true }) {
   const { values, setFieldValue, touched, errors, handleBlur } = useFormikContext();
+  const location = useLocation()
+  const {categoryId} = useParams()
 
   const handleChange = (e) => {
-    setFieldValue(name, e.target.files[0]);
+        if (multiple) {
+          const files = values[name] || []
+          setFieldValue(name, [...files, ...e.target.files]);
+        } else {
+          setFieldValue(name, e.target.files[0]);
+        }
   };
-  const handleDelete = () => {
-    setFieldValue(name, null);
-  };
-  const hasError = touched[name] && errors[name];
 
-  const file = values && values[name] ? values[name] : null;
+  const handleDelete = (index) => {
+        if (multiple) {
+          const files = [...values[name]];
+          files.splice(index, 1);
+          setFieldValue(name, files);
+        } else {
+          setFieldValue(name, null);
+        }
+  };
+
+  const file = values && values[name] ? values[name] : values;
 
   let imageUrl = null;
   if (file instanceof File) {
     imageUrl = URL.createObjectURL(file);
   }
 
+  const hasError = touched[name] && errors[name];
+
   return (
-    <div className="position-relative">
+    <div className="border rounded p-3">
       <label
         htmlFor={name}
         className={`d-block ${hasError ? "text-danger" : ""}`}
       >
         {hasError ? errors[name] : label}
       </label>
-
-      <label
-        className="image rounded overflow-hidden mt-2"
-        htmlFor={name}
-        style={{
-          display: "inline-block",
-          cursor: "pointer",
-          width: "200px",
-          height: "100px",
-        }}
-      >
-        <Switch>
-          <Default>
-            <div className="w-100 h-100 fs-1 d-flex justify-content-center align-items-center">
-              <IoMdCloudUpload />
-            </div>
-          </Default>
-          <Case condition={imageUrl}>
-            <img
-              src={imageUrl}
-              alt="uploaded image"
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            />
-          </Case>
-          <Case
-            condition={values?.picture && location.pathname !== "/add-category"}
-          >
-            <img
-              src={values?.picture}
-              alt="uploaded image"
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-            />
-          </Case>
-        </Switch>
-      </label>
-      {imageUrl ? (
-        <button
-          className="btn btn-danger btn-small mt-2 position-absolute"
-          style={{ left: "180px" }}
-          onClick={handleDelete}
-        >
-          delete
-        </button>
-      ) : null}
       <input
         type="file"
+        multiple={multiple}
         id={name}
         name={name}
         onChange={handleChange}
         onBlur={handleBlur}
-        style={{ display: "none" }}
+        className="d-none"
       />
+      <Switch>
+        <Default>
+          <label
+            className="btn btn-primary rounded-circle fw-bolder shadow"
+            htmlFor={name}
+          >
+            +
+          </label>
+        </Default>
+      </Switch>
+
+      <div className="d-flex align-items-center gap-3 flex-row flex-wrap mt-2">
+        {multiple && (
+          <>
+            {values[name] &&
+              values[name].map((file, index) => (
+                <div
+                  key={index}
+                  className="image shadow my-3 rounded position-relative"
+                >
+                  <img className="rounded" src={URL.createObjectURL(file)} />
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className="btn btn-sm btn-danger position-absolute"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              ))}
+          </>
+        )}
+        {!multiple && (
+          <div className="image shadow my-3 rounded position-relative">
+            <img className="rounded" src={imageUrl ?? values?.picture} />
+            <button
+              onClick={() => handleDelete()}
+              className="btn btn-sm btn-danger position-absolute"
+            >
+              <RiDeleteBin6Line />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 export default ImageHandler;
+

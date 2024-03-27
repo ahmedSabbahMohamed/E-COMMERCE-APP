@@ -13,7 +13,7 @@ function AdminRoutes() {
           element={<AddEditProductForm btnTxt={"Add Product"} />}
         />
         <Route
-          path="/edit_product/:productId"
+          path="/edit-product/:productId"
           element={<AddEditProductForm btnTxt={"Edit Product"} />}
         />
         <Route path="/products" element={<Products />} />

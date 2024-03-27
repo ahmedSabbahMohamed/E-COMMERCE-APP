@@ -1,24 +1,25 @@
-.sidebar a {
-    transition: .3s ease;
-    color: #198754;
+.sidebar {
+  border-right: 1px solid #e0e0e0;
 }
 
-.sidebar aside ul li .active {
-    background-color: gray;
-    color: white;
+.sidebar-links {
+  height: fit-content;
 }
 
-@media (max-width: 767px) {
-    .sidebar {
-        background-color: #73ccac;
-        height: fit-content;
-        a {
-            color: white;
-            &:hover {
-                background-color: transparent;
-                padding: 0;
-                color: blueviolet;
-            }
-        }
-    }
+.nav-link {
+  color: #555 !important;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: rgb(77, 158, 224) !important;
+  background-color: #f0f0f0;
+}
+
+.sidebar-link.active {
+  border-left: 4px solid rgb(77, 158, 224);
+  background-color: #f2f2f2;
+  display: block;
+  color: rgb(77, 158, 224) !important;
+  font-weight: 700;
 }

@@ -8,16 +8,15 @@ import { API } from "../../../../api";
 import swal from "sweetalert";
 import { Case, Default, Switch } from "react-if";
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 function AddCategoryForm() {
   const [loading, setLoading] = useState(false)
   const {categoryId} = useParams()
-  const location = useLocation()
 
-  const {data} = useQuery({
-    queryFn: ["category id"],
+  const { data } = useQuery({
+    queryFn: ["categoryid"],
     queryFn: () => API.get(`/admin/category/${categoryId}`),
   });
 
@@ -38,7 +37,7 @@ function AddCategoryForm() {
       API.post(`/admin/category/${categoryId}`, data)
       .then((res) => {
           swal(res?.data?.message);
-          window.location.pathname = "/categories"
+          window.location.pathname = "/"
         })
         .catch((err) => swal(err?.response?.data?.message || "error"))
     };
@@ -54,7 +53,7 @@ function AddCategoryForm() {
         </h2>
         <div className="d-flex align-items-center justify-content-center">
           <Formik
-            initialValues={data?.data?.data}
+            initialValues={categoryId? data?.data?.data: {}}
             validationSchema={addCategorySchema}
             onSubmit={false}
             enableReinitialize
@@ -62,18 +61,18 @@ function AddCategoryForm() {
             {(formikProps) => {
               return (
                 <Form className="d-grid gap-3 my-4">
-                  <Input label={"Category"} name={"name"} />
+                  <Input label={"Category Name:"} name={"name"} />
                   <ImageHandler
                     values={formikProps.values}
-                    label={"Category image"}
+                    label={"Category image:"}
                     name={"picture"}
+                    setFieldValue={formikProps.setFieldValue}
+                    multiple={false}
                   />
                   <SubmitBtn
-                    onClick={() => {
-                      categoryId
-                        ? handleEdit(formikProps)
-                        : handleSubmit(formikProps);
-                    }}
+                    onClick={
+                      categoryId? () => handleEdit(formikProps) : () => handleSubmit(formikProps)
+                    }
                     btnTxt={`${categoryId ? "Edit" : "Add"} Category`}
                   />
                 </Form>
