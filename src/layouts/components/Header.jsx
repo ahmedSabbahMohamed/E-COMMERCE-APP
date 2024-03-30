@@ -26,7 +26,7 @@ function Header() {
       <div className="header-content"></div>
       <Container
         fluid
-        className="navbar scrolled px-2 py-0 d-flex align-items-center justify-content-between position-fixed top-0 z-3"
+        className="navbar px-2 py-0 d-flex align-items-center justify-content-between position-fixed top-0 z-3"
       >
         <div className="d-flex gap-2 align-items-center">
           <div className="d-md-none">
