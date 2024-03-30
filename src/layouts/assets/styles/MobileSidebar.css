@@ -1,0 +1,28 @@
+.mobile-sidebar a {
+  color: rgb(114, 113, 113);
+  font-weight: bold;
+}
+
+.mobile-sidebar a:hover {
+  transition: all 0.3s ease-in-out;
+  padding-left: 10px;
+  color: black;
+}
+
+.active {
+  color: rgb(3, 194, 143) !important;
+  padding-left: 10px;
+  position: relative;
+}
+
+.active::before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 4px;
+  border-radius: 20px;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgb(3, 194, 143);
+}

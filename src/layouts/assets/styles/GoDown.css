@@ -1,0 +1,31 @@
+.arrow-container {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin: 100px auto;
+}
+
+.arrow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 50px solid rgb(168, 81, 5);
+  animation: arrow-down 3s infinite;
+}
+
+@keyframes arrow-down {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(50px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}

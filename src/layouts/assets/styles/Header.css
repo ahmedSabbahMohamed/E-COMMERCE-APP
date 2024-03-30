@@ -1,0 +1,19 @@
+.header-content {
+  height: 50vh;
+  /* clip-path: ellipse(60% 52% at 48% 11%); */
+  /* clip-path: ellipse(60% 71% at 51% 20%); */
+  clip-path: ellipse(67% 97% at 48% 3%);
+  background-image: url("../images/header.jpeg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.navbar {
+    transition: all .3s ease-in-out;
+}
+
+.navbar.scrolled {
+  background-color: #000000e3;
+  box-shadow: 0 16px 14px -8px gray;
+}
