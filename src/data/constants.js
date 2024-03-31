@@ -1,3 +1,7 @@
+import { FaProductHunt } from "react-icons/fa";
+import { BiCategory } from "react-icons/bi";
+import { IoIosAddCircleOutline } from "react-icons/io";
+
 const navLinks = [
   { id: 1, link: "Home", path: "/" },
   { id: 2, link: "Products", path: "/products" },
@@ -14,4 +18,11 @@ const hife = [
   { id: 6, link: "Datenschutz", path: "/products" },
 ];
 
-export { navLinks, hife }
+const adminLinks = [
+  { id: 1, path: "/", link: "Categories", icon: <BiCategory /> },
+  { id: 2, path: "/add-category", link: "Add Category", icon: <IoIosAddCircleOutline /> },
+  { id: 3, path: "/products", link: "Products", icon: <FaProductHunt /> },
+  { id: 4, path: "/add-product", link: "Add Product", icon:<IoIosAddCircleOutline /> },
+];
+
+export { navLinks, hife, adminLinks };

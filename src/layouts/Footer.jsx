@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaTwitter } from "react-icons/fa6";
 import { FaInstagramSquare } from "react-icons/fa";
 
-function Footer2() {
+function Footer() {
   const socialMediaIcons = [
     <FaFacebook />,
     <FaTwitter />,
@@ -76,4 +76,4 @@ function Footer2() {
   );
 }
 
-export default Footer2;
+export default Footer;
