@@ -1,13 +1,4 @@
-export const closeMobileNav = () => {
-  let mobileNav = document.querySelector(".mobile-nav");
-  mobileNav.classList.add("d-none");
-};
-export const showMobileNav = () => {
-  let mobileNav = document.querySelector(".mobile-nav");
-  mobileNav.classList.remove("d-none");
-};
-
-export const toFormData = (jsonData) => {
+const toFormData = (jsonData) => {
   const formData = new FormData();
 
   for (let key in jsonData) {
@@ -27,10 +18,12 @@ export const toFormData = (jsonData) => {
   }
 
   return formData;
-}
+};
 
-export const logOut = () => {
-  localStorage.clear()
-  window.location.pathname = "/"
-  return
-}
+const logOut = () => {
+  localStorage.clear();
+  window.location.pathname = "/";
+  return;
+};
+
+export { toFormData, logOut };

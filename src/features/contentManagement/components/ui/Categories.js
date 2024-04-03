@@ -1,120 +1,101 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Table } from "react-bootstrap";
+import React from "react";
+import { Button, Space, Table, Tag, Tooltip } from "antd";
+import { useQuery } from "@tanstack/react-query";
 import { API } from "../../../../api";
-import { useState } from "react";
-import swal from "sweetalert";
-import { Link } from "react-router-dom";
+import { FiEdit2 } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import useDeleteItem from "../../../../hooks/DeleteItem";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { Modal } from "antd";
+import { useNavigate } from "react-router-dom";
 
-function Categories() {
-  const [categoryId, setCategoryId] = useState(null);
+function Categories () {
 
-  const query = useQueryClient()
+  const deleteCategory = useDeleteItem();
+  const navigate = useNavigate()
 
   const { data } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => API.get("/admin/categories"),
-  });
+    queryKey: ['categories'],
+    queryFn: () => API.get('/admin/categories')
+  })
 
-  let deleteProductDialog = document.getElementById("delete-dialog");
-
-  const deleteProduct = (id) => {
-    deleteProductDialog.classList.remove("d-none");
-    deleteProductDialog.classList.add("d-flex");
-    setCategoryId(id);
+  const showDeleteConfirm = (id) => {
+    Modal.confirm({
+      title: "Are you sure delete this category?",
+      icon: <ExclamationCircleFilled />,
+      content: "Some descriptions",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        deleteCategory('category', id, "categories");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
-  const cancelDeleteProduct = () => {
-    deleteProductDialog.classList.remove("d-flex");
-    deleteProductDialog.classList.add("d-none");
-  };
-
-  const confirmDeleteProduct = () => {
-    API.delete(`/admin/category/${categoryId}`)
-      .then((res) => {
-        swal(res?.data?.message);
-        query.invalidateQueries("categories");
-      })
-      .catch((err) => swal(err?.response?.data?.message || "error"))
-      .finally(() => {
-        deleteProductDialog.classList.remove("d-flex");
-        deleteProductDialog.classList.add("d-none");
-      });
-  };
-
-  return (
-    <>
-      <h2 className="text-success fw-bold h2 p-4">All categories</h2>
-      <Table bordered responsive className="text-center">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Category</th>
-            <th>Category image</th>
-            <th>Operations</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.data?.data?.map((category, index) => (
-            <tr key={category?.id}>
-              <td>{index + 1}</td>
-              <td>{category?.name}</td>
-              <td>
-                <img
-                  className="img-fluid"
-                  style={{ height: "70px" }}
-                  src={category?.picture}
-                />
-              </td>
-              <td className="d-flex gap-2 flex-md-row flex-column">
-                <Button
-                  id={category?.id}
-                  onClick={() => deleteProduct(category?.id)}
-                  variant="danger"
-                >
-                  Delete
-                </Button>
-                <Button variant="primary">
-                  <Link
-                    className="btn btn-primary"
-                    to={`/edit-category/${category?.id}`}
-                  >
-                    Edit
-                  </Link>
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <dialog
-        className="d-none align-items-center justify-content-center"
-        id="delete-dialog"
-        style={{
-          backgroundColor: "#00000085",
-          top: "0px",
-          left: "0px",
-          position: "fixed",
-          width: "100vw",
-          height: "100vh",
-        }}
-      >
-        <div className="bg-light p-3 rounded">
-          <p className="text-dark fw-bold">
-            Are you sure you want to delete this category
-          </p>
-          <div className="d-flex gap-2">
-            <Button onClick={confirmDeleteProduct} variant="danger">
-              Yes, delete
-            </Button>
-            <Button onClick={cancelDeleteProduct} variant="dark">
-              No, cancel
-            </Button>
-          </div>
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Category",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Category Image",
+      dataIndex: "picture",
+      key: "picture",
+      render: (img, record) => (
+        <div key={record.id} style={{ display: "flex", alignItems: "center" }}>
+          <img
+            style={{
+              maxWidth: "100px",
+              maxHeight: "100px",
+              borderRadius: "5px",
+            }}
+            src={img}
+            alt="Category"
+          />
         </div>
-      </dialog>
-    </>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="small">
+          <Tooltip title="edit">
+            <Button
+              className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+              type="primary"
+              shape="circle"
+              icon={<FiEdit2 />}
+              onClick={() => navigate(`/edit-category/${record?.id}`)}
+            />
+          </Tooltip>
+          <Tooltip title="delete">
+            <Button
+              className="btn btn-outline-danger d-flex align-items-center justify-content-center"
+              type="danger"
+              shape="circle"
+              icon={<RiDeleteBin6Line />}
+              onClick={() => showDeleteConfirm(record?.id)}
+            />
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+  
+  return (
+    <Table bordered virtual columns={columns} dataSource={data?.data?.data} />
   );
-}
-
+} 
 export default Categories;

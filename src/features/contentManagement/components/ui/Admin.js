@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Menu } from "antd";
+import { Avatar, Layout, Menu } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { adminLinks } from "../../../../data/constants";
+import { RxAvatar } from "react-icons/rx";
+import Logo from "../../../../components/ui/Logo";
 
 function Admin() {
-  const [collapse, setCollapse] = useState(false);
-  const { Content, Sider } = Layout;
+  const { Content, Sider, Header } = Layout;
   const location = useLocation();
-
-  useEffect(() => {
-    if (window.innerWidth <= 768 && collapse === false) {
-      setCollapse(true);
-    } else if (window.innerWidth > 769 && collapse === true) {
-      setCollapse(false);
-    }
-  }, [window.innerWidth]);
+  const user = localStorage.getItem("user");
 
   const items = adminLinks.map((link) => ({
     key: String(link.id),
@@ -26,20 +20,21 @@ function Admin() {
     ),
   }));
 
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.toLocaleString("en-US", {
+    month: "long",
+  })} / ${currentDate.getDate()} / ${currentDate.getFullYear()}`;
+
   return (
     <Layout>
       <Sider
-        collapsed={collapse}
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          paddingTop: 15,
-        }}
+        breakpoint="lg"
+        collapsedWidth="75"
+        className="vh-100 position-sticky left-0 top-0"
       >
+        <div className="text-center">
+          <Logo />
+        </div>
         <Menu
           theme="dark"
           mode="inline"
@@ -53,13 +48,15 @@ function Admin() {
           items={items}
         />
       </Sider>
-      <Layout
-        className="p-3"
-        style={{
-          marginLeft: `${collapse ? "80px" : "200px"}`,
-        }}
-      >
-        <Content className="bg-white rounded p-3 shadow">
+      <Layout className="min-vh-100">
+        <Header className="d-flex align-items-center justify-content-between bg-light shadow position-sticky top-0 z-3">
+          <div className="d-flex align-items-center gap-3">
+            <Avatar icon={<RxAvatar size={24} />} />
+            {user ?? "unknown"}
+          </div>
+          <div>{formattedDate}</div>
+        </Header>
+        <Content className="rounded p-3">
           <Outlet />
         </Content>
       </Layout>
