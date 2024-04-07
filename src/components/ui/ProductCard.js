@@ -1,18 +1,20 @@
-import { Button, Card } from "react-bootstrap";
-
-function ProductCard(props) {
+import React from "react";
+import { Card } from "antd";
+const { Meta } = Card;
+function ProductCard({
+  img = "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg",
+  title = "Product Title",
+  description = "This is a product description.",
+}) {
   return (
-    <Card style={{ width: "18rem" }}>
-      <Card.Img variant="top" src={props.img} />
-      <Card.Body>
-        <Card.Title>{props.name}</Card.Title>
-        <Card.Text>
-          {props.text}
-        </Card.Text>
-        <Button variant="primary">Show Product</Button>
-      </Card.Body>
+    <Card
+      style={{
+        width: 240,
+      }}
+      cover={<img alt="product" src={img} />}
+    >
+      <Meta title={title} description={description} />
     </Card>
   );
 }
-
-export default ProductCard
+export default ProductCard;

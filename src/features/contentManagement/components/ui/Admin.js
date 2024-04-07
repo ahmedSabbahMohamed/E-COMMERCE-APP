@@ -8,7 +8,7 @@ import Logo from "../../../../components/ui/Logo";
 function Admin() {
   const { Content, Sider, Header } = Layout;
   const location = useLocation();
-  const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const items = adminLinks.map((link) => ({
     key: String(link.id),
@@ -49,10 +49,10 @@ function Admin() {
         />
       </Sider>
       <Layout className="min-vh-100">
-        <Header className="d-flex align-items-center justify-content-between bg-light shadow position-sticky top-0 z-3">
+        <Header className="d-flex align-items-center justify-content-between bg-light shadow position-sticky top-0 z-3 px-2 px-md-5">
           <div className="d-flex align-items-center gap-3">
             <Avatar icon={<RxAvatar size={24} />} />
-            {user ?? "unknown"}
+            {user ? user?.name : "unknown"}
           </div>
           <div>{formattedDate}</div>
         </Header>

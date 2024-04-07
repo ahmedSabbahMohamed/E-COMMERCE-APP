@@ -1,3 +1,6 @@
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { Modal } from "antd";
+
 const toFormData = (jsonData) => {
   const formData = new FormData();
 
@@ -26,4 +29,21 @@ const logOut = () => {
   return;
 };
 
-export { toFormData, logOut };
+const showDeleteConfirm = (id, deleteFn = () => {}, item, invalidateQuery) => {
+  Modal.confirm({
+    title: "Are you sure delete this category?",
+    icon: <ExclamationCircleFilled />,
+    content: "Some descriptions",
+    okText: "Yes",
+    okType: "danger",
+    cancelText: "No",
+    onOk() {
+      deleteFn(item, id, invalidateQuery)
+    },
+    onCancel() {
+      console.log("Cancel");
+    },
+  });
+};
+
+export { toFormData, logOut, showDeleteConfirm };

@@ -1,17 +1,16 @@
 import { useFormikContext } from "formik";
 import { get } from "lodash";
-import { useLocation } from "react-router-dom";
 
-const Input = ({ label, name, type= "text", ...props }) => {
+function TextArea({ label, name, type = "text", ...props }) {
 
-  const { setFieldValue, touched, errors, handleBlur, values } = useFormikContext()
+  const { setFieldValue, touched, errors, handleBlur, values } =
+    useFormikContext();
 
   const handleChange = (e) => {
     setFieldValue(name, e.target.value);
   };
 
   const hasError = touched[name] && errors[name];
-
   return (
     <div>
       <label
@@ -20,7 +19,7 @@ const Input = ({ label, name, type= "text", ...props }) => {
       >
         {hasError ? errors[name] : label}
       </label>
-      <input
+      <textarea
         {...props}
         value={get(values, name, undefined)}
         name={name}
@@ -31,6 +30,6 @@ const Input = ({ label, name, type= "text", ...props }) => {
       />
     </div>
   );
-};
+}
 
-export default Input;
+export default TextArea;

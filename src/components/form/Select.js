@@ -1,5 +1,4 @@
 import { useFormikContext } from "formik"
-import { get } from "lodash"
 import { useEffect, useState } from "react"
 import ReactSelect from "react-select"
 
@@ -33,6 +32,7 @@ function Select( {
       isMulti={isMulti}
       isClearable={true}
       isSearchable={true}
+      value={values ? finalOptions.find((option) => option.value === values?.category_id) : null}
     />
   );
 }

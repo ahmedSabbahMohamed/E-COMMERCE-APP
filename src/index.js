@@ -7,6 +7,8 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js"
+import "slick-carousel/slick/slick.css";  
+import "slick-carousel/slick/slick-theme.css";
 
 const queryClient = new QueryClient()
 

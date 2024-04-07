@@ -1,153 +1,115 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import React, { useEffect, useState } from 'react'
-import { Button, Table } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Link, useNavigate } from 'react-router-dom'
 import { API } from "../../../../api"
-import { IoEye } from "react-icons/io5";
-import swal from 'sweetalert'
-import ProductModal from './ProductModal'
-import ProductCard from '../../../../components/ui/ProductCard'
+import { Button, Dropdown, Space, Table, Tooltip, Menu } from 'antd';
+import { FiEdit2 } from 'react-icons/fi';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { BsThreeDotsVertical } from "react-icons/bs";
+import useDeleteItem from '../../../../hooks/DeleteItem';
+import { showDeleteConfirm } from '../../../../actions/events';
 
 function Products() {
-  // a;sdlfaskd
+  const deleteProduct = useDeleteItem()
 
-  const [productId, setProductId] = useState('')
-  const [modalShow, setModalShow] = React.useState(false);
-  const [productData, setProductData] = useState({})
-  const query = useQueryClient()
+  const navigate = useNavigate()
 
-      const { data: products } = useQuery({
+  const { data: products } = useQuery({
         queryKey: ["prodcut id"],
         queryFn: () => API.get("/admin/products"),
-      });
+  });
 
-  let deleteProductDialog = document.getElementById("delete-dialog");
-
-  const deleteProduct = (id) => {
-    deleteProductDialog.classList.remove("d-none")
-    deleteProductDialog.classList.add("d-flex");
-    setProductId(id);
-  }
-
-  const cancelDeleteProduct = () => {
-    deleteProductDialog.classList.remove("d-flex")
-    deleteProductDialog.classList.add("d-none")
-  }
-
-  const confirmDeleteProduct = () => {
-    API.delete(`/admin/product/${productId}`)
-      .then((res) => {
-        swal(res?.data?.message);
-        query.invalidateQueries("prodcut id");
-      })
-      .catch((err) => swal(err?.response?.data?.message || "error"))
-      .finally(() => {
-        deleteProductDialog.classList.remove("d-flex");
-        deleteProductDialog.classList.add("d-none");
-      });
-  };
-
-  const viewProduct = (id) => {
-    setProductId(id)
-    setModalShow(true);
-  }
-
-  useEffect(() => {
-    {productId &&
-      API.get(`/admin/product/${productId}`).then(res => setProductData(res?.data?.data))}
-  }, [productId])
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      render: (_, record, index) => index + 1,
+      width: 65,
+    },
+    {
+      title: "Product Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "description",
+      dataIndex: "description",
+      key: "description",
+      render: (text) => (text.length > 40 ? `${text.slice(0, 40)}...` : text),
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+      render: (category) => category.name,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => {
+          const items = [
+            {
+              key: "1",
+              label: <Link className='text-decoration-none text-primary' to={`/product/${record?.id}`}>Review</Link>,
+            },
+          ]
+        return (
+          <Space size="small">
+            <Tooltip title="edit">
+              <Button
+                className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                type="primary"
+                shape="circle"
+                icon={<FiEdit2 />}
+                onClick={() => navigate(`/edit-product/${record?.id}`)}
+              />
+            </Tooltip>
+  
+            <Tooltip title="delete">
+              <Button
+                className="btn btn-outline-danger d-flex align-items-center justify-content-center"
+                type="danger"
+                shape="circle"
+                icon={<RiDeleteBin6Line />}
+                onClick={() =>
+                  showDeleteConfirm(
+                    record?.id,
+                    deleteProduct,
+                    "product",
+                    "products"
+                  )
+                }
+              />
+            </Tooltip>
+  
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomRight"
+              arrow
+            >
+              <Button
+                shape="circle"
+                className="border-0 shadow-0 bg-transparent d-flex align-items-center justify-content-center"
+              >
+                <BsThreeDotsVertical />
+              </Button>
+            </Dropdown>
+          </Space>
+        )
+      }
+    },
+  ];
 
   return (
-    <>
-      <h2 className="text-success fw-bold h2 p-4">Products page</h2>
-      <Table bordered responsive hover className="m-0 p-0">
-        <thead className="table-dark text-center">
-          <tr>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Discription</th>
-            <th>Price</th>
-            <th>View</th>
-            <th>Operations</th>
-          </tr>
-        </thead>
-        <tbody className="text-center">
-          {products?.data?.data?.map((product, index) => (
-            <tr key={index} className="" style={{ fontWeight: "bold" }}>
-              <td>{index + 1}</td>
-              <td>{product?.name}</td>
-              <td>{`${product?.description?.slice(
-                0,
-                40
-              )}...`}</td>
-              <td>{product?.price}</td>
-              <td>
-                <Button onClick={() => viewProduct(product?.id)} variant="">
-                  <IoEye />
-                </Button>
-              </td>
-              <td className="d-flex gap-2 flex-md-row flex-column align-items-center justify-content-center">
-                <Button
-                  onClick={() => deleteProduct(product?.id)}
-                  id={product?.id}
-                  variant="outline-danger"
-                >
-                  Delete
-                </Button>
-                <Link
-                  className="btn btn-outline-primary"
-                  to={`/edit-product/${product?.id}`}
-                >
-                  Edit
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      <dialog
-        className="d-none align-items-center justify-content-center"
-        id="delete-dialog"
-        style={{
-          backgroundColor: "#00000085",
-          top: "0px",
-          left: "0px",
-          position: "fixed",
-          width: "100vw",
-          height: "100vh",
-        }}
-      >
-        <div className="bg-light p-3 rounded">
-          <p className="text-dark fw-bold">
-            Are you sure you want to delete this product
-          </p>
-          <div className="d-flex gap-2">
-            <Button onClick={confirmDeleteProduct} variant="danger">
-              Yes, delete
-            </Button>
-            <Button onClick={cancelDeleteProduct} variant="dark">
-              No, cancel
-            </Button>
-          </div>
-        </div>
-      </dialog>
-
-      <ProductModal
-        heading={"Product name"}
-        body={
-          productData && (
-            <ProductCard
-              img={productData?.picture}
-              name={productData?.name}
-              text={productData?.description}
-            />
-          )
-        }
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-    </>
+    <Table bordered virtual columns={columns} dataSource={products?.data?.data} />
   );
 }
 

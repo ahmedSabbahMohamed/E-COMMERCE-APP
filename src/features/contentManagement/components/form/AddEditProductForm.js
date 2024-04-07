@@ -11,10 +11,14 @@ import { useState } from "react"
 import { toFormData } from "axios"
 import swal from "sweetalert"
 import Select from "../../../../components/form/Select"
-
+import TextArea from "../../../../components/form/TextArea"
+import { Row, Col } from 'react-bootstrap'
+import ProductCard from "../../../../components/ui/ProductCard"
+import ProductCarousel from "../../../../components/ui/ProductCarousel"
 
 function AddEditProductForm() {
     const [loading, setLoading] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const {productId} = useParams()
 
       const { data: myProduct } = useQuery({
@@ -28,6 +32,7 @@ function AddEditProductForm() {
         });
 
       const handleSubmit = (values) => {
+        setIsSubmitting(true);
         const data = toFormData(values);
         console.log(data)
         API.post("/admin/product", data)
@@ -38,33 +43,11 @@ function AddEditProductForm() {
           })
           .catch((err) => swal(err?.response?.data?.message || "error"))
           .finally(() =>
+            setIsSubmitting(false),
             setTimeout(() => {
               setLoading(false);
             }, 300)
           );
-
-        // const formData = new FormData();
-        // formData.append("name", values.name);
-        // formData.append("description", values.description);
-        // formData.append("price", values.price);
-        // formData.append("category_id", values.category_id);
-        // values.images.forEach((img, index) => {
-        //   formData.append(`picture[${index}]`, img);
-        // });
-        // formData.append("picture", values.picture)
-
-        // console.log(formData)
-        // console.log(values)
-        // API.post("/admin/product", formData)
-        //   .then((res) => {
-        //     swal(res?.data?.message);
-        //     values = {};
-        //     setLoading(true);
-        //   })
-        //   .catch(err => swal(err?.response?.data?.message || "error"))
-        //   .finally(() => {
-        //     setTimeout(() => { setLoading(false) }, 300)
-        //   })
       };
 
       const handleEdit = (formikProps) => {
@@ -81,53 +64,86 @@ function AddEditProductForm() {
     <Switch>
       <Case condition={loading}>.</Case>
       <Default>
-        <h2 className="text-success text-center h2 p-4 fw-bold">
+        <h2 className="text-black-50 text-center h2 p-4 fw-bold">
           {productId
             ? `Edit ${myProduct?.data?.data.name} product`
             : "Add New Product"}
         </h2>
+        <Row className="justify-content-center align-items-center">
 
-        <div className="d-flex align-items-center justify-content-center">
-          <Formik
-            initialValues={{}}
-            validationSchema={addProductSchema}
-            onSubmit={false}
-            enableReinitialize
+          <Col
+            sm={12}
+            lg={5}
+            className="p-3 mx-2 d-flex flex-column align-items-center gap-4"
           >
-            {(formikProps) => {
-              return (
-                <Form className="d-grid gap-3 my-4">
-                  <Input label={"Product Name"} name={"name"} />
-                  <Input label={"Product description"} name={"description"} />
-                  <Input label={"Product price"} name={"price"} />
-                  <Select
-                    options={categories?.data?.data}
-                    name={"category_id"}
-                  />
-                  <ImageHandler
-                    label={"Product Images"}
-                    name={"images"}
-                    setFieldValue={formikProps.setFieldValue}
-                  />
-                  <ImageHandler
-                    label={"Product Images"}
-                    name={"picture"}
-                    multiple={false}
-                    setFieldValue={formikProps.setFieldValue}
-                  />
-                  <SubmitBtn
-                    onClick={() => {
-                      productId
-                        ? handleEdit(formikProps.values)
-                        : handleSubmit(formikProps.values);
-                    }}
-                    btnTxt={`${productId ? "Edit" : "Add"} Product`}
-                  />
-                </Form>
-              );
-            }}
-          </Formik>
-        </div>
+            <ProductCard />
+            <div className="w-100 p-3 px-lg-5">
+              <ProductCarousel>
+                <div className="d-flex align-items-center justify-content-center">
+                  <ProductCard />
+                </div>
+                <div className="d-flex align-items-center justify-content-center">
+                  <ProductCard />
+                </div>
+                <div className="d-flex align-items-center justify-content-center">
+                  <ProductCard />
+                </div>
+                <div className="d-flex align-items-center justify-content-center">
+                  <ProductCard />
+                </div>
+              </ProductCarousel>
+            </div>
+          </Col>
+
+          <Col sm={12} lg={5}>
+            <div className="d-flex align-items-center justify-content-center">
+              <Formik
+                initialValues={productId ? myProduct?.data?.data : {}}
+                validationSchema={addProductSchema}
+                onSubmit={false}
+                enableReinitialize
+              >
+                {(formikProps) => {
+                  return (
+                    <Form className="d-grid gap-3 my-4 w-100">
+                      <Input label={"Product Name"} name={"name"} />
+                      <TextArea
+                        label={"Product description"}
+                        name={"description"}
+                      />
+                      <Input label={"Product price"} name={"price"} />
+                      <Select
+                        options={categories?.data?.data}
+                        name={"category_id"}
+                      />
+                      <ImageHandler
+                        label={"Product Main Image"}
+                        name={"picture"}
+                        numOfImgs={1}
+                      />
+                      <ImageHandler
+                        label={"Product Images"}
+                        name={"images"}
+                        numOfImgs={4}
+                        setFieldValue={formikProps.setFieldValue}
+                      />
+                      <SubmitBtn
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          productId
+                            ? handleEdit(formikProps.values)
+                            : handleSubmit(formikProps.values);
+                        }}
+                        btnTxt={`${productId ? "Edit" : "Add"} Product`}
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </Col>
+          
+        </Row>
       </Default>
     </Switch>
   );
