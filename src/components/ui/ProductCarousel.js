@@ -5,7 +5,7 @@ function ProductCarousel({ children }) {
   const settings = {
     infinite: true,
     dots: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: 0,
@@ -14,11 +14,9 @@ function ProductCarousel({ children }) {
   };
 
   return (
-    <div className="slider-container">
-      <Slider {...settings} className="">
+      <Slider {...settings}>
         {children}
       </Slider>
-    </div>
   );
 };
 export default ProductCarousel;

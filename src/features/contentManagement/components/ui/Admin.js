@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { adminLinks } from "../../../../data/constants";
 import { RxAvatar } from "react-icons/rx";
 import Logo from "../../../../components/ui/Logo";
+import Logout from "../../../../components/ui/Logout";
 
 function Admin() {
   const { Content, Sider, Header } = Layout;
@@ -49,12 +50,17 @@ function Admin() {
         />
       </Sider>
       <Layout className="min-vh-100">
-        <Header className="d-flex align-items-center justify-content-between bg-light shadow position-sticky top-0 z-3 px-2 px-md-5">
+        <Header className="d-flex align-items-center justify-content-between bg-light shadow position-sticky top-0 z-3 px-1 px-md-5">
           <div className="d-flex align-items-center gap-3">
             <Avatar icon={<RxAvatar size={24} />} />
             {user ? user?.name : "unknown"}
           </div>
-          <div>{formattedDate}</div>
+          <div className="d-flex gap-2 align-items-center justify-content-center">
+            <div>
+              <p className="d-none d-sm-block p-0 m-0">{formattedDate}</p>
+            </div>
+            <Logout />
+          </div>
         </Header>
         <Content className="rounded p-3">
           <Outlet />

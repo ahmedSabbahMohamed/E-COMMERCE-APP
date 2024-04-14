@@ -56,7 +56,7 @@ function Products() {
           const items = [
             {
               key: "1",
-              label: <Link className='text-decoration-none text-primary' to={`/product/${record?.id}`}>Review</Link>,
+              label: <Link className='text-decoration-none text-primary' to={`/products/${record?.id}`}>Review</Link>,
             },
           ]
         return (

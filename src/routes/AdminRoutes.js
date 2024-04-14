@@ -7,6 +7,7 @@ import {
   Products,
 } from "../features/contentManagement";
 import NotFoundPage from "../components/ui/NotFoundPage";
+import ProductPage from "../components/ui/ProductPage";
 
 function AdminRoutes() {
   return (
@@ -24,6 +25,7 @@ function AdminRoutes() {
         <Route path="products" element={<Products />} />
         <Route path="add-category" element={<AddCategoryForm />} />
         <Route path="edit-category/:categoryId" element={<AddCategoryForm />} />
+        <Route path="/products/:productId" element={<ProductPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

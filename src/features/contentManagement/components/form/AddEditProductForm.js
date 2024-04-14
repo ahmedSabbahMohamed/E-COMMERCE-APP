@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { API } from "../../../../api"
 import { Case, Default, Switch } from "react-if"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toFormData } from "axios"
 import swal from "sweetalert"
 import Select from "../../../../components/form/Select"
@@ -19,10 +19,15 @@ import ProductCarousel from "../../../../components/ui/ProductCarousel"
 function AddEditProductForm() {
     const [loading, setLoading] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [formikValues, setFormikValues] = useState({})
     const {productId} = useParams()
 
+    useEffect(() => {
+      setFormikValues(formikValues)
+    }, [formikValues])
+
       const { data: myProduct } = useQuery({
-        queryFn: ["product-id"],
+        queryKey: ["product-id"],
         queryFn: () => API.get(`/admin/product/${productId}`),
       });
 
@@ -70,28 +75,40 @@ function AddEditProductForm() {
             : "Add New Product"}
         </h2>
         <Row className="justify-content-center align-items-center">
-
           <Col
             sm={12}
             lg={5}
             className="p-3 mx-2 d-flex flex-column align-items-center gap-4"
           >
-            <ProductCard />
+            <ProductCard
+              img={formikValues?.picture}
+              title={formikValues?.name}
+              description={
+                productId && (
+                  <>
+                    <p>{formikValues?.description}</p>
+                    <strong>Price: ${formikValues?.price}</strong>
+                  </>
+                )
+              }
+            />
             <div className="w-100 p-3 px-lg-5">
-              <ProductCarousel>
-                <div className="d-flex align-items-center justify-content-center">
-                  <ProductCard />
-                </div>
-                <div className="d-flex align-items-center justify-content-center">
-                  <ProductCard />
-                </div>
-                <div className="d-flex align-items-center justify-content-center">
-                  <ProductCard />
-                </div>
-                <div className="d-flex align-items-center justify-content-center">
-                  <ProductCard />
-                </div>
-              </ProductCarousel>
+              <Switch>
+                {/* <Case condition={formikValues}>
+                  <ProductCarousel>
+                    {formikValues?.images.map((img, index) => {
+                      return (
+                        <div key={index} className="d-flex align-items-center justify-content-center">
+                          <ProductCard />
+                        </div>
+                      );
+                    })}
+                  </ProductCarousel>
+                </Case> */}
+                <Case condition={productId}>
+                  <h3 className="text-center text-danger">This Product doesn't have any sub images</h3>
+                </Case>
+              </Switch>
             </div>
           </Col>
 
@@ -104,6 +121,7 @@ function AddEditProductForm() {
                 enableReinitialize
               >
                 {(formikProps) => {
+                  setFormikValues(formikProps.values);
                   return (
                     <Form className="d-grid gap-3 my-4 w-100">
                       <Input label={"Product Name"} name={"name"} />
@@ -142,7 +160,6 @@ function AddEditProductForm() {
               </Formik>
             </div>
           </Col>
-          
         </Row>
       </Default>
     </Switch>

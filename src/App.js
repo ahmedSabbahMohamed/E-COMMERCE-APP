@@ -1,11 +1,9 @@
-import AdminRoutes from "./routes/AdminRoutes";
-import PublicRoutes from "./routes/PublicRoutes"
+import { router } from "./routes";
 
 function App() {
   return (
     <>
-      <AdminRoutes />
-      {/* <PublicRoutes /> */}
+      {router}
     </>
   );
 }
