@@ -7,16 +7,20 @@ function ProductCard({
   description = "This is a product description.",
 }) {
   return (
-    <Card style={{ width: "18rem" }}>
-      <Card.Img variant="top" src={img} />
-      <Card.Body>
-        <Card.Title>
-          {title}
-        </Card.Title>
-        <Card.Text>
-          {description}
-        </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+    <Card style={{ width: "18rem", height: "25rem", overflow: "hidden" }}>
+      <div style={{height: "12rem", backgroundImage: `url(${img})`, backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat"}}>
+
+      </div>
+      <Card.Body className="position-relative">
+        <Card.Title className="text-primary fw-bold">{title}</Card.Title>
+        <Card.Text>{description}</Card.Text>
+        <Button
+          className="position-absolute"
+          style={{ bottom: "10px" }}
+          variant="primary"
+        >
+          Go somewhere
+        </Button>
       </Card.Body>
     </Card>
   );

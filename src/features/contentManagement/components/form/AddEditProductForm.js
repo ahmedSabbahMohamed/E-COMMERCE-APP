@@ -22,19 +22,15 @@ function AddEditProductForm() {
     const [formikValues, setFormikValues] = useState({})
     const {productId} = useParams()
 
-    useEffect(() => {
-      setFormikValues(formikValues)
-    }, [formikValues])
+    const { data: myProduct } = useQuery({
+      queryKey: ["product-id"],
+      queryFn: () => API.get(`/admin/product/${productId}`),
+    });
 
-      const { data: myProduct } = useQuery({
-        queryKey: ["product-id"],
-        queryFn: () => API.get(`/admin/product/${productId}`),
-      });
-
-        const { data: categories } = useQuery({
-          queryKey: ["categories"],
-          queryFn: () => API.get("/admin/categories"),
-        });
+    const { data: categories } = useQuery({
+      queryKey: ["categories"],
+      queryFn: () => API.get("/admin/categories"),
+    });
 
       const handleSubmit = (values) => {
         setIsSubmitting(true);
@@ -74,46 +70,136 @@ function AddEditProductForm() {
             ? `Edit ${myProduct?.data?.data.name} product`
             : "Add New Product"}
         </h2>
-        <Row className="justify-content-center align-items-center">
+        <Row className="justify-content-center align-items-center m-0 p-0">
           <Col
             sm={12}
             lg={5}
             className="p-3 mx-2 d-flex flex-column align-items-center gap-4"
           >
             <ProductCard
-              img={formikValues?.picture}
+              img={
+                formikValues?.picture
+                  ? typeof formikValues.picture === "string"
+                    ? formikValues.picture
+                    : formikValues.picture
+                    ? URL.createObjectURL(formikValues.picture)
+                    : null
+                  : ""
+              }
               title={formikValues?.name}
               description={
-                productId && (
-                  <>
-                    <p>{formikValues?.description}</p>
-                    <strong>Price: ${formikValues?.price}</strong>
-                  </>
-                )
+                <>
+                  <p className="mb-1 text-black-50">{`${formikValues?.description?.slice(
+                    0,
+                    70
+                  )}...`}</p>
+                  <strong>Price: ${formikValues?.price}</strong>
+                </>
               }
             />
+
             <div className="w-100 p-3 px-lg-5">
-              <Switch>
-                {/* <Case condition={formikValues}>
+              {/* <Switch>
+                <Case
+                  condition={formikValues && formikValues?.images?.length >= 2}
+                >
                   <ProductCarousel>
-                    {formikValues?.images.map((img, index) => {
+                    {formikValues?.images?.map((img, index) => {
                       return (
-                        <div key={index} className="d-flex align-items-center justify-content-center">
-                          <ProductCard />
+                        <div
+                          key={index}
+                          className="d-flex align-items-center justify-content-center"
+                        >
+                          <ProductCard
+                            img={
+                              img
+                                ? typeof img === "string"
+                                  ? img
+                                  : img
+                                  ? URL.createObjectURL(img)
+                                  : null
+                                : ""
+                            }
+                            title={formikValues?.name}
+                            description={
+                              <>
+                                <p className="mb-1 text-black-50">
+                                  {`${formikValues?.description?.slice(
+                                    0,
+                                    70
+                                  )}...`}
+                                </p>
+                                <strong>Price: ${formikValues?.price}</strong>
+                              </>
+                            }
+                          />
                         </div>
                       );
                     })}
                   </ProductCarousel>
-                </Case> */}
+                </Case>
                 <Case condition={productId}>
-                  <h3 className="text-center text-danger">This Product doesn't have any sub images</h3>
+                  <h3 className="text-center text-danger">
+                    This Product doesn't have any sub images
+                  </h3>
+                </Case>
+              </Switch> */}
+              <Switch>
+                <Case
+                  condition={
+                    formikValues &&
+                    formikValues.images &&
+                    formikValues.images.length >= 2
+                  }
+                >
+                  <ProductCarousel>
+                    {formikValues?.images?.map((img, index) => (
+                      <div
+                        key={index}
+                        className="d-flex align-items-center justify-content-center"
+                      >
+                        <ProductCard
+                          img={
+                            img
+                              ? typeof img.path === "string"
+                                ? img.path
+                                : img instanceof File
+                                ? URL.createObjectURL(img)
+                                : null
+                              : ""
+                          }
+                          title={formikValues.name}
+                          description={
+                            <>
+                              <p className="mb-1 text-black-50">
+                                {formikValues?.description?.slice(0, 70)}...
+                              </p>
+                              <strong>Price: ${formikValues.price}</strong>
+                            </>
+                          }
+                        />
+                      </div>
+                    ))}
+                  </ProductCarousel>
+                </Case>
+                <Case
+                  condition={
+                    !formikValues ||
+                    (formikValues &&
+                      formikValues.images &&
+                      formikValues.images.length === 0)
+                  }
+                >
+                  <h3 className="text-center text-danger">
+                    This Product doesn't have any images
+                  </h3>
                 </Case>
               </Switch>
             </div>
           </Col>
 
           <Col sm={12} lg={5}>
-            <div className="d-flex align-items-center justify-content-center">
+            <div className="d-flex align-items-center justify-content-center p-3">
               <Formik
                 initialValues={productId ? myProduct?.data?.data : {}}
                 validationSchema={addProductSchema}

@@ -62,7 +62,7 @@ function Admin() {
             <Logout />
           </div>
         </Header>
-        <Content className="rounded p-3">
+        <Content className="rounded py-3">
           <Outlet />
         </Content>
       </Layout>

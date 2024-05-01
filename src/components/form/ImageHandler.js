@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Image, Upload } from "antd";
 import UploadButton from "../ui/UploadButton";
 import { useFormikContext } from "formik";
-import { useParams } from "react-router-dom"
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -17,7 +16,6 @@ const ImageHandler = ({ numOfImgs, name, label }) => {
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
   const { setFieldValue, values } = useFormikContext()
-  const {categoryId} = useParams()
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {

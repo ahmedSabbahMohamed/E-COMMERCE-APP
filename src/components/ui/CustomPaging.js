@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
-import one from "../../assets/images/cu.jpeg";
-import two from "../../assets/images/customPaging1.jpeg";
-import three from "../../assets/images/customPaging2.jpeg";
-import four from "../../assets/images/customPaging3.jpeg";
 import "../../assets/styles/CustomPaging.css";
 import { FcNext, FcPrevious } from "react-icons/fc";
 
-function CustomPaging() {
-  const imgs = [one, two, three, four];
+function CustomPaging({ imgs }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const settings = {
@@ -27,7 +22,7 @@ function CustomPaging() {
     ),
     customPaging: function (i) {
       return (
-        <li key={i} style={{ opacity: activeIndex === i ? 0.5 : 1 }}>
+        <li className="d-none d-md-block" key={i} style={{ opacity: activeIndex === i ? 0.5 : 1 }}>
           <img
             className="rounded"
             src={imgs[i]}
@@ -45,12 +40,22 @@ function CustomPaging() {
   };
 
   return (
-    <Slider {...settings} className="mx-5 slider-container">
-      {imgs.map((img, index) => (
-        <div key={index} className="slide">
-          <img src={img} alt={`slide-${index}`} />
-        </div>
-      ))}
+    <Slider {...settings} className="slider-container bg-danger">
+      {imgs &&
+        imgs.map((img, index) => (
+          <div key={index} className="slide mb-4">
+            <div
+              style={{
+                backgroundImage: `url(${img})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                height: "100%",
+                width: "100%",
+              }}
+            ></div>
+          </div>
+        ))}
     </Slider>
   );
 }
