@@ -1,8 +1,21 @@
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 
 function ProductDetails({ product, onAddToCart }) {
   const { category, name, description, price } = product;
+  const [quantity, setQuantity] = useState(1); // State to manage quantity
+
   const spanStyles = "p-2 d-inline-block text-white fw-bold fs-6";
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   return (
     <div className="text-center text-md-start">
@@ -12,11 +25,28 @@ function ProductDetails({ product, onAddToCart }) {
       <h5 className="text-black fw-bold my-3">${price}</h5>
       <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
         <div className="d-flex gap-3 bg-success rounded px-2 py-1">
-          <span className={spanStyles}>-</span>
-          <span className={spanStyles}>1</span>
-          <span className={spanStyles}>+</span>
+          <Button
+            variant=""
+            className="text-white fw-bold"
+            onClick={handleDecrement}
+          >
+            -
+          </Button>
+          <span className={spanStyles}>{quantity}</span>
+          <Button
+            variant=""
+            className="text-white fw-bold"
+            onClick={handleIncrement}
+          >
+            +
+          </Button>
         </div>
-        <Button variant="primary" size="lg" className="" onClick={onAddToCart}>
+        <Button
+          variant="primary"
+          size="lg"
+          className=""
+          onClick={() => onAddToCart(product, quantity)} // Passing product and quantity to the callback
+        >
           Add to Cart
         </Button>
       </div>

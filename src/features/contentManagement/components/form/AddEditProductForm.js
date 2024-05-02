@@ -99,51 +99,6 @@ function AddEditProductForm() {
             />
 
             <div className="w-100 p-3 px-lg-5">
-              {/* <Switch>
-                <Case
-                  condition={formikValues && formikValues?.images?.length >= 2}
-                >
-                  <ProductCarousel>
-                    {formikValues?.images?.map((img, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="d-flex align-items-center justify-content-center"
-                        >
-                          <ProductCard
-                            img={
-                              img
-                                ? typeof img === "string"
-                                  ? img
-                                  : img
-                                  ? URL.createObjectURL(img)
-                                  : null
-                                : ""
-                            }
-                            title={formikValues?.name}
-                            description={
-                              <>
-                                <p className="mb-1 text-black-50">
-                                  {`${formikValues?.description?.slice(
-                                    0,
-                                    70
-                                  )}...`}
-                                </p>
-                                <strong>Price: ${formikValues?.price}</strong>
-                              </>
-                            }
-                          />
-                        </div>
-                      );
-                    })}
-                  </ProductCarousel>
-                </Case>
-                <Case condition={productId}>
-                  <h3 className="text-center text-danger">
-                    This Product doesn't have any sub images
-                  </h3>
-                </Case>
-              </Switch> */}
               <Switch>
                 <Case
                   condition={
