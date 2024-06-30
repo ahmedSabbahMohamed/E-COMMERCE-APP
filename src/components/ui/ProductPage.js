@@ -3,13 +3,16 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CustomPaging from "./CustomPaging";
 import ProductDetails from "./ProductDetails";
-import { useQuery } from "@tanstack/react-query"
-import {API} from "../../api/index"
-import {useParams} from "react-router-dom"
+import { useQuery } from "@tanstack/react-query";
+import { API } from "../../api/index";
+import { useParams } from "react-router-dom";
 
 function ProductPage() {
-  const [images, setImages] = useState([])
-  const [cart, setCart] = useState([]);
+  const [images, setImages] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const myCart = sessionStorage.getItem("cart");
+    return myCart ? JSON.parse(myCart) : [];
+  });
   const { productId } = useParams();
 
   const { data: { data: { data: product } = {} } = {} } = useQuery({
@@ -17,26 +20,26 @@ function ProductPage() {
     queryFn: () => API.get(`/admin/product/${productId}`),
   });
 
+  useEffect(() => {
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (product, quantity) => {
-    const itemIndex = cart.findIndex(
-      (item) => item.product.id === product.id
-    );
+    const itemIndex = cart.findIndex((item) => item.product.id === product.id);
     if (itemIndex !== -1) {
       const updatedCart = [...cart];
-      updatedCart[itemIndex].quantity += quantity;
+      updatedCart[itemIndex].quantity = quantity;
       setCart(updatedCart);
     } else {
       setCart([...cart, { product, quantity }]);
     }
   };
 
-  console.log(cart)
-
   useEffect(() => {
     if (product) {
-      const updatedImages = product.images.map((image) => image.path); // Extracting paths from objects
+      const updatedImages = product.images.map((image) => image.path);
       if (product.picture) {
-        updatedImages.push(product.picture); // Adding the picture URL string
+        updatedImages.push(product.picture);
       }
       setImages(updatedImages);
     }

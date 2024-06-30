@@ -10,13 +10,25 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import "slick-carousel/slick/slick.css";  
 import "slick-carousel/slick/slick-theme.css";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+
+      refetchOnmount: true,
+
+      refetchOnReconnect: false,
+
+      retry: false,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient} >
 
       <App />
     </QueryClientProvider>

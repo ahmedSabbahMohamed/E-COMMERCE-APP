@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Upload } from "antd";
 import UploadButton from "../ui/UploadButton";
 import { useFormikContext } from "formik";
+import { toDataUrl } from "../../actions/events";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -15,7 +16,7 @@ const ImageHandler = ({ numOfImgs, name, label }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-  const { setFieldValue, values } = useFormikContext()
+  const { setFieldValue, values } = useFormikContext();
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -27,9 +28,11 @@ const ImageHandler = ({ numOfImgs, name, label }) => {
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    if (numOfImgs === 1) {
+    console.log(newFileList)
+    if (numOfImgs == 1) {
       setFieldValue(name, newFileList[0]?.originFileObj);
-    } else {
+    } 
+    else {
         const images = newFileList.map((file) => file.originFileObj);
         setFieldValue(name, images);
       }
@@ -49,7 +52,8 @@ const ImageHandler = ({ numOfImgs, name, label }) => {
         onChange={handleChange}
         multiple={numOfImgs !==  1}
         maxCount={numOfImgs}
-
+        action={null}
+        beforeUpload={() => false}
       >
         {fileList.length >= numOfImgs ? null : <UploadButton />}
       </Upload>

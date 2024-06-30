@@ -15,16 +15,20 @@ import TextArea from "../../../../components/form/TextArea"
 import { Row, Col } from 'react-bootstrap'
 import ProductCard from "../../../../components/ui/ProductCard"
 import ProductCarousel from "../../../../components/ui/ProductCarousel"
+import { ProductDescription } from "../../../../components/ui/ProductDescription"
+import ProgressBar from "../../../../components/ui/ProgressBar"
 
 function AddEditProductForm() {
     const [loading, setLoading] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [formikValues, setFormikValues] = useState({})
+    const [progress, setProgress] = useState(0)
     const {productId} = useParams()
 
-    const { data: myProduct } = useQuery({
+    const { data: myProduct, isLoading, isError, isSuccess } = useQuery({
       queryKey: ["product-id"],
       queryFn: () => API.get(`/admin/product/${productId}`),
+      enabled: !!productId,
     });
 
     const { data: categories } = useQuery({
@@ -36,15 +40,18 @@ function AddEditProductForm() {
         setIsSubmitting(true);
         const data = toFormData(values);
         console.log(data)
-        API.post("/admin/product", data)
+        API.post("/admin/product", data, {
+          onUploadProgress: (e) =>
+            setProgress(Math.round((e.loaded * 100) / e.total)),
+        })
           .then((res) => {
             swal(res?.data?.message);
-            values = {}
+            values = {};
             setLoading(true);
           })
           .catch((err) => swal(err?.response?.data?.message || "error"))
-          .finally(() =>
-            setIsSubmitting(false),
+          .finally(
+            () => setIsSubmitting(false),
             setTimeout(() => {
               setLoading(false);
             }, 300)
@@ -60,6 +67,10 @@ function AddEditProductForm() {
           })
           .catch((err) => swal(err?.response?.data?.message || "error"));
       };
+
+      const productDescription = (
+        <ProductDescription description={formikValues?.description} />
+      );
 
   return (
     <Switch>
@@ -86,13 +97,10 @@ function AddEditProductForm() {
                     : null
                   : ""
               }
-              title={formikValues?.name}
+              title={formikValues?.name || "Product Title"}
               description={
                 <>
-                  <p className="mb-1 text-black-50">{`${formikValues?.description?.slice(
-                    0,
-                    70
-                  )}...`}</p>
+                  {productDescription}
                   <strong>Price: ${formikValues?.price}</strong>
                 </>
               }
@@ -126,9 +134,7 @@ function AddEditProductForm() {
                           title={formikValues.name}
                           description={
                             <>
-                              <p className="mb-1 text-black-50">
-                                {formikValues?.description?.slice(0, 70)}...
-                              </p>
+                              {productDescription}
                               <strong>Price: ${formikValues.price}</strong>
                             </>
                           }
@@ -184,7 +190,6 @@ function AddEditProductForm() {
                         label={"Product Images"}
                         name={"images"}
                         numOfImgs={4}
-                        setFieldValue={formikProps.setFieldValue}
                       />
                       <SubmitBtn
                         disabled={isSubmitting}
@@ -202,7 +207,9 @@ function AddEditProductForm() {
             </div>
           </Col>
         </Row>
+      {isSubmitting && progress && <ProgressBar percent={progress} />}
       </Default>
+
     </Switch>
   );
 }

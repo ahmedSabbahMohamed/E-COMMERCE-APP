@@ -7,7 +7,7 @@ import CategoryProducts from "../features/productCatalog/components/CategoryProd
 import NotFoundPage from "../components/ui/NotFoundPage";
 import Header from "../layouts/components/Header";
 import Footer from "../layouts/Footer";
-
+import ProductPage from "../components/ui/ProductPage";
 
 function PublicRoutes() {
   const location = useLocation();
@@ -15,9 +15,10 @@ function PublicRoutes() {
   const existingPaths = [
     { path: "/", element: <HomePage /> },
     { path: "/product", element: <ProductDetails /> },
-    { path: "/categories/:categoryProducts", element: <CategoryProducts /> },
+    { path: "/category/:categoryProducts", element: <CategoryProducts /> },
     { path: "/signup", element: <Signup /> },
     { path: "/login", element: <Login /> },
+    { path: "/product/:productId", element: <ProductPage /> },
   ];
 
   const routes = useRoutes(existingPaths);

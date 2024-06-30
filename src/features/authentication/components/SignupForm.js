@@ -1,19 +1,20 @@
 import { Form, Formik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../../components/form/Input";
 import SubmitBtn from "../../../components/form/SubmitBtn";
-import "../assets/styles/FormContainer.css"
+import "../assets/styles/FormContainer.css";
 import { API } from "../../../api";
 import swal from "sweetalert";
 import { useState } from "react";
+import ImageHandler from "../../../components/form/ImageHandler";
 
 function SignupForm() {
-
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setisSubmitting] = useState(false);
 
   const validationSchema = Yup.object({
+    picture: Yup.mixed().required("Profile Image required"),
     name: Yup.string()
       .required("name is required")
       .min(2, "name is so short")
@@ -27,32 +28,27 @@ function SignupForm() {
       ),
     password: Yup.string()
       .required("password is required")
-      .matches(
-        /^(?=.*[!@#$%^&*()_+,\-./:;<=>?@[\\\]^_`{|}~])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/
-      , "weak password"),
-    dateOfBirth: Yup.string()
-      .required("date of birth is required")
-      .matches(
-        /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}$/,
-        "wrong format"
-      ),
+      // .matches(
+      //   /^(?=.*[!@#$%^&*()_+,\-./:;<=>?@[\\\]^_`{|}~])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
+      //   "weak password"
+      // )
+      ,
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = (values) => {
-    setisSubmitting(true)
+    setisSubmitting(true);
+    console.log(values)
     API.post("/user/register", values)
       .then(() => {
         swal("signup successfully").then(() => {
-          navigate("/login")
-        })
+          navigate("/login");
+        });
       })
-      .catch((err) => swal(err?.response?.data?.message))
-      .finally(() => setisSubmitting(false))
-    
-    
-  }
+      .catch((err) => swal(err?.response?.data?.message || "something went wrong"))
+      .finally(() => setisSubmitting(false));
+  };
 
   return (
     <div className="form-container d-flex align-items-center justify-content-center">
@@ -69,6 +65,11 @@ function SignupForm() {
                 >
                   {(formikProps) => (
                     <Form className="mx-auto d-grid gap-2">
+                      <ImageHandler
+                        name={"picture"}
+                        numOfImgs={"1"}
+                        label={"Profile Image"}
+                      />
                       <Input
                         label={"Name:"}
                         name={"name"}
@@ -86,12 +87,6 @@ function SignupForm() {
                         name={"password"}
                         type={"password"}
                         id={"password"}
-                      />
-                      <Input
-                        label={"Date of birth:"}
-                        name={"date_of_birth"}
-                        type={"date"}
-                        id={"dateOfBirth"}
                       />
 
                       <SubmitBtn
@@ -115,4 +110,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm
+export default SignupForm;

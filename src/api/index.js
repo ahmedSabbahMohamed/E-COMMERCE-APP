@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const BASE_API = `https://mo7amedatef17.serv00.net/api`;
 
@@ -25,6 +25,6 @@ const getHeaders = () => {
 };
 
 export const API = axios.create({
-    baseURL: BASE_API,
-    headers: getHeaders()
-})
+  baseURL: BASE_API,
+  headers: getHeaders(),
+});

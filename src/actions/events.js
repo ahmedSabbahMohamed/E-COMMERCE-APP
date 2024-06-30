@@ -46,4 +46,11 @@ const showDeleteConfirm = (id, deleteFn = () => {}, item, invalidateQuery) => {
   });
 };
 
-export { toFormData, logOut, showDeleteConfirm };
+const truncateDescription = (description) => {
+  const maxLength = 70;
+  return description && description.length > maxLength
+    ? description.slice(0, maxLength) + "..."
+    : description;
+};
+
+export { toFormData, logOut, showDeleteConfirm, truncateDescription };

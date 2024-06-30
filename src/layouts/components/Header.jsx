@@ -5,15 +5,19 @@ import SearchBar from "./SearchBar";
 import Arrow from "./Arrow";
 import MobileSidebar from "./MobileSidebar";
 import { navLinks } from "../../data/constants";
-import { Link } from "react-router-dom";
-import { IoCartOutline } from "react-icons/io5";
+import { Link, useLocation } from "react-router-dom";
 import "../assets/styles/Header.css";
 import { Case, Default, Switch } from "react-if";
-import Logout from "../../components/ui/Logout"
+import Logout from "../../components/ui/Logout";
+import headerImg from "../assets/images/header.jpeg";
+import { useQuery } from "@tanstack/react-query";
+import { API } from "../../api";
+import Cart from "./Cart";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
+  const location = useLocation();
 
     useEffect(() => {
       const handleScroll = () => {
@@ -34,9 +38,21 @@ function Header() {
       };
     }, []);
 
+    const { data } = useQuery({
+      queryKey: ["data"],
+      queryFn: () => API.get(`/admin${location.pathname}`),
+      enabled: location.pathname !== "/"
+    });
+
   return (
     <header className="w-100 position-relative">
-      <div className="header-content"></div>
+      <div
+        className="header-content"
+        style={{
+          backgroundImage:
+            data?.data?.data && location.pathname !== "/" ? `url(${data?.data?.data?.picture})` : `url(${headerImg})`,
+        }}
+      ></div>
       <Container
         fluid
         className="navbar px-2 py-0 d-flex align-items-center justify-content-between position-fixed top-0 z-3"
@@ -65,8 +81,8 @@ function Header() {
 
         <Switch>
           <Case condition={user}>
-            <div>
-              <IoCartOutline size={25} color="white" />
+            <div className="d-flex gap-2 justify-content-center align-items-center">
+              <Cart />
               <Logout />
             </div>
           </Case>
@@ -79,7 +95,7 @@ function Header() {
                 Register
               </Link>
               <div>
-                <IoCartOutline size={25} color="white" />
+                <Cart />
               </div>
             </div>
           </Default>

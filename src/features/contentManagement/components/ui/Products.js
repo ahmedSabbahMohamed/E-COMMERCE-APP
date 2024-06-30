@@ -1,22 +1,24 @@
-import React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Link, useNavigate } from 'react-router-dom'
-import { API } from "../../../../api"
-import { Button, Dropdown, Space, Table, Tooltip, Menu } from 'antd';
-import { FiEdit2 } from 'react-icons/fi';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../../../api";
+import { Button, Dropdown, Space, Table, Tooltip, Menu } from "antd";
+import { FiEdit2 } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import useDeleteItem from '../../../../hooks/DeleteItem';
-import { showDeleteConfirm } from '../../../../actions/events';
+import useDeleteItem from "../../../../hooks/DeleteItem";
+import { showDeleteConfirm } from "../../../../actions/events";
+import { Case, Switch } from "react-if";
+import Loading from "../../../../components/ui/Loading";
 
 function Products() {
-  const deleteProduct = useDeleteItem()
+  const deleteProduct = useDeleteItem();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { data: products } = useQuery({
-        queryKey: ["prodcut id"],
-        queryFn: () => API.get("/admin/products"),
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["prodcuts"],
+    queryFn: () => API.get("/admin/products"),
   });
 
   const columns = [
@@ -53,12 +55,19 @@ function Products() {
       title: "Action",
       key: "action",
       render: (_, record) => {
-          const items = [
-            {
-              key: "1",
-              label: <Link className='text-decoration-none text-primary' to={`/products/${record?.id}`}>Review</Link>,
-            },
-          ]
+        const items = [
+          {
+            key: "1",
+            label: (
+              <Link
+                className="text-decoration-none text-primary"
+                to={`/products/${record?.id}`}
+              >
+                Review
+              </Link>
+            ),
+          },
+        ];
         return (
           <Space size="small">
             <Tooltip title="edit">
@@ -70,7 +79,7 @@ function Products() {
                 onClick={() => navigate(`/edit-product/${record?.id}`)}
               />
             </Tooltip>
-  
+
             <Tooltip title="delete">
               <Button
                 className="btn btn-outline-danger d-flex align-items-center justify-content-center"
@@ -87,7 +96,7 @@ function Products() {
                 }
               />
             </Tooltip>
-  
+
             <Dropdown
               menu={{
                 items,
@@ -103,14 +112,27 @@ function Products() {
               </Button>
             </Dropdown>
           </Space>
-        )
-      }
+        );
+      },
     },
   ];
 
   return (
-    <Table bordered virtual columns={columns} dataSource={products?.data?.data} />
+    <Switch>
+      <Case condition={isLoading}>
+        <Loading queryString={"products"} />
+      </Case>
+      <Case condition={products}>
+        <Table
+          className="container"
+          bordered
+          virtual
+          columns={columns}
+          dataSource={products?.data?.data}
+        />
+      </Case>
+    </Switch>
   );
 }
 
-export default Products
+export default Products;
