@@ -14,7 +14,7 @@ function ProductCarousel({ children }) {
   };
 
   return (
-      <Slider {...settings}>
+      <Slider {...settings} className="asdf">
         {children}
       </Slider>
   );

@@ -1,48 +1,49 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import Logo from "../../components/ui/Logo";
-import SearchBar from "./SearchBar";
-import Arrow from "./Arrow";
-import MobileSidebar from "./MobileSidebar";
-import { navLinks } from "../../data/constants";
+import Logo from "../components/ui/Logo";
+import SearchBar from "./components/SearchBar";
+import Arrow from "./components/Arrow";
+import MobileSidebar from "./components/MobileSidebar";
+import { navLinks } from "../data/constants";
 import { Link, useLocation } from "react-router-dom";
-import "../assets/styles/Header.css";
+import "./assets/styles/Header.css";
 import { Case, Default, Switch } from "react-if";
-import Logout from "../../components/ui/Logout";
-import headerImg from "../assets/images/header.jpeg";
+import Logout from "../components/ui/Logout";
+import headerImg from "./assets/images/header.jpeg";
 import { useQuery } from "@tanstack/react-query";
-import { API } from "../../api";
-import Cart from "./Cart";
+import { API } from "../api";
+import Cart from "./components/Cart";
+import { useSelector } from "react-redux";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useSelector((state) => state.authSlice);
   const location = useLocation();
 
-    useEffect(() => {
-      const handleScroll = () => {
-        const navbar = document.querySelector(".navbar");
-        if (window.scrollY > 140) {
-          setScrolled(true);
-          navbar.classList.add("scrolled");
-        } else {
-          setScrolled(false);
-          navbar.classList.remove("scrolled");
-        }
-      };
+  useEffect(() => {
+    const handleScroll = () => {
+      const navbar = document.querySelector(".navbar");
+      if (window.scrollY > 140) {
+        setScrolled(true);
+        navbar.classList.add("scrolled");
+      } else {
+        setScrolled(false);
+        navbar.classList.remove("scrolled");
+      }
+    };
 
-      window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-    const { data } = useQuery({
-      queryKey: ["data"],
-      queryFn: () => API.get(`/admin${location.pathname}`),
-      enabled: location.pathname !== "/"
-    });
+  const { data } = useQuery({
+    queryKey: ["data"],
+    queryFn: () => API.get(`/admin${location.pathname}`),
+    enabled: location.pathname !== "/",
+  });
 
   return (
     <header className="w-100 position-relative">
@@ -50,7 +51,9 @@ function Header() {
         className="header-content"
         style={{
           backgroundImage:
-            data?.data?.data && location.pathname !== "/" ? `url(${data?.data?.data?.picture})` : `url(${headerImg})`,
+            data?.data?.data && location.pathname !== "/"
+              ? `url(${data?.data?.data?.picture})`
+              : `url(${headerImg})`,
         }}
       ></div>
       <Container

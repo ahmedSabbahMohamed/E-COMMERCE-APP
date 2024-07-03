@@ -1,8 +1,4 @@
 import { Form, Formik } from "formik"
-import Input from "../../../../components/form/Input"
-import ImageHandler from "../../../../components/form/ImageHandler"
-import SubmitBtn from "../../../../components/form/SubmitBtn"
-import { addProductSchema } from "../../../../actions/validationSchema"
 import { useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { API } from "../../../../api"
@@ -17,6 +13,11 @@ import ProductCard from "../../../../components/ui/ProductCard"
 import ProductCarousel from "../../../../components/ui/ProductCarousel"
 import { ProductDescription } from "../../../../components/ui/ProductDescription"
 import ProgressBar from "../../../../components/ui/ProgressBar"
+import Input from "../../../../components/form/Input"
+import ImageHandler from "../../../../components/form/ImageHandler"
+import SubmitBtn from "../../../../components/form/SubmitBtn"
+import {addProductSchema} from "../../../../actions/validationSchema";
+import CustomPaging from "../../../../components/ui/CustomPaging"
 
 function AddEditProductForm() {
     const [loading, setLoading] = useState(false)
@@ -106,7 +107,7 @@ function AddEditProductForm() {
               }
             />
 
-            <div className="w-100 p-3 px-lg-5">
+            <div className="w-100">
               <Switch>
                 <Case
                   condition={

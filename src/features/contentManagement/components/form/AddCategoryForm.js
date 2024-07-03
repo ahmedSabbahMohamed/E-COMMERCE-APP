@@ -14,7 +14,7 @@ import { Spin } from "antd";
 
 function AddCategoryForm() {
   const [loading, setLoading] = useState(false);
-  const [isSubmit, setIsSubmit] = useState(false)
+  const [isSubmit, setIsSubmit] = useState(false);
   const { categoryId } = useParams();
 
   const { data } = useQuery({
@@ -24,7 +24,7 @@ function AddCategoryForm() {
   });
 
   const handleSubmit = (formikProps) => {
-    setIsSubmit(true)
+    setIsSubmit(true);
     const data = toFormData(formikProps.values);
     API.post("/admin/category", data)
       .then((res) => {
@@ -33,8 +33,8 @@ function AddCategoryForm() {
         setLoading(true);
       })
       .catch((err) => swal(err?.response?.data?.message || "error"))
-      .finally(() =>
-        setIsSubmit(false),
+      .finally(
+        () => setIsSubmit(false),
         setTimeout(() => {
           setLoading(false);
         }, 300)
@@ -50,7 +50,7 @@ function AddCategoryForm() {
         window.location.pathname = "/";
       })
       .catch((err) => swal(err?.response?.data?.message || "error"))
-      .finally(() => setIsSubmit(false))
+      .finally(() => setIsSubmit(false));
   };
 
   return (
@@ -72,15 +72,10 @@ function AddCategoryForm() {
             enableReinitialize
           >
             {(formikProps) => {
-              console.log(formikProps.values);
               return (
                 <Form className="d-grid gap-3 my-4">
                   <Input label={"Category Name:"} name={"name"} />
-                  <ImageHandler
-                    name={"picture"}
-                    numOfImgs={1}
-                    label={"Category Image"}
-                  />
+                  <ImageHandler name={"picture"} label={"Category Image"} />
                   <SubmitBtn
                     disabled={isSubmit}
                     onClick={

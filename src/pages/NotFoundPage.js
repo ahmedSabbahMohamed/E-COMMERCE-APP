@@ -1,4 +1,4 @@
-import error from "../../assets/images/404-error.gif"
+import error from "../assets/images/404-error.gif";
 
 function NotFoundPage() {
   return (

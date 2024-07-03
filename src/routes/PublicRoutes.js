@@ -1,3 +1,4 @@
+import React from "react";
 import { useLocation, useRoutes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import ProductDetails from "../features/productCatalog/components/ProductDetails";
@@ -9,10 +10,10 @@ import Header from "../layouts/components/Header";
 import Footer from "../layouts/Footer";
 import ProductPage from "../components/ui/ProductPage";
 
-function PublicRoutes() {
+const PublicRoutes = () => {
   const location = useLocation();
 
-  const existingPaths = [
+  const routesConfig = [
     { path: "/", element: <HomePage /> },
     { path: "/product", element: <ProductDetails /> },
     { path: "/category/:categoryProducts", element: <CategoryProducts /> },
@@ -21,19 +22,18 @@ function PublicRoutes() {
     { path: "/product/:productId", element: <ProductPage /> },
   ];
 
-  const routes = useRoutes(existingPaths);
-
+  const routes = useRoutes(routesConfig);
   const isLoginOrSignup =
     location.pathname === "/login" || location.pathname === "/signup";
 
   return (
     <>
-      {!routes && <NotFoundPage />}
-      {routes && !isLoginOrSignup ? <Header /> : null}
       {routes}
-      {routes && !isLoginOrSignup ? <Footer /> : null}
+      {!isLoginOrSignup && <Header />}
+      {!isLoginOrSignup && <Footer />}
+      {!routes && <NotFoundPage />}
     </>
   );
-}
+};
 
 export default PublicRoutes;

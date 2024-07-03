@@ -19,10 +19,8 @@ const hife = [
 ];
 
 const adminLinks = [
-  { id: 1, path: "/", link: "Categories", icon: <BiCategory /> },
-  { id: 2, path: "/add-category", link: "Add Category", icon: <IoIosAddCircleOutline /> },
-  { id: 3, path: "/products", link: "Products", icon: <FaProductHunt /> },
-  { id: 4, path: "/add-product", link: "Add Product", icon:<IoIosAddCircleOutline /> },
+  { id: 1, path: "/admin", link: "Categories", icon: <BiCategory /> },
+  { id: 3, path: "/admin/products", link: "Products", icon: <FaProductHunt /> },
 ];
 
 export { navLinks, hife, adminLinks };

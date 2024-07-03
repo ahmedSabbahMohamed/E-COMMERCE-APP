@@ -1,12 +1,19 @@
-import { Categories, Products } from "../features/productCatalog"
+import { Categories, Products } from "../features/productCatalog";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer";
+import { Container } from "react-bootstrap";
 
 function HomePage() {
   return (
-    <div className="container">
+    <>
+      <Header />
+      <Container fluid>
         <Categories />
         <Products />
-    </div>
-  )
+      </Container>
+      <Footer />
+    </>
+  );
 }
 
-export default HomePage
+export default HomePage;

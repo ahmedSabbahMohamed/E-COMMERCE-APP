@@ -8,9 +8,12 @@ import SubmitBtn from "../../../components/form/SubmitBtn"
 import "../assets/styles/FormContainer.css"
 import swal from "sweetalert"
 import { API } from "../../../api"
+import { useDispatch } from "react-redux"
+import { handleLogin } from "../store"
 
 function LoginForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -23,15 +26,7 @@ function LoginForm() {
       setIsSubmitting(true)
       API.post("/user/login", values)
       .then((res) => {
-          localStorage.setItem("token", res?.data?.access_token);
-          localStorage.setItem("user", JSON.stringify(res?.data?.user));
-          localStorage.setItem(
-            "role",
-            JSON.stringify(res?.data?.user?.user_type)
-          );
-          swal("signedin successfully").then(() => {
-            window.location.pathname = "/"
-          });
+          dispatch(handleLogin(res?.data));
         })
         .catch((err) => {
           swal(err?.response?.data.error || "error");
@@ -40,7 +35,7 @@ function LoginForm() {
 
   return (
     <div className="form-container my-4 d-flex align-items-center justify-content-center">
-      <Container className="">
+      <Container>
         <Row className="rounded mx-2 shadow overflow-hidden">
           <Col className="p-0 form-img" sm={12} md={4}></Col>
           <Col className="py-4" sm={12} md={8}>
@@ -72,7 +67,7 @@ function LoginForm() {
 
                         <SubmitBtn disabled={isSubmitting} id={"login"} btnTxt={"Login"} />
                         <p className="text-center">
-                          don't have an account?{" "}
+                          don't have an account? 
                           <Link to={"/signup"}>Signup</Link>
                         </p>
                       </Form>
