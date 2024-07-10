@@ -16,6 +16,10 @@ form {
   width: 100%;
 }
 
+.fade.show {
+  z-index: 3 !important;
+}
+
 @media (min-width: 740px) {
   form {
     width: 50%;

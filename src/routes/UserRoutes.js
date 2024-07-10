@@ -1,11 +1,11 @@
 import React from "react";
 import { useRoutes } from "react-router-dom";
-import HomePage from "../pages/HomePage";
+import HomePage from "../Pages/HomePage";
 import ProductDetails from "../features/productCatalog/components/ProductDetails";
 import CategoryProducts from "../features/productCatalog/components/CategoryProducts";
 import NotFoundPage from "../components/ui/NotFoundPage";
-import Header from "../layouts/components/Header";
-import Footer from "../layouts/Footer";
+import Header from "../Layouts/components/Header";
+import Footer from "../Layouts/Footer";
 
 const routesConfig = [
   { path: "/", element: <HomePage /> },

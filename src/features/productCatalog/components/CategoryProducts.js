@@ -1,20 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom"
-import { API } from "../../../api";
+import { useParams } from "react-router-dom";
+import { API } from "../../../Api";
 
 function CategoryProducts() {
-    const { categoryProducts } = useParams();
+  const { categoryProducts } = useParams();
 
-    const {data} = useQuery({
-      queryKey: ['categoryProducts'],
-      queryFn: () => API.get(`/admin/category/${categoryProducts}`)
-    });
+  const { data } = useQuery({
+    queryKey: ["categoryProducts"],
+    queryFn: () => API.get(`/admin/category/${categoryProducts}`),
+  });
 
-    console.log(data?.data?.data);
+  console.log(data?.data?.data);
 
-  return (
-    <div className="container min-vh-100">{categoryProducts}</div>
-  )
+  return <div className="container min-vh-100">{categoryProducts}</div>;
 }
 
-export default CategoryProducts
+export default CategoryProducts;

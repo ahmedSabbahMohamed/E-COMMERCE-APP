@@ -2,7 +2,7 @@ import { Route } from "react-router-dom";
 import Admin from "../features/contentManagement/components/ui/Admin";
 import {
   AddCategoryForm,
-  AddEditProductForm,
+  AddProductForm,
   Categories,
   Products,
 } from "../features/contentManagement";
@@ -16,11 +16,11 @@ function AdminRoutes() {
         <Route index element={<Categories />} />
         <Route
           path="add-product"
-          element={<AddEditProductForm btnTxt={"Add Product"} />}
+          element={<AddProductForm btnTxt={"Add Product"} />}
         />
         <Route
           path="edit-product/:productId"
-          element={<AddEditProductForm btnTxt={"Edit Product"} />}
+          element={<AddProductForm btnTxt={"Edit Product"} />}
         />
         <Route path="products" element={<Products />} />
         <Route path="add-category" element={<AddCategoryForm />} />

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../../components/form/Input";
 import SubmitBtn from "../../../components/form/SubmitBtn";
 import "../assets/styles/FormContainer.css";
-import { API } from "../../../api";
+import { API } from "../../../Api";
 import swal from "sweetalert";
 import { useState } from "react";
 import ImageHandler from "../../../components/form/ImageHandler";
@@ -26,27 +26,27 @@ function SignupForm() {
         /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/,
         "wront format"
       ),
-    password: Yup.string()
-      .required("password is required")
-      // .matches(
-      //   /^(?=.*[!@#$%^&*()_+,\-./:;<=>?@[\\\]^_`{|}~])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
-      //   "weak password"
-      // )
-      ,
+    password: Yup.string().required("password is required"),
+    // .matches(
+    //   /^(?=.*[!@#$%^&*()_+,\-./:;<=>?@[\\\]^_`{|}~])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/,
+    //   "weak password"
+    // )
   });
 
   const navigate = useNavigate();
 
   const handleSubmit = (values) => {
     setisSubmitting(true);
-    console.log(values)
+    console.log(values);
     API.post("/user/register", values)
       .then(() => {
         swal("signup successfully").then(() => {
           navigate("/login");
         });
       })
-      .catch((err) => swal(err?.response?.data?.message || "something went wrong"))
+      .catch((err) =>
+        swal(err?.response?.data?.message || "something went wrong")
+      )
       .finally(() => setisSubmitting(false));
   };
 
@@ -67,7 +67,7 @@ function SignupForm() {
                     <Form className="mx-auto d-grid gap-2">
                       <ImageHandler
                         name={"picture"}
-                        numOfImgs={"1"}
+                        maxFiles={"1"}
                         label={"Profile Image"}
                       />
                       <Input

@@ -1,5 +1,7 @@
-import authSlice from "../features/authentication/store";
+import userSlice from "../Auth/store/userSlice";
+import uploadSlice from "../Api/store/uploadSlice";
 
 export const reducers = {
-  authSlice
+  userSlice,
+  uploadSlice,
 };

@@ -7,9 +7,9 @@ import Input from "../../../components/form/Input"
 import SubmitBtn from "../../../components/form/SubmitBtn"
 import "../assets/styles/FormContainer.css"
 import swal from "sweetalert"
-import { API } from "../../../api"
+import { API } from "../../../Api"
 import { useDispatch } from "react-redux"
-import { handleLogin } from "../store"
+import { handleLogin } from "../../../Auth/store"
 
 function LoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);

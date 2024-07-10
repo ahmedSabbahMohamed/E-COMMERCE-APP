@@ -1,13 +1,13 @@
 import React from "react";
 import { useLocation, useRoutes } from "react-router-dom";
-import HomePage from "../pages/HomePage";
+import HomePage from "../Pages/HomePage";
 import ProductDetails from "../features/productCatalog/components/ProductDetails";
 import Signup from "../pages/Signup";
 import Login from "../pages/Login";
 import CategoryProducts from "../features/productCatalog/components/CategoryProducts";
 import NotFoundPage from "../components/ui/NotFoundPage";
-import Header from "../layouts/components/Header";
-import Footer from "../layouts/Footer";
+import Header from "../Layouts/components/Header";
+import Footer from "../Layouts/Footer";
 import ProductPage from "../components/ui/ProductPage";
 
 const PublicRoutes = () => {

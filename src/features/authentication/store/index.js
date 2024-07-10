@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import swal from "sweetalert";
 
 export const authSlice = createSlice({
   name: "user",
@@ -9,17 +8,16 @@ export const authSlice = createSlice({
   },
   reducers: {
     handleLogin: (state, action) => {
-      const { user , access_token } = action.payload
+      const { user, access_token } = action.payload;
       state.isLogin = true;
       state.user = user;
       localStorage.setItem("token", access_token);
-      swal("signedin successfully").then(() => {
-        window.location.pathname = "/";
-      });
+      window.location.pathname = "/";
     },
     handleLogout: (state) => {
       state.isLogin = false;
       state.user = {};
+      localStorage.removeItem("token");
     },
   },
 });

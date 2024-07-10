@@ -12,6 +12,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { PhotoProvider } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +37,10 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <PhotoProvider>
+            <App />
+          </PhotoProvider>
+          <ToastContainer />
         </QueryClientProvider>
       </BrowserRouter>
     </PersistGate>
