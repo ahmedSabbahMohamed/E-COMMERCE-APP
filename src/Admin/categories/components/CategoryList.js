@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { API } from "../../../Api";
 import CustomDataTable from "../../../Components/ui/CustomDataTable";
 import AddCategoryForm from "./AddCategoryForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { categoryListCols } from "../columns";
 import { customStyles } from "../customStyles";
@@ -10,14 +10,26 @@ import { customStyles } from "../customStyles";
 function CategoryList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]);
 
   const {
     data: categories,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["categories", currentPage, search],
-    queryFn: () => API.get(`/admin/categories?page=${currentPage}&filter[name]=${search}`),
+    queryKey: ["categories", currentPage, debouncedSearch],
+    queryFn: () =>
+      API.get(`/admin/categories?page=${currentPage}&filter[name]=${search}`),
     enabled: !!currentPage,
   });
 

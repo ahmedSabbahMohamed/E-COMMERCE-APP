@@ -43,7 +43,7 @@ const CustomDataTable = ({
         paginationPerPage={paginationPerPage}
         paginationRowsPerPageOptions={paginationRowsPerPageOptions}
         progressPending={progressPending}
-        progressComponent={progressComponent}
+        progressComponent={<div className="py-3">{progressComponent}</div>}
         noHeader={noHeader}
         subHeader={subHeader}
         fixedHeader={fixedHeader}
@@ -56,7 +56,9 @@ const CustomDataTable = ({
           />
         }
         persistTableHead={true}
-        noDataComponent={isError ? <Loading queryString={queryString} /> : <NoData />}
+        noDataComponent={
+          isError ? <Loading queryString={queryString} /> : <NoData />
+        }
         responsive
       />
       <div className="mt-5 mb-2 d-flex justify-content-end">

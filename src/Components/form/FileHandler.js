@@ -13,16 +13,28 @@ const FileHandler = ({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState([]);
-  const { setFieldValue, values } = useFormikContext();
+  const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
     if (currentFiles.length > 0) {
-      const initialFileList = currentFiles.map((file, index) => ({
-        uid: `${index}`,
-        name: file?.path,
-        status: "done",
-        url: file?.path,
-      }));
+      const initialFileList = currentFiles.map((file, index) => {
+        console.log("file => ", file);
+        if (file?.path) {
+          return {
+            uid: `${index}`,
+            name: file?.path,
+            status: "done",
+            url: file?.path,
+            originFileObj: file,
+          };
+        } else {
+          return {
+            uid: `${index}`,
+            name: file?.name,
+            originFileObj: file,
+          };
+        }
+      });
       setFileList(initialFileList);
     }
   }, [currentFiles]);
@@ -46,11 +58,10 @@ const FileHandler = ({
 
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    console.log(newFileList);
-    if (maxFiles == 1) {
+    if (maxFiles === 1) {
       setFieldValue(id, newFileList[0]?.originFileObj);
     } else {
-      const images = newFileList.map((file) => file.originFileObj);
+      const images = newFileList.map((file) => file?.originFileObj || file);
       setFieldValue(id, images);
     }
   };

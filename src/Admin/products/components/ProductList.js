@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { API } from "../../../Api";
 import CustomDataTable from "../../../Components/ui/CustomDataTable";
 import { Spin } from "antd";
@@ -10,24 +10,36 @@ import { customStyles } from "../customStyles";
 function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [filterKey, setFilterKey] = useState("")
+  const [filterKey, setFilterKey] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]);
 
   const {
     data: products,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["products", currentPage, search],
+    queryKey: ["products", currentPage, debouncedSearch],
     queryFn: () =>
       API.get(
-        `/admin/products?page=${currentPage}&filter[${filterKey}]=${search}`
+        `/admin/products?page=${currentPage}`
+        // &filter[${filterKey}]=${search}
       ),
     enabled: !!currentPage,
   });
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected + 1);
-  }
+  };
 
   const pageCount = products?.data?.data?.last_page;
 

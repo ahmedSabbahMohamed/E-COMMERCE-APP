@@ -3,7 +3,7 @@ import CustomModal from "../../Components/ui/CustomModal";
 import ImageViewer from "../../Components/ui/ImageViewer";
 import { FiEdit2 } from "react-icons/fi";
 import AddProduct from "./components/AddProduct";
-import {RiDeleteBin6Line} from "react-icons/ri";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import DeleteConfirmation from "../../Components/ui/DeleteConfirmation";
 import { truncateDescription } from "../../Helpers";
 
@@ -20,7 +20,11 @@ export const productListCols = (setSearch, setFilterKey) => [
         triggerText={<IoMdEye />}
         variant="outline-secondary"
         heading={`View ${row?.name} Images`}
-        body={<ImageViewer imgs={row?.images} />}
+        body={
+          <ImageViewer
+            imgs={row?.images ? row?.images : [{ path: row?.picture }]}
+          />
+        }
         className={
           "rounded-pill d-flex align-items-center justify-content-center"
         }

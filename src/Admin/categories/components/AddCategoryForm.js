@@ -5,7 +5,7 @@ import FileHnadler from "../../../Components/form/FileHandler";
 import { API } from "../../../Api";
 import { Case, Default, Switch } from "react-if";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Spin } from "antd";
 import { closeModal, convertToFormData } from "../../../Helpers";
 import Loading from "../../../Components/ui/Loading";
@@ -23,35 +23,35 @@ function AddCategoryForm({ edit = false, id = undefined }) {
     enabled: Boolean(edit && id),
   });
 
-  const handleSubmit = (formikProps) => {
-    setIsSubmit(true);
-    console.log(formikProps.values);
-    const formData = convertToFormData(formikProps?.values);
-
-    const apiCall =
+  const mutation = useMutation({
+    mutationFn: (formData) =>
       id && edit
         ? API.post(`/admin/category/${id}`, formData)
-        : API.post("/admin/category", formData);
+        : API.post("/admin/category", formData),
+    onSuccess: () => {
+      toast.success(
+        `${id ? "Category Updated" : "Category Added"} Successfully`
+      );
+      queryClient.invalidateQueries("categories");
+      closeModal();
+    },
+    onError: (err) => {
+      toast.error(
+        JSON.stringify(err?.response?.data?.message) ||
+          `${id ? "Category Not Updated" : "Category Not Added"}`
+      );
+    },
+    onSettled: () => {
+      setIsSubmit(false);
+    },
+  });
 
-    apiCall
-      .then(() => {
-        toast.success(
-          `${id ? "Category Updated" : "Category Added"} Successfully`
-        );
-        formikProps.resetForm();
-        queryClient.invalidateQueries("categories");
-        closeModal();
-      })
-      .catch((err) => {
-        console.log(err?.response?.data?.message);
-        toast.error(
-          JSON.stringify(err?.response?.data?.message) ||
-            `${id ? "Category Not Updated" : "Category Not Added"}`
-        );
-      })
-      .finally(() => {
-        setIsSubmit(false);
-      });
+  const handleSubmit = (formikProps) => {
+    setIsSubmit(true);
+    const formData = convertToFormData(formikProps?.values);
+    mutation.mutate(formData, {
+      onSuccess: () => formikProps.resetForm(),
+    });
   };
 
   return (
@@ -75,24 +75,27 @@ function AddCategoryForm({ edit = false, id = undefined }) {
             onSubmit={() => false}
             enableReinitialize
           >
-            {(formikProps) => (
-              <Form className="d-grid gap-3 my-4">
-                <Input label={"Category Name"} name={"name"} />
-                <FileHnadler
-                  id={"images"}
-                  label={"Category Image"}
-                  maxFiles={5}
-                  currentFiles={
-                    id && edit ? get(formikProps?.values, "images", []) : []
-                  }
-                />
-                <SubmitBtn
-                  disabled={isSubmit}
-                  onClick={() => handleSubmit(formikProps)}
-                  btnTxt={`${id ? "Edit" : "Add"} Category`}
-                />
-              </Form>
-            )}
+            {(formikProps) => {
+              console.log(formikProps.values);
+              return (
+                <Form className="d-grid gap-3 my-4">
+                  <Input label={"Category Name"} name={"name"} />
+                  <FileHnadler
+                    id={"images"}
+                    label={"Category Image"}
+                    maxFiles={5}
+                    currentFiles={
+                      id && edit ? get(formikProps?.values, "images", []) : []
+                    }
+                  />
+                  <SubmitBtn
+                    disabled={isSubmit}
+                    onClick={() => handleSubmit(formikProps)}
+                    btnTxt={`${id ? "Edit" : "Add"} Category`}
+                  />
+                </Form>
+              );
+            }}
           </Formik>
         </div>
       </Default>

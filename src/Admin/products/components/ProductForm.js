@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import Input from "../../../Components/form/Input";
 import Select from "../../../Components/form/Select";
@@ -11,8 +11,11 @@ import { API } from "../../../Api";
 import { closeModal, convertToFormData } from "../../../Helpers";
 import { toast } from "react-toastify";
 import { get } from "lodash";
+import { Spin } from "antd";
+import Loading from "../../../Components/ui/Loading";
+import { Case, Default, Switch } from "react-if";
 
-function ProductFom({ id = undefined, edit = false, productData }) {
+function ProductForm({ id = null, edit = false, productData }) {
   const [isSubmit, setIsSubmit] = useState(false);
   const queryClient = useQueryClient();
 
@@ -31,76 +34,83 @@ function ProductFom({ id = undefined, edit = false, productData }) {
     queryFn: () => API.get("/admin/categories"),
   });
 
+  const mutation = useMutation({
+    mutationFn: (formData) =>
+      id && edit
+        ? API.post(`/admin/product/${id}`, formData)
+        : API.post("/admin/product", formData),
+    onSuccess: () => {
+      toast.success(
+        `Product ${id ? "Updated" : "Added"} Successfully`
+      );
+      queryClient.invalidateQueries("products");
+      closeModal();
+    },
+    onError: (err) => {
+      toast.error(
+        JSON.stringify(err?.response?.data?.message) ||
+          `Product Not ${id ? "Updated" : "Added"}`
+      );
+    },
+    onSettled: () => {
+      setIsSubmit(false);
+    },
+  });
+
   const handleSubmit = (formikProps) => {
     setIsSubmit(true);
     const formData = convertToFormData(formikProps?.values);
-
-    const apiCall =
-      id && edit
-        ? API.post(`/admin/product/${id}`, formData)
-        : API.post("/admin/product", formData);
-
-    apiCall
-      .then(() => {
-        toast.success(`Product ${id ? "Updated" : "Added"} Successfully`);
-        formikProps.resetForm();
-        queryClient.invalidateQueries("products");
-        closeModal();
-      })
-      .catch((err) => {
-        toast.error(
-          err?.response?.data?.message ||
-            `Product ${id ? "Not Updated" : "Not Added"}`
-        );
-      })
-      .finally(() => {
-        setIsSubmit(false);
-      });
+    mutation.mutate(formData, {
+      onSuccess: () => formikProps.resetForm(),
+    });
   };
 
   return (
-    <div>
-      <Formik
-        initialValues={id ? product?.data?.data : {}}
-        validationSchema={validationSchema}
-        onSubmit={() => false}
-        enableReinitialize
-      >
-        {(formikProps) => {
-          productData(formikProps.values);
-          return (
-            <Form className="d-grid gap-3 my-4 w-100">
-              <Input label={"Product Name"} name={"name"} />
-              <TextArea label={"Product description"} name={"description"} />
-              <Input label={"Product price"} name={"price"} />
-              <Select
-                options={categories?.data?.data?.data}
-                name={"category_id"}
-              />
-              <FileHandler
-                label={"Product Main Image"}
-                id={"picture"}
-                maxFiles={1}
-              />
-              <FileHandler
-                label={"Product Images"}
-                id={"images"}
-                maxFiles={4}
-                currentFiles={
-                  id && edit ? get(formikProps.values, "images", []) : []
-                }
-              />
-              <SubmitBtn
-                disabled={isSubmit}
-                onClick={() => handleSubmit(formikProps)}
-                btnTxt={`${id ? "Edit" : "Add"} Product`}
-              />
-            </Form>
-          );
-        }}
-      </Formik>
-    </div>
+    <Switch>
+      <Case condition={isLoading}>
+        <Spin />
+      </Case>
+      <Case condition={isError}>
+        <Loading queryString={"get_product"} />
+      </Case>
+      <Default>
+        <Formik
+          initialValues={id && edit ? product?.data?.data : {}}
+          validationSchema={validationSchema}
+          onSubmit={() => false}
+          enableReinitialize
+        >
+          {(formikProps) => {
+            productData(formikProps.values);
+            return (
+              <Form className="d-grid gap-3 my-4 w-100">
+                <Input label={"Product Name"} name={"name"} />
+                <TextArea label={"Product Description"} name={"description"} />
+                <Input label={"Product Price"} name={"price"} />
+                <Select options={categories?.data?.data?.data} name={"category_id"} />
+                <FileHandler
+                  label={"Product Main Image"}
+                  id={"picture"}
+                  maxFiles={1}
+                />
+                <FileHandler
+                  label={"Product Images"}
+                  id={"images"}
+                  maxFiles={4}
+                  currentFiles={id && edit ? get(formikProps?.values, "images", []) : []}
+                />
+                <SubmitBtn
+                  disabled={isSubmit}
+                  btnTxt={`${id ? "Edit" : "Add"} Product`}
+                  onClick={() => handleSubmit(formikProps)}
+                />
+              </Form>
+            );
+          }}
+        </Formik>
+      </Default>
+    </Switch>
   );
 }
 
-export default ProductFom;
+export default ProductForm;

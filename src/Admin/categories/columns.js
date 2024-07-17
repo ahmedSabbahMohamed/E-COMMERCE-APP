@@ -5,6 +5,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import AddCategoryForm from "./components/AddCategoryForm";
 import DeleteConfirmation from "../../Components/ui/DeleteConfirmation";
 import ImageViewer from "../../Components/ui/ImageViewer";
+import { Table } from "antd";
+import { truncateDescription } from "../../Helpers";
 
 export const categoryListCols = (setSearch) => [
   {
@@ -26,8 +28,29 @@ export const categoryListCols = (setSearch) => [
         style={{ width: "2rem", height: "2rem", padding: "0" }}
       />
     ),
-    minWidth: "90px",
-    // center: "true"
+    maxWidth: "90px",
+  },
+  {
+    name: "Category Products",
+    selector: (row) => (
+      <CustomModal
+        triggerText="products"
+        variant="outline-success"
+        heading={row?.name + " Category"}
+        body={
+          <div className="overflow-auto">
+            <Table
+              responsive
+              dataSource={row?.products}
+              columns={categoryProductscols}
+              pagination={false}
+            />
+          </div>
+        }
+      />
+    ),
+    center: true,
+    width: "200px",
   },
   {
     name: (
@@ -36,7 +59,7 @@ export const categoryListCols = (setSearch) => [
         <input
           onChange={(e) => setSearch(e.target.value)}
           className="form-control form m-0 py-0 px-1 shadow-none w-75"
-          style={{ height: "20px"}}
+          style={{ height: "20px" }}
           type="text"
         />
       </div>
@@ -78,5 +101,21 @@ export const categoryListCols = (setSearch) => [
     ),
     minWidth: "150px",
     center: "true",
+  },
+];
+
+const categoryProductscols = [
+  { title: "ID", render: (_, __, index) => index + 1 },
+  { title: "Product Name", dataIndex: "name" },
+  {
+    title: "Product Picture",
+    dataIndex: "picture",
+    render: (img) => <ImageViewer width="4rem" height="4rem" imgs={[{ path: img }]} />,
+  },
+  { title: "Price", dataIndex: "price" },
+  {
+    title: "Product Desc",
+    dataIndex: "description",
+    render: (desc) => truncateDescription(desc),
   },
 ];
