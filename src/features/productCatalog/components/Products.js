@@ -26,7 +26,7 @@ function Products() {
 
         <Case condition={products}>
           <div className="d-flex flex-row flex-wrap gap-3">
-            {products?.map((product, index) => {
+            {/* {products?.map((product, index) => {
               return (
                 <Link
                   to={`/product/${product?.id}`}
@@ -45,7 +45,7 @@ function Products() {
                   />
                 </Link>
               );
-            })}
+            })} */}
           </div>
         </Case>
       </Switch>
