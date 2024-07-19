@@ -15,22 +15,6 @@ export const categoryListCols = (setSearch) => [
     maxWidth: "70px",
   },
   {
-    name: "Images",
-    cell: (row) => (
-      <CustomModal
-        triggerText={<IoMdEye />}
-        variant="outline-secondary"
-        heading={`View ${row?.name} Images`}
-        body={<ImageViewer imgs={row?.images} />}
-        className={
-          "rounded-pill d-flex align-items-center justify-content-center"
-        }
-        style={{ width: "2rem", height: "2rem", padding: "0" }}
-      />
-    ),
-    maxWidth: "90px",
-  },
-  {
     name: "Category Products",
     selector: (row) => (
       <CustomModal
@@ -102,20 +86,38 @@ export const categoryListCols = (setSearch) => [
     minWidth: "150px",
     center: "true",
   },
+  {
+    name: "Images",
+    cell: (row) => (
+      <CustomModal
+        triggerText={<IoMdEye />}
+        variant="outline-secondary"
+        heading={`View ${row?.name} Images`}
+        body={<ImageViewer imgs={row?.images} />}
+        className={
+          "rounded-pill d-flex align-items-center justify-content-center"
+        }
+        style={{ width: "2rem", height: "2rem", padding: "0" }}
+      />
+    ),
+    maxWidth: "90px",
+  },
 ];
 
 const categoryProductscols = [
   { title: "ID", render: (_, __, index) => index + 1 },
   { title: "Product Name", dataIndex: "name" },
-  {
-    title: "Product Picture",
-    dataIndex: "picture",
-    render: (img) => <ImageViewer width="4rem" height="4rem" imgs={[{ path: img }]} />,
-  },
   { title: "Price", dataIndex: "price" },
   {
     title: "Product Desc",
     dataIndex: "description",
     render: (desc) => truncateDescription(desc),
+  },
+  {
+    title: "Product Picture",
+    dataIndex: "picture",
+    render: (img) => (
+      <ImageViewer width="4rem" height="4rem" imgs={[{ path: img }]} />
+    ),
   },
 ];

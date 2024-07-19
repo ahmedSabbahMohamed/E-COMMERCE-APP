@@ -5,6 +5,10 @@ import Signup from "../Pages/Signup";
 import Login from "../Pages/Login";
 import NotFoundPage from "../Pages/NotFoundPage";
 import { useSelector } from "react-redux";
+import ProductPage from "../Pages/ProductPage";
+import Products from "../Pages/Products";
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
 
 const RoutesConfig = () => {
   const { isLogin, user } = useSelector((state) => state.userSlice);
@@ -25,19 +29,36 @@ const RoutesConfig = () => {
       isPublic: true,
       alwaysShow: true,
     },
-    // {
-    //   path: "/categories",
-    //   element: <Admin />,
-    //   isAuth: true,
-    //   isPublic: false,
-    //   userType: "admin",
-    // },
     {
       path: "/products",
       element: <Admin />,
       isAuth: true,
       isPublic: false,
       userType: "admin",
+    },
+    {
+      path: "/product/:productId",
+      element: <ProductPage />,
+      isPublic: true,
+      isAuth: false,
+    },
+    {
+      path: "/products",
+      element: <Products />,
+      isAuth: false,
+      isPublic: true,
+    },
+    {
+      path: "/about",
+      element: <About />,
+      isAuth: false,
+      isPublic: true,
+    },
+    {
+      path: "/contact",
+      element: <Contact />,
+      isAuth: false,
+      isPublic: true,
     },
     {
       path: "/login",

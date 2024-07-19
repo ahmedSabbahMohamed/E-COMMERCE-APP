@@ -1,22 +1,26 @@
-import Slider from "react-slick";
 import { FcNext, FcPrevious } from "react-icons/fc";
+import Slider from "react-slick";
 
-function ImagesCarousel({ children }) {
-  const settings = {
+function ImagesCarousel({
+  children,
+  settings = {
     infinite: true,
     dots: true,
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: 0,
-    nextArrow: <FcNext />,
-    prevArrow: <FcPrevious />,
+  },
+  nextArrow,
+  prevArrow,
+}) {
+  const customSettings = {
+    ...settings,
+    nextArrow: nextArrow || <FcNext />,
+    prevArrow: prevArrow || <FcPrevious />,
   };
 
-  return (
-    <Slider {...settings}>
-      {children}
-    </Slider>
-  );
+  return <Slider {...customSettings}>{children}</Slider>;
 }
+
 export default ImagesCarousel;

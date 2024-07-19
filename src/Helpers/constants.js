@@ -1,5 +1,8 @@
 import { FaProductHunt } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
+import customerService from "../Assets/images/Icon-Customer service.png";
+import delivery from "../Assets/images/icon-delivery.png";
+import secure from "../Assets/images/Icon-secure.png";
 
 const navLinks = [
   { id: 1, link: "Home", path: "/" },
@@ -42,6 +45,27 @@ const privateMobileNavbar = [
   { id: 3, href: "/about", link: "About" },
 ];
 
+const services = [
+  {
+    id: 1,
+    icon: delivery,
+    title: "free and fast delivery",
+    paragraph: "Free delivery for all orders over $140",
+  },
+  {
+    id: 2,
+    icon: customerService,
+    title: "24/7 CUSTOMER SERVICE",
+    paragraph: "Friendly 24/7 customer support",
+  },
+  {
+    id: 3,
+    icon: secure,
+    title: "MONEY BACK GUARANTEE",
+    paragraph: "We reurn money within 30 days",
+  },
+];
+
 export {
   navLinks,
   hife,
@@ -49,4 +73,5 @@ export {
   desktopNavbar,
   publicMobileNavbar,
   privateMobileNavbar,
+  services
 };

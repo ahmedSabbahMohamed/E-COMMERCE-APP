@@ -1,4 +1,4 @@
-import { truncateDescription } from "../../actions/events";
+import { truncateDescription } from "../../Helpers";
 
 export const ProductDescription = ({ description }) => (
   <p className="mb-1 text-black-50">

@@ -10,7 +10,7 @@ import { customStyles } from "../customStyles";
 function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [filterKey, setFilterKey] = useState("");
+  const [filterKey, setFilterKey] = useState("name");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
   useEffect(() => {
@@ -31,8 +31,7 @@ function ProductList() {
     queryKey: ["products", currentPage, debouncedSearch],
     queryFn: () =>
       API.get(
-        `/admin/products?page=${currentPage}`
-        // &filter[${filterKey}]=${search}
+        `/admin/products?page=${currentPage}&filter[${filterKey}]=${search}`
       ),
     enabled: !!currentPage,
   });

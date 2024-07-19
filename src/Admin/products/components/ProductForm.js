@@ -40,9 +40,7 @@ function ProductForm({ id = null, edit = false, productData }) {
         ? API.post(`/admin/product/${id}`, formData)
         : API.post("/admin/product", formData),
     onSuccess: () => {
-      toast.success(
-        `Product ${id ? "Updated" : "Added"} Successfully`
-      );
+      toast.success(`Product ${id ? "Updated" : "Added"} Successfully`);
       queryClient.invalidateQueries("products");
       closeModal();
     },
@@ -87,17 +85,34 @@ function ProductForm({ id = null, edit = false, productData }) {
                 <Input label={"Product Name"} name={"name"} />
                 <TextArea label={"Product Description"} name={"description"} />
                 <Input label={"Product Price"} name={"price"} />
-                <Select options={categories?.data?.data?.data} name={"category_id"} />
+                <Select
+                  options={categories?.data?.data?.data}
+                  name={"category_id"}
+                />
                 <FileHandler
                   label={"Product Main Image"}
                   id={"picture"}
                   maxFiles={1}
+                  currentFiles={
+                    typeof formikProps?.values?.picture === "string" &&
+                    id &&
+                    edit
+                      ? [
+                          {
+                            id: Math.random(),
+                            path: formikProps?.values?.picture,
+                          },
+                        ]
+                      : []
+                  }
                 />
                 <FileHandler
                   label={"Product Images"}
                   id={"images"}
                   maxFiles={4}
-                  currentFiles={id && edit ? get(formikProps?.values, "images", []) : []}
+                  currentFiles={
+                    id && edit ? get(formikProps?.values, "images", []) : []
+                  }
                 />
                 <SubmitBtn
                   disabled={isSubmit}

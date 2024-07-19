@@ -1,21 +1,28 @@
-.categories-container {
-    justify-content: center;
+.heading {
+    color: #008ECC;
 }
 
-.category {
-    width: 260px;
-    height: 400px;
-    border-radius: 30px;
-    background-size: cover;
-    background-position: center;
-    transition: .3s ease-in-out;
-    &:hover {
-        transform: scale(1.05);
+.category-card {
+    width: 132px !important;
+    height: 172px;
+    .category-img {
+        width: 132px;
+        height: 132px;
+        background-color: #F5F5F5;
+    }
+    img {
+        width: 90px;
+        height: 90px;
     }
 }
 
-@media (min-width: 992px) {
-    .categories-container {
-        justify-content: normal;
-    }
+.category-card:hover .category-img {
+    transition: .3s ease all;
+    border: 1px solid #40c1f8;
+    box-shadow: 1px 1px 10px lightblue;
+}
+
+.category-card:hover img {
+    transition: .5s ease-in-out all;
+    transform: scale(1.2);
 }

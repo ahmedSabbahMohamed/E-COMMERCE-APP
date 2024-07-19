@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CustomPaging from "./CustomPaging";
-import ProductDetails from "./ProductDetails";
+import CustomPaging from "../Components/ui/CustomPaging";
+import ProductDetails from "../Components/ui/ProductDetails";
 import { useQuery } from "@tanstack/react-query";
-import { API } from "../../Api";
+import { API } from "../Api";
 import { useParams } from "react-router-dom";
+import Header from "../Layouts/Header";
+import Footer from "../Layouts/Footer";
 
 function ProductPage() {
   const [images, setImages] = useState([]);
@@ -47,6 +49,7 @@ function ProductPage() {
 
   return (
     <>
+    <Header />
       <Row className="p-0 m-0 d-flex align-items-center justify-content-center gap-4 min-vh-100">
         <Col className="p-0 m-0" sm={12} lg={5}>
           <CustomPaging imgs={images} customImages={images} />
@@ -57,6 +60,7 @@ function ProductPage() {
           )}
         </Col>
       </Row>
+      <Footer />
     </>
   );
 }

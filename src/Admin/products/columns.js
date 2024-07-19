@@ -14,26 +14,6 @@ export const productListCols = (setSearch, setFilterKey) => [
     maxWidth: "70px",
   },
   {
-    name: "Images",
-    cell: (row) => (
-      <CustomModal
-        triggerText={<IoMdEye />}
-        variant="outline-secondary"
-        heading={`View ${row?.name} Images`}
-        body={
-          <ImageViewer
-            imgs={row?.images ? row?.images : [{ path: row?.picture }]}
-          />
-        }
-        className={
-          "rounded-pill d-flex align-items-center justify-content-center"
-        }
-        style={{ width: "2rem", height: "2rem", padding: "0" }}
-      />
-    ),
-    minWidth: "90px",
-  },
-  {
     name: (
       <div className="d-flex flex-column gap-1 align-items-center justify-content-center">
         <p className="m-0 p-0">Product Name</p>
@@ -110,5 +90,26 @@ export const productListCols = (setSearch, setFilterKey) => [
     ),
     minWidth: "150px",
     center: "true",
+  },
+  {
+    name: "Images",
+    cell: (row) => (
+      <CustomModal
+        triggerText={<IoMdEye />}
+        variant="outline-secondary"
+        heading={`View ${row?.name} Images`}
+        body={
+          <ImageViewer
+            imgs={row?.images ? row?.images : [{ path: row?.picture }]}
+          />
+        }
+        className={
+          "rounded-pill d-flex align-items-center justify-content-center"
+        }
+        style={{ width: "2rem", height: "2rem", padding: "0" }}
+      />
+    ),
+    maxWidth: "90px",
+    center: true,
   },
 ];

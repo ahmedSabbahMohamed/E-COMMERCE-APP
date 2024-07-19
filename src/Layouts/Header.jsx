@@ -19,6 +19,14 @@ function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { user } = useSelector((state) => state.userSlice);
   const location = useLocation();
+  const pathnameRegex = /^(\/product\/[^/]+|\/category\/[^/]+)$/;
+
+  const { data } = useQuery({
+    queryKey: ["data"],
+    queryFn: () => API.get(`/admin${location.pathname}`),
+    enabled: pathnameRegex.test(location?.pathname),
+  });
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,23 +45,23 @@ function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [scrolled]);
 
-  const { data } = useQuery({
-    queryKey: ["data"],
-    queryFn: () => API.get(`/admin${location.pathname}`),
-    enabled: location.pathname !== "/",
-  });
+  console.log(data?.data?.data)
 
   return (
     <header className="w-100 position-relative">
-
+      
       <div
         className="header-content"
         style={{
           backgroundImage:
             data?.data?.data && location.pathname !== "/"
-              ? `url(${data?.data?.data?.picture})`
+              ? `url(${
+                  data?.data?.data?.picture ||
+                  data?.data?.data?.images[0]?.path || 
+                  headerImg
+                } )`
               : `url(${headerImg})`,
         }}
       ></div>
@@ -113,7 +121,6 @@ function Header() {
       >
         <Arrow />
       </div>
-      
     </header>
   );
 }

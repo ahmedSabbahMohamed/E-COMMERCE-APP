@@ -11,9 +11,6 @@ function AddProduct({ edit = false, id = null }) {
     setFormData(data);
   };
 
-  // console.log(Object.keys(formData).length)
-  console.log(formData);
-
   return (
     <Row className="align-items-center justify-content-center">
       <Col sm={12} lg={6}>

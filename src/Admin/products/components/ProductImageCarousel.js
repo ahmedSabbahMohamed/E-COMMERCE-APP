@@ -3,17 +3,17 @@ import { getSrc } from "../../../Helpers";
 
 function ProductImageCarousel({ images }) {
   return (
-      <ImagesCarousel>
-        {images?.map((img, index) => (
-          <div key={index}>
-            <img
-              src={getSrc(img)}
-              className="w-100 h-100"
-              alt={`Product Image ${index + 1}`}
-            />
-          </div>
-        ))}
-      </ImagesCarousel>
+    <ImagesCarousel>
+      {images?.map((img, index) => (
+        <div key={index} style={{ width: "8rem", height: "8rem" }}>
+          <img
+            src={getSrc(img)}
+            style={{ width: "100%", height: "12rem" }}
+            alt={`Product Image ${index + 1}`}
+          />
+        </div>
+      ))}
+    </ImagesCarousel>
   );
 }
 

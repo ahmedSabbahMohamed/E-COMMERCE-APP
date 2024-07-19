@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Slider from "react-slick";
 import "../../Assets/styles/CustomPaging.css";
 import { FcNext, FcPrevious } from "react-icons/fc";
@@ -9,7 +9,7 @@ function CustomPaging({ imgs }) {
     customPaging: function (i) {
       return (
         <div
-          className="custom-paging rounded"
+          className="custom-paging rounded shadow"
           style={{ backgroundImage: `url(${imgs[i]})` }}
         ></div>
       );
@@ -39,7 +39,8 @@ function CustomPaging({ imgs }) {
                 height: "100%",
                 width: "100%",
               }}
-            ></div>
+            >
+            </div>
           </div>
         ))}
     </Slider>

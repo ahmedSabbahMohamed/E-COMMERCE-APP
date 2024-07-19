@@ -77,14 +77,47 @@ const closeModal = () => {
 
 const getSrc = (file) => {
   if (!file) {
-    return
-  } else if (file.type && file.type.match("image.*")) {
-    return URL.createObjectURL(file);
-  } else {
-    return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s";
+    return "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
   }
+  if (typeof file === "string") {
+    return file;
+  }
+  if (file.type && file.type.match("image.*")) {
+    return URL.createObjectURL(file);
+  }
+  if (typeof file === "object") {
+    return file?.path;
+  }
+  return "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"; // Default fallback
 };
 
+function getImageBrightness(imageElement) {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  canvas.width = imageElement.naturalWidth;
+  canvas.height = imageElement.naturalHeight;
+  context.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+
+  let r, g, b, avg;
+  let colorSum = 0;
+
+  for (let x = 0, len = data.length; x < len; x += 4) {
+    r = data[x];
+    g = data[x + 1];
+    b = data[x + 2];
+    avg = Math.floor((r + g + b) / 3);
+    colorSum += avg;
+  }
+
+  const brightness = Math.floor(
+    colorSum / (imageElement.naturalWidth * imageElement.naturalHeight)
+  );
+  return brightness;
+}
 
 export {
   convertToFormData,
@@ -92,4 +125,5 @@ export {
   truncateDescription,
   closeModal,
   getSrc,
+  getImageBrightness,
 };

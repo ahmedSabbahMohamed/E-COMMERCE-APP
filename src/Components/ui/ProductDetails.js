@@ -19,12 +19,15 @@ function ProductDetails({ product, onAddToCart }) {
 
   return (
     <div className="text-center text-md-start">
-      <h6 className="text-success">#{category?.name}</h6>
+
       <h1 className="text-dark my-3">{name}</h1>
       <p className="text-black-50 fs-6">{description}</p>
       <h5 className="text-black fw-bold my-3">${price}</h5>
+
       <div className="d-flex align-items-center justify-content-center justify-content-md-start flex-column flex-sm-row gap-3">
+
         <div className="d-flex gap-3 bg-success rounded px-2 py-1">
+
           <Button
             variant=""
             className="text-white fw-bold"
@@ -32,7 +35,9 @@ function ProductDetails({ product, onAddToCart }) {
           >
             -
           </Button>
+
           <span className={spanStyles}>{quantity}</span>
+
           <Button
             variant=""
             className="text-white fw-bold"
@@ -40,7 +45,9 @@ function ProductDetails({ product, onAddToCart }) {
           >
             +
           </Button>
+
         </div>
+
         <Button
           variant="primary"
           size="lg"

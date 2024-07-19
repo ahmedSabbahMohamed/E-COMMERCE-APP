@@ -18,7 +18,6 @@ const FileHandler = ({
   useEffect(() => {
     if (currentFiles.length > 0) {
       const initialFileList = currentFiles.map((file, index) => {
-        console.log("file => ", file);
         if (file?.path) {
           return {
             uid: `${index}`,
@@ -30,7 +29,7 @@ const FileHandler = ({
         } else {
           return {
             uid: `${index}`,
-            name: file?.name,
+            name: file?.name || file,
             originFileObj: file,
           };
         }
