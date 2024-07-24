@@ -1,29 +1,23 @@
-import { useState } from "react";
 import "../assets/styles/Categories.css";
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../../../Api";
 import { Case, Switch } from "react-if";
 import Loading from "../../../Components/ui/Loading";
 import { Spin } from "antd";
-import Pagination from "../../../Components/ui/Pagination";
 import ImagesCarousel from "../../../Components/ui/ImagesCarousel";
 import { FcNext, FcPrevious } from "react-icons/fc";
+import { Link } from "react-router-dom";
+import { FiExternalLink } from "react-icons/fi";
 
 function Categories() {
-  const [currentPage, setCurrentPage] = useState(1);
-
   const {
     data: categories,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["categories", currentPage],
-    queryFn: () => API.get(`/admin/categories?page=${currentPage}`),
+    queryKey: ["categories"],
+    queryFn: () => API.get(`/admin/categories?page=1`),
   });
-
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected + 1);
-  };
 
   const settings = {
     dots: false,
@@ -103,13 +97,12 @@ function Categories() {
     );
   };
 
-  const pageCount = categories?.data?.data?.last_page;
-
   return (
     <div className="my-5">
       <h2 className="heading mb-5 text-center text-lg-start fw-bold">
         Categories
       </h2>
+
       <Switch>
         <Case condition={isLoading}>
           <div className="vh-100 d-flex justify-content-center align-itmes-center">
@@ -118,7 +111,7 @@ function Categories() {
         </Case>
 
         <Case condition={isError}>
-          <Loading queryString={["categories", currentPage]} />
+          <Loading queryString={["categories"]} />
         </Case>
 
         <Case condition={categories?.data?.data?.data}>
@@ -129,9 +122,10 @@ function Categories() {
               prevArrow={<PrevArrow />}
             >
               {categories?.data?.data?.data.map((category, index) => (
-                <div
+                <Link
+                  to={`/category/${category?.id}`}
                   key={index}
-                  className="category-card d-flex flex-column align-items-center justify-content-between"
+                  className="category-card d-flex flex-column align-items-center justify-content-between text-decoration-none"
                 >
                   <div className="category-img rounded-pill d-flex align-items-center justify-content-center">
                     <img
@@ -141,16 +135,20 @@ function Categories() {
                     />
                   </div>
                   <p className="p-0 m-0 text-secondary">{category?.name}</p>
-                </div>
+                </Link>
               ))}
+              {categories?.data?.data?.data?.length > 10 && (
+                <div className="category-card d-flex flex-column align-items-center justify-content-between">
+                  <Link
+                    to={"/categories"}
+                    className="category-img rounded-pill d-flex align-items-center justify-content-center text-decoration-none text-secondary"
+                  >
+                    <FiExternalLink size={"30px"} className="text-primary" />
+                  </Link>
+                  <p className="p-0 m-0 text-secondary">All Categories</p>
+                </div>
+              )}
             </ImagesCarousel>
-          </div>
-          <div>
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              pageCount={pageCount}
-            />
           </div>
         </Case>
       </Switch>

@@ -7,12 +7,10 @@ import { truncateDescription } from "../../../Helpers";
 import { Link } from "react-router-dom";
 
 function Products() {
-  const { data, isLoading } = useQuery({
+  const { data: products, isLoading } = useQuery({
     queryKey: ["prodcuts"],
     queryFn: () => API.get("/admin/products"),
   });
-
-  const products = data?.data?.data;
 
   return (
     <div className="vh-100 my-5">

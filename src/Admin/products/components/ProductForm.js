@@ -65,12 +65,15 @@ function ProductForm({ id = null, edit = false, productData }) {
 
   return (
     <Switch>
+
       <Case condition={isLoading}>
         <Spin />
       </Case>
+
       <Case condition={isError}>
         <Loading queryString={"get_product"} />
       </Case>
+      
       <Default>
         <Formik
           initialValues={id && edit ? product?.data?.data : {}}

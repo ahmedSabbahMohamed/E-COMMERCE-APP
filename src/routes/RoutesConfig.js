@@ -9,6 +9,9 @@ import ProductPage from "../Pages/ProductPage";
 import Products from "../Pages/Products";
 import About from "../Pages/About";
 import Contact from "../Pages/Contact";
+import Payment from "../Pages/Payment";
+import Categories from "../Pages/Categories";
+import CategoryPage from "../Pages/CategoryPage";
 
 const RoutesConfig = () => {
   const { isLogin, user } = useSelector((state) => state.userSlice);
@@ -45,6 +48,24 @@ const RoutesConfig = () => {
     {
       path: "/products",
       element: <Products />,
+      isAuth: false,
+      isPublic: true,
+    },
+    {
+      path: "/categories",
+      element: <Categories />,
+      isAuth: false,
+      isPublic: true,
+    },
+    {
+      path: "/category/:categoryId",
+      element: <CategoryPage />,
+      isAuth: false,
+      isPublic: true,
+    },
+    {
+      path: "/checkout",
+      element: <Payment />,
       isAuth: false,
       isPublic: true,
     },

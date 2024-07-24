@@ -6,6 +6,7 @@ function Select( {
     name = undefined,
     options=[], 
     isMulti = false,
+    label
 } ) {
 
     const { values, setFieldValue } = useFormikContext()
@@ -25,6 +26,8 @@ function Select( {
 //         finalOptions.push({ label: option?.name, value: option?.id });
 //       })
   return (
+    <>
+  <label className="text-black-50" htmlFor={name}>{label}</label>    
     <ReactSelect
       options={finalOptions}
       name={name}
@@ -34,6 +37,7 @@ function Select( {
       isSearchable={true}
       value={values ? finalOptions.find((option) => option.value === values?.category_id) : null}
     />
+    </>
   );
 }
 

@@ -1,5 +1,6 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Modal } from "antd";
+import { useEffect } from "react";
 
 function appendFormData(formData, key, value) {
   if (value instanceof File) {
@@ -119,6 +120,12 @@ function getImageBrightness(imageElement) {
   return brightness;
 }
 
+const useUpdateFilterData = (values, setFilterData) => {
+  useEffect(() => {
+    setFilterData(values);
+  }, [values, setFilterData]);
+};
+
 export {
   convertToFormData,
   showDeleteConfirm,
@@ -126,4 +133,5 @@ export {
   closeModal,
   getSrc,
   getImageBrightness,
+  useUpdateFilterData,
 };

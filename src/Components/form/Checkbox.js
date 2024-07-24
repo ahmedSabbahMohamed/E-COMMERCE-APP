@@ -1,12 +1,12 @@
 import { useFormikContext } from "formik";
 import { get } from "lodash";
 
-const Input = ({ label, name, type= "text", ...props }) => {
-
-  const { setFieldValue, touched, errors, handleBlur, values } = useFormikContext()
+const Checkbox = ({ label, name, ...props }) => {
+  const { setFieldValue, touched, errors, handleBlur, values } =
+    useFormikContext();
 
   const handleChange = (e) => {
-    setFieldValue(name, e.target.value);
+    setFieldValue(name, e.target.checked);
   };
 
   const hasError = touched[name] && errors[name];
@@ -17,19 +17,20 @@ const Input = ({ label, name, type= "text", ...props }) => {
         htmlFor={name}
         className={`d-block text-black-50 ${hasError ? "text-danger" : ""}`}
       >
-        {hasError ? errors[name] : label}
+        {label}
       </label>
       <input
         {...props}
-        value={get(values, name, undefined)}
+        checked={get(values, name, false)}
         name={name}
-        type={type}
+        type="checkbox"
         onChange={handleChange}
         onBlur={handleBlur}
-        className={`form-control mt-1 w-100 ${hasError ? "is-invalid" : ""}`}
+        className={`form-check-input ${hasError ? "is-invalid" : ""}`}
       />
+      {hasError && <div className="invalid-feedback">{errors[name]}</div>}
     </div>
   );
 };
 
-export default Input;
+export default Checkbox;
