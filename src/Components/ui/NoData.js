@@ -1,9 +1,10 @@
 import noData from "../../Assets/images/noData.gif";
 function NoData() {
   return (
-    <div>
+    <div className="d-flex flex-column align-itmes-center justify-content-center">
       <img
         style={{ width: "16rem", height: "auto" }}
+        className="mx-auto"
         src={noData}
         alt="No Data"
       />

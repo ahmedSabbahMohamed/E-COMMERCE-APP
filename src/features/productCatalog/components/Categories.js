@@ -8,6 +8,7 @@ import ImagesCarousel from "../../../Components/ui/ImagesCarousel";
 import { FcNext, FcPrevious } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
+import NoData from "../../../Components/ui/NoData";
 
 function Categories() {
   const {
@@ -114,7 +115,7 @@ function Categories() {
           <Loading queryString={["categories"]} />
         </Case>
 
-        <Case condition={categories?.data?.data?.data}>
+        <Case condition={categories?.data?.data?.data.length > 0}>
           <div className="mb-5 pt-5">
             <ImagesCarousel
               settings={settings}
@@ -150,6 +151,10 @@ function Categories() {
               )}
             </ImagesCarousel>
           </div>
+        </Case>
+
+        <Case condition={categories?.data?.data?.data.length < 1}>
+          <NoData />
         </Case>
       </Switch>
     </div>

@@ -7,6 +7,7 @@ import Pagination from "../../Components/ui/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../../Api";
 import ProductCard from "../../Components/ui/ProductCard";
+import NoData from "../../Components/ui/NoData";
 
 function ProductList({ filterData }) {
   const [currentPage, setCurrentPage] = useState("1");
@@ -60,7 +61,7 @@ function ProductList({ filterData }) {
           <Loading queryString={"products"} />
         </Case>
 
-        <Case condition={products?.data?.data}>
+        <Case condition={products?.data?.data?.data.length > 0}>
           <div className="d-flex flex-row flex-wrap gap-4 mb-5 align-items-center justify-content-center justify-content-md-start">
             {products?.data?.data?.data?.map((product, index) => (
               <Link
@@ -79,6 +80,10 @@ function ProductList({ filterData }) {
               pageCount={pageCount}
             />
           </div>
+        </Case>
+
+        <Case condition={products?.data?.data?.data?.length < 1}>
+          <NoData />
         </Case>
       </Switch>
     </div>
