@@ -22,7 +22,7 @@ function AppRoutes() {
           return (
             <Route key={index} path={route.path} element={route.element} />
           );
-        } else if (!isLogin && !route.isAuth && route.isPublic) {
+        } else if (isLogin && route.isPublic) {
           return (
             <Route key={index} path={route.path} element={route.element} />
           );
