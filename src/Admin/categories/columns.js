@@ -6,7 +6,7 @@ import AddCategoryForm from "./components/AddCategoryForm";
 import DeleteConfirmation from "../../Components/ui/DeleteConfirmation";
 import ImageViewer from "../../Components/ui/ImageViewer";
 import { Table } from "antd";
-import { truncateDescription } from "../../Helpers";
+import { truncateText } from "../../Helpers";
 
 export const categoryListCols = (setSearch) => [
   {
@@ -111,7 +111,7 @@ const categoryProductscols = [
   {
     title: "Product Desc",
     dataIndex: "description",
-    render: (desc) => truncateDescription(desc),
+    render: (desc) => truncateText(desc),
   },
   {
     title: "Product Picture",

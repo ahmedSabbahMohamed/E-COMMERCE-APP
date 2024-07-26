@@ -3,7 +3,7 @@ import { Case, Switch } from "react-if";
 import ProductCard from "../../../Components/ui/ProductCard";
 import Loading from "../../../Components/ui/Loading";
 import { API } from "../../../Api";
-import { truncateDescription } from "../../../Helpers";
+import { truncateText } from "../../../Helpers";
 import { Link } from "react-router-dom";
 
 function Products() {
@@ -37,7 +37,7 @@ function Products() {
                     description={
                       <>
                         <p className="fw-bold">Price: {product.price}</p>
-                        <p>{truncateDescription(product.description)}</p>
+                        <p>{truncateText(product.description)}</p>
                       </>
                     }
                   />

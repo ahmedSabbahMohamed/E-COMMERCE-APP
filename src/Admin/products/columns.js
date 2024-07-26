@@ -5,7 +5,7 @@ import { FiEdit2 } from "react-icons/fi";
 import AddProduct from "./components/AddProduct";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import DeleteConfirmation from "../../Components/ui/DeleteConfirmation";
-import { truncateDescription } from "../../Helpers";
+import { truncateText } from "../../Helpers";
 
 export const productListCols = (setSearch, setFilterKey) => [
   {
@@ -53,7 +53,7 @@ export const productListCols = (setSearch, setFilterKey) => [
   },
   {
     name: "Description",
-    selector: (row) => truncateDescription(row?.description),
+    selector: (row) => truncateText(row?.description),
     minWidth: "250px",
     center: true,
   },
