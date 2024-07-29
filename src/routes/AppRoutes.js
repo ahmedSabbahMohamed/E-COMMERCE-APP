@@ -6,8 +6,6 @@ function AppRoutes() {
   const { isLogin, user } = useSelector((state) => state.userSlice);
   const routes = RoutesConfig();
 
-  console.log(isLogin, user)
-  
   return (
     <Routes>
       {routes?.map((route, index) => {

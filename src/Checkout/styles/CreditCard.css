@@ -1,0 +1,15 @@
+.rccs__card {
+  color: #fff;
+}
+
+.rccs__card--unknown > div {
+  background: linear-gradient(to right, #2940d9, #376ee5);
+}
+
+.rccs__card .rccs__number,
+.rccs__card .rccs__name,
+.rccs__card .rccs__expiry,
+.rccs__card .rccs__cvc {
+  color: #fff;
+}
+

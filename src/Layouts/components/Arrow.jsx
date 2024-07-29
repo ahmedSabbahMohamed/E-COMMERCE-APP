@@ -12,13 +12,13 @@ const Arrow = () => {
 
   return (
     <Button
-      variant=""
+    variant=""
       onClick={handleClick}
       className="d-block arrow-container"
     >
-      <div className="chevron"></div>
-      <div className="chevron"></div>
-      <div className="chevron"></div>
+      <div onClick={handleClick} className="chevron"></div>
+      <div onClick={handleClick} className="chevron"></div>
+      <div onClick={handleClick} className="chevron"></div>
     </Button>
   );
 };

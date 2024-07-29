@@ -6,7 +6,6 @@ import secure from "../Assets/images/Icon-secure.png";
 
 const navLinks = [
   { id: 1, link: "Home", path: "/" },
-  { id: 2, link: "Products", path: "/products" },
   { id: 3, link: "About Us", path: "/about" },
   { id: 4, link: "Contact", path: "/contact" },
 ];

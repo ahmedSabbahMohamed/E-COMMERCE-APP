@@ -76,7 +76,6 @@ function AddCategoryForm({ edit = false, id = undefined }) {
             enableReinitialize
           >
             {(formikProps) => {
-              console.log(formikProps.values);
               return (
                 <Form className="d-grid gap-3 my-4">
                   <Input label={"Category Name"} name={"name"} />

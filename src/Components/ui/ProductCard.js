@@ -1,72 +1,54 @@
-import { getRandomBootstrapColor, getSrc, truncateText } from "../../Helpers";
-import Rating from "react-rating-stars-component";
+import { Link } from "react-router-dom";
+import { getSrc, truncateText } from "../../Helpers";
+import { FaRegHeart } from "react-icons/fa6";
+import { IoEyeOutline } from "react-icons/io5";
+import "../../Assets/styles/ProductCard.css";
+import CustomRating from "./CustomRating";
 
 function ProductCard({ details, edit = false }) {
-  const randomBackgroundColor = getRandomBootstrapColor(details?.id);
-
   return (
-    <div
-      className="p-2 shadow position-relative overflow-hidden"
-      style={{ width: "18rem", height: "27rem" }}
-    >
-      <div
-        className={`position-absolute rounded-pill ${randomBackgroundColor}`}
-        style={{
-          width: "35rem",
-          height: "35rem",
-          top: "-20rem",
-          right: "-4rem",
-          zIndex: "-1",
-        }}
-      ></div>
-      <img
-        src={getSrc(details?.picture)}
-        alt={details?.name || "Product Image"}
-        className="rounded-pill shadow position-relative top-50 start-50 translate-middle"
-        style={{ width: "12rem", height: "12rem" }}
-      />
-      <span
-        className="position-absolute p-1 bg-white text-secondary fw-bold rounded-pill d-flex align-items-center justify-content-center"
-        style={{ right: ".5rem", top: "1rem" }}
+    <div className="d-flex flex-column gap-3" style={{ width: "16rem" }}>
+      <Link
+        to={`/product/${details?.id}`}
+        className="card-img rounded overflow-hidden position-relative shadow-lg"
+        style={{ height: "15rem" }}
       >
-        ${details?.price || "price"}
-      </span>
-      <h2
-        className="position-absolute text-white fw-bold"
-        style={{
-          top: "1rem",
-          left: "1rem",
-          fontSize: "1.4rem",
-          maxWidth: "70%",
-        }}
-      >
-        {truncateText(details?.name || "Product Title", 40)}
-      </h2>
-      <p
-        className="position-absolute text-center text-secondary"
-        style={{
-          top: "20rem",
-          left: "50%",
-          transform: "translateX(-50%)",
-          minWidth: "95%",
-          wordWrap: "break-word",
-        }}
-      >
-        {truncateText(details?.description) || "description"}
-      </p>
-      <div
-        className="d-flex align-items-center gap-2 position-absolute"
-        style={{ bottom: ".3rem", left: "50%", transform: "translateX(-50%)" }}
-      >
-        <Rating
-          count={5}
-          value={Math.round(details?.rating * 2) / 2 || 0}
-          edit={edit}
-          size={25}
-          activeColor="#ffd700"
-          isHalf={true}
+        <img
+          className="img w-100 h-100"
+          style={{ objectFit: "cover" }}
+          src={getSrc(details?.picture)}
+          alt={details?.id}
         />
-        <span className="text-success">({details?.rating || 0})</span>
+        <div className="position-absolute top-0 end-0 w-100 h-100 d-none flex-column justify-content-start align-items-end p-2 gap-2 card-icons">
+          <button
+            className="btn btn-outline-danger shadow rounded-pill d-flex align-items-center justify-content-center p-0 pt-1"
+            style={{ width: "30px", height: "30px" }}
+          >
+            <FaRegHeart size={"15px"} />
+          </button>
+          <Link
+            to={`product/${details?.id}`}
+            className="btn btn-outline-primary shadow rounded-pill d-flex align-items-center justify-content-center p-0"
+            style={{ width: "30px", height: "30px" }}
+          >
+            <IoEyeOutline color="" />
+          </Link>
+        </div>
+      </Link>
+
+      <div className="px-2 d-flex flex-row align-items-center justify-content-between">
+        <div>
+          <Link
+            to={`product/${details?.id}`}
+            className="text-primary text-decoration-none fw-bold"
+          >
+            {truncateText(details?.name, 15)}
+          </Link>
+          <h6 className="text-muted fw-bold small fst-italic mb-0 mt-1">
+            $ {truncateText(details?.price.toString(), 5)}
+          </h6>
+        </div>
+        <CustomRating value={details?.Rating} />
       </div>
     </div>
   );

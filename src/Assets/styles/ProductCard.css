@@ -1,0 +1,21 @@
+.card-img img {
+  transition: transform 0.3s ease;
+}
+
+.card-img:hover img {
+  transform: scale(1.05);
+}
+
+.card-icons {
+  display: none;
+  transition: top 0.3s ease;
+  top: 0;
+  right: 0;
+  background-color: rgba(12, 11, 11, 0.701) !important;
+}
+
+.card-img:hover .card-icons {
+  display: flex !important;
+  top: 0 !important;
+}
+

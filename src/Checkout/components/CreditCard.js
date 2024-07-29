@@ -1,12 +1,13 @@
 import { Form, Formik } from "formik";
-import Cards from "react-credit-cards-2"
- import "react-credit-cards-2/dist/es/styles-compiled.css";
+import Cards from "react-credit-cards-2";
+import "react-credit-cards-2/dist/es/styles-compiled.css";
 import Input from "../../Components/form/Input";
 import SubmitBtn from "../../Components/form/SubmitBtn";
+import "../styles/CreditCard.css";
 
 function CreditCard() {
   return (
-    <div className="rounded shadow p-4">
+    <div className="rounded shadow p-4 my-4">
       <Formik
         initialValues={{
           number: "",
@@ -18,7 +19,7 @@ function CreditCard() {
         onSubmit={() => false}
       >
         {(formikProps) => (
-          <div className="d-grid gap-5">
+          <div className="d-flex flex-row flex-wrap gap-5 align-items-center justify-conent-center">
             <Cards
               number={formikProps?.values?.number}
               name={formikProps?.values?.name}
@@ -27,10 +28,27 @@ function CreditCard() {
               focused={formikProps?.values?.focused}
             />
             <Form>
-              <Input name={"number"} label={"Number"} />
-              <Input name={"name"} label={"Name"} />
-              <Input name={"expiry"} label={"Expiry"} />
-              <Input type="tel" name={"cvc"} label={"CVC"} />
+              <Input
+                name={"number"}
+                label={"Number"}
+                onFocus={() => formikProps?.setFieldValue("focused", "number")}
+              />
+              <Input
+                name={"name"}
+                label={"Name"}
+                onFocus={() => formikProps?.setFieldValue("focused", "name")}
+              />
+              <Input
+                name={"expiry"}
+                label={"Expiry"}
+                onFocus={() => formikProps?.setFieldValue("focused", "expiry")}
+              />
+              <Input
+                type="tel"
+                name={"cvc"}
+                label={"CVC"}
+                onFocus={() => formikProps?.setFieldValue("focused", "cvc")}
+              />
               <SubmitBtn btnTxt={"Checkout"} />
             </Form>
           </div>
@@ -40,4 +58,4 @@ function CreditCard() {
   );
 }
 
-export default CreditCard
+export default CreditCard;

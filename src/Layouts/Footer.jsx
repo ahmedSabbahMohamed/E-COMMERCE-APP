@@ -15,7 +15,7 @@ function Footer() {
     <FaInstagramSquare />,
   ];
   return (
-    <footer>
+    <footer className="pt-5">
       <FooterWaves />
       <div className="footer-content">
         <Container>

@@ -21,6 +21,7 @@ function CustomPaging({ imgs }) {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
     nextArrow: <FcNext className="slick-next" />,
     prevArrow: <FcPrevious className="slick-prev" />,
   };
