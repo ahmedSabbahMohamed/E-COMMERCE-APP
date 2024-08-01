@@ -45,7 +45,7 @@ function Categories() {
   return (
     <div className="mb-5 mt-3">
       <Switch>
-        <Case condition={isLoading}>
+        <Case condition={isLoading && currentCategories.length === 0}>
           <div className="vh-100 d-flex justify-content-center align-items-center">
             <Spin />
           </div>
@@ -84,7 +84,7 @@ function Categories() {
               disabled={isLoading || categories?.data?.data?.length < 1}
               onClick={handleNext}
             >
-              Load More Categories
+              {isLoading ? <Spin /> : "Load More Categories"}
             </Button>
           </Container>
 

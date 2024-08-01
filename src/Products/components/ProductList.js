@@ -47,7 +47,7 @@ function ProductList({ filterData, category }) {
   return (
     <div>
       <Switch>
-        <Case condition={isLoading}>
+        <Case condition={isLoading && currentProducts.length < 1}>
           <div className="vh-100 d-flex justify-content-center align-itmes-center">
             <Spin />
           </div>
@@ -75,11 +75,14 @@ function ProductList({ filterData, category }) {
                 variant="outline-primary"
                 disabled={isLoading || products?.data?.data?.length < 1}
                 style={{
-                  cursor: isLoading || products?.data?.data?.length < 1 ? "not-allowed" : "",
+                  cursor:
+                    isLoading || products?.data?.data?.length < 1
+                      ? "not-allowed"
+                      : "",
                 }}
                 onClick={handleNext}
               >
-                Load More Categories
+                {isLoading ? <Spin /> : "Load More Categories"}
               </Button>
             </div>
           </Container>
