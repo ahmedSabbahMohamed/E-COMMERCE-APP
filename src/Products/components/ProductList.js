@@ -2,27 +2,90 @@ import { Case, Default, Switch } from "react-if";
 import ProductCard from "../../Components/ui/ProductCard";
 import NoData from "../../Components/ui/NoData";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { API } from "../../Api";
+import { useQuery } from "@tanstack/react-query";
+import { Spin } from "antd";
+import Loading from "../../Components/ui/Loading";
+import { Button, Container } from "react-bootstrap";
 
-function ProductList({ filterData, products }) {
+function ProductList({ filterData, category }) {
+  const [pagination, setPagination] = useState({ start: 1, end: 8 });
+  const [currentProducts, setCurrentProducts] = useState([]);
+  const [prevCategory, setPrevCategory] = useState(category);
+
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["products", pagination?.start, pagination?.end, category],
+    queryFn: () =>
+      API.get(
+        `/user/products?start=${pagination?.start}&end=${pagination?.end}&category=${category}`
+      ),
+  });
+
+  useEffect(() => {
+    if (prevCategory !== category) {
+      setCurrentProducts([]);
+      setPrevCategory(category);
+    }
+
+    if (products?.data?.data) {
+      setCurrentProducts((prev) => [...prev, ...products.data.data]);
+    }
+  }, [products, category, prevCategory]);
+
+  const handleNext = () => {
+    setPagination((prev) => ({
+      start: prev.start + 8,
+      end: prev.end + 8,
+    }));
+  };
 
   return (
     <div>
       <Switch>
-        <Default>
-          <div className="d-flex gap-3 flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
-            {products?.map((product, index) => (
-              <Link
-                to={`/product/${product?.id}`}
-                className="text-decoration-none"
-                key={index}
-              >
-                <ProductCard details={product} />
-              </Link>
-            ))}
+        <Case condition={isLoading}>
+          <div className="vh-100 d-flex justify-content-center align-itmes-center">
+            <Spin />
           </div>
-        </Default>
+        </Case>
 
-        <Case condition={products?.length < 1}>
+        <Case condition={isError}>
+          <Loading queryString={["products"]} />
+        </Case>
+
+        <Case condition={currentProducts.length > 0}>
+          <Container className="d-flex flex-column gap-5 align-items-center justify-conent-center">
+            <div className="d-flex gap-3 flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
+              {currentProducts?.map((product, index) => (
+                <Link
+                  to={`/product/${product?.id}`}
+                  className="text-decoration-none"
+                  key={index}
+                >
+                  <ProductCard details={product} />
+                </Link>
+              ))}
+            </div>
+            <div>
+              <Button
+                variant="outline-primary"
+                disabled={isLoading || products?.data?.data?.length < 1}
+                style={{
+                  cursor: isLoading || products?.data?.data?.length < 1 ? "not-allowed" : "",
+                }}
+                onClick={handleNext}
+              >
+                Load More Categories
+              </Button>
+            </div>
+          </Container>
+        </Case>
+
+        <Case condition={currentProducts.length < 1}>
           <NoData />
         </Case>
       </Switch>

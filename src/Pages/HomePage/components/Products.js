@@ -4,7 +4,7 @@ import ProductsFilters from "../../../Products/components/ProductsFilters";
 import FilterForm from "../../../Products/components/FilterForm";
 import { Container } from "react-bootstrap";
 
-function Products({ products }) {
+function Products({ category }) {
   const [filterData, setFilterData] = useState({});
 
   const handleFilterData = (data) => {
@@ -18,7 +18,7 @@ function Products({ products }) {
           <FilterForm filterData={handleFilterData} />
         </ProductsFilters>
       </div>
-      <ProductList filterData={filterData} products={products} />
+      <ProductList filterData={filterData} category={category} />
     </Container>
   );
 }
