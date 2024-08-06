@@ -1,4 +1,4 @@
-import { Case, Default, Switch } from "react-if";
+import { Case, Switch } from "react-if";
 import ProductCard from "../../Components/ui/ProductCard";
 import NoData from "../../Components/ui/NoData";
 import { Link } from "react-router-dom";
@@ -24,6 +24,7 @@ function ProductList({ filterData, category }) {
       API.get(
         `/user/products?start=${pagination?.start}&end=${pagination?.end}&category=${category}`
       ),
+    enabled: !!category,
   });
 
   useEffect(() => {
@@ -33,7 +34,17 @@ function ProductList({ filterData, category }) {
     }
 
     if (products?.data?.data) {
-      setCurrentProducts((prev) => [...prev, ...products.data.data]);
+      setCurrentProducts((prev) => {
+        const newProducts = products?.data?.data;
+        const existingProducts = prev || [];
+        const mergedProducts = [...existingProducts];
+        newProducts.forEach((newProduct) => {
+          if (!mergedProducts.find((product) => product.id === newProduct.id)) {
+            mergedProducts.push(newProduct);
+          }
+        });
+        return mergedProducts;
+      });
     }
   }, [products, category, prevCategory]);
 
@@ -75,14 +86,14 @@ function ProductList({ filterData, category }) {
                 variant="outline-primary"
                 disabled={isLoading || products?.data?.data?.length < 1}
                 style={{
-                  cursor:
-                    isLoading || products?.data?.data?.length < 1
-                      ? "not-allowed"
+                  display:
+                    currentProducts.length === products?.data?.count
+                      ? "none"
                       : "",
                 }}
                 onClick={handleNext}
               >
-                {isLoading ? <Spin /> : "Load More Categories"}
+                {isLoading ? <Spin /> : "Load More Products"}
               </Button>
             </div>
           </Container>
