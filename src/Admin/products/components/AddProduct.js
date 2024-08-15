@@ -21,7 +21,7 @@ function AddProduct({ edit = false, id = null }) {
         lg={6}
         className="d-flex flex-column gap-2 align-items-center justify-content-center"
       >
-        {formData && <ProductCard details={formData} />}
+        {formData && <ProductCard details={formData} edit={true} />}
         <div className="p-3 w-100">
           {formData?.images?.length > 1 && (
             <ProductImageCarousel images={formData.images} />

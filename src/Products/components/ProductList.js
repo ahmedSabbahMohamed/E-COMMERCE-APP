@@ -2,63 +2,51 @@ import { Case, Switch } from "react-if";
 import ProductCard from "../../Components/ui/ProductCard";
 import NoData from "../../Components/ui/NoData";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { API } from "../../Api";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Spin } from "antd";
 import Loading from "../../Components/ui/Loading";
 import { Button, Container } from "react-bootstrap";
 
 function ProductList({ filterData, category }) {
   const [pagination, setPagination] = useState({ start: 1, end: 8 });
-  const [currentProducts, setCurrentProducts] = useState([]);
-  const [prevCategory, setPrevCategory] = useState(category);
 
-  const {
-    data: products,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["products", pagination?.start, pagination?.end, category],
-    queryFn: () =>
-      API.get(
-        `/user/products?start=${pagination?.start}&end=${pagination?.end}&category=${category}`
-      ),
-    enabled: !!category,
-  });
+  const { data, fetchNextPage, isLoading, isError, isFetching } =
+    useInfiniteQuery({
+      queryKey: ["products", category],
+      queryFn: ({ pageParam = pagination }) =>
+        API.get(
+          `/user/products?start=${pageParam.start}&end=${pageParam.end}&category=${category}`
+        ),
+      getNextPageParam: (lastPage, allPages) => {
+        if (allPages.length * 8 < lastPage?.data?.count) {
+          return {
+            start: allPages.length * 8 + 1,
+            end: (allPages.length + 1) * 8,
+          };
+        } else {
+          return undefined;
+        }
+      },
+      refetchOnMount: false,
+    });
 
-  useEffect(() => {
-    if (prevCategory !== category) {
-      setCurrentProducts([]);
-      setPrevCategory(category);
-    }
-
-    if (products?.data?.data) {
-      setCurrentProducts((prev) => {
-        const newProducts = products?.data?.data;
-        const existingProducts = prev || [];
-        const mergedProducts = [...existingProducts];
-        newProducts.forEach((newProduct) => {
-          if (!mergedProducts.find((product) => product.id === newProduct.id)) {
-            mergedProducts.push(newProduct);
-          }
-        });
-        return mergedProducts;
-      });
-    }
-  }, [products, category, prevCategory]);
-
-  const handleNext = () => {
-    setPagination((prev) => ({
-      start: prev.start + 8,
-      end: prev.end + 8,
-    }));
+  const handleFetchNextPage = () => {
+    const nextStart = pagination.start + 8;
+    const nextEnd = pagination.end + 8;
+    setPagination({ start: nextStart, end: nextEnd });
+    fetchNextPage({ pageParam: { start: nextStart, end: nextEnd } });
   };
+
+  const allProducts =
+    data?.pages.flatMap((item) => item?.data?.data || []) || [];
+  const count = data?.pages[0]?.data?.count;
 
   return (
     <div>
       <Switch>
-        <Case condition={isLoading && currentProducts.length < 1}>
+        <Case condition={isLoading}>
           <div className="vh-100 d-flex justify-content-center align-itmes-center">
             <Spin />
           </div>
@@ -68,38 +56,33 @@ function ProductList({ filterData, category }) {
           <Loading queryString={["products"]} />
         </Case>
 
-        <Case condition={currentProducts.length > 0}>
+        <Case condition={allProducts.length > 0}>
           <Container className="d-flex flex-column gap-5 align-items-center justify-conent-center">
             <div className="d-flex gap-3 flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
-              {currentProducts?.map((product, index) => (
-                <Link
-                  to={`/product/${product?.id}`}
-                  className="text-decoration-none"
+              {allProducts?.map((product, index) => (
+                <div
                   key={index}
                 >
                   <ProductCard details={product} />
-                </Link>
+                </div>
               ))}
             </div>
             <div>
               <Button
                 variant="outline-primary"
-                disabled={isLoading || products?.data?.data?.length < 1}
+                disabled={isFetching}
                 style={{
-                  display:
-                    currentProducts.length === products?.data?.count
-                      ? "none"
-                      : "",
+                  display: allProducts.length === count ? "none" : "",
                 }}
-                onClick={handleNext}
+                onClick={handleFetchNextPage}
               >
-                {isLoading ? <Spin /> : "Load More Products"}
+                {isFetching ? <Spin /> : "Load More Products"}
               </Button>
             </div>
           </Container>
         </Case>
 
-        <Case condition={currentProducts.length < 1}>
+        <Case condition={allProducts.length < 1}>
           <NoData />
         </Case>
       </Switch>

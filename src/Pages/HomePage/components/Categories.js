@@ -1,87 +1,73 @@
-import "../assets/styles/Categories.css";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { API } from "../../../Api";
 import { Case, Switch } from "react-if";
-import Loading from "../../../Components/ui/Loading";
 import { Spin } from "antd";
-import NoData from "../../../Components/ui/NoData";
-import { useEffect, useState } from "react";
-import CustomCarousel from "../../../Components/ui/CustomCarousel";
+import Loading from "../../../Components/ui/Loading";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import "../assets/styles/Categories.css";
+import CustomCarousel from "../../../Components/ui/CustomCarousel";
 import Products from "./Products";
-import { useDispatch, useSelector } from "react-redux";
-import { setCategories } from "../store/categoriesSlice";
+import NoData from "../../../Components/ui/NoData";
 
 function Categories() {
   const [pagination, setPagination] = useState({ start: 1, end: 5 });
-  // const [currentCategories, setCurrentCategories] = useState([]);
-  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [categoryIndex, setCategoryIndex] = useState(
+    Number(sessionStorage.getItem("categoryIndex")) || 0
+  );
 
-  const dispatch = useDispatch();
-  const data = useSelector((state) => state.categoriesSlice.categories);
+  const { data, fetchNextPage, isLoading, isError, isFetching } =
+    useInfiniteQuery({
+      queryKey: ["categories"],
+      queryFn: ({ pageParam = pagination }) =>
+        API.get(
+          `/user/categories?start=${pageParam.start}&end=${pageParam.end}`
+        ),
+      getNextPageParam: (lastPage, allPages) => {
+        if (allPages.length * 5 < lastPage?.data?.count) {
+          return {
+            start: allPages.length * 5 + 1,
+            end: (allPages.length + 1) * 5,
+          };
+        } else {
+          return undefined;
+        }
+      },
+      refetchOnMount: false,
+    });
 
-  const {
-    data: categories,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["categories", pagination?.start, pagination?.end],
-    queryFn: () =>
-      API.get(
-        `/user/categories?start=${pagination?.start}&end=${pagination?.end}`
-      ),
-  });
-
-  useEffect(() => {
-    if (categories?.data?.data) {
-      dispatch(setCategories(categories?.data?.data));
-      // setCurrentCategories((prev) => {
-      //   const newCategories = categories?.data?.data;
-      //   const existingCategories = prev || [];
-      //   const mergedCategories = [...existingCategories];
-      //   newCategories.forEach((newCategory) => {
-      //     if (
-      //       !mergedCategories.find((category) => category.id === newCategory.id)
-      //     ) {
-      //       mergedCategories.push(newCategory);
-      //     }
-      //   });
-      //   return mergedCategories;
-      // });
-    }
-    // return () => {
-    //   dispatch(setCategories([]))
-    // }
-  }, [categories]);
-
-      const allCategories = data.filter((item, index, self) => {
-        return self.findIndex((t) => t.id === item.id) === index;
-      });
-
-  const handleNext = () => {
-    setPagination((prev) => ({
-      start: prev.start + 5,
-      end: prev.end + 5,
-    }));
-    // dispatch(setCategories(categories?.data?.data));
+  const handleFetchNextPage = () => {
+    const nextStart = pagination.start + 5;
+    const nextEnd = pagination.end + 5;
+    setPagination({ start: nextStart, end: nextEnd });
+    fetchNextPage({ pageParam: { start: nextStart, end: nextEnd } });
   };
 
-  console.log(data);
+  const handleCategoryClick = (index) => {
+    setCategoryIndex(index);
+    sessionStorage.setItem("categoryIndex", index);
+  };
+
+  const allCategories =
+    data?.pages.flatMap((item) => item?.data?.data || []) || [];
+  const count = data?.pages[0]?.data?.count;
+
+  useEffect(() => {
+    if (!allCategories[Number(sessionStorage.getItem("categoryIndex"))]) {
+      setCategoryIndex(0)
+    }
+  }, [allCategories])
 
   return (
-    <div className="mb-5 mt-3">
+    <div>
       <Switch>
-        <Case condition={isLoading && allCategories?.length === 0}>
-          <div className="vh-100 d-flex justify-content-center align-items-center">
-            <Spin />
-          </div>
+        <Case condition={isLoading}>
+          <Spin />
         </Case>
-
         <Case condition={isError}>
-          <Loading queryString={["categories"]} />
+          <Loading queryString={"categories"} />
         </Case>
-
-        <Case condition={allCategories?.length > 0}>
+        <Case condition={data?.pages}>
           <Container className="d-flex flex-column gap-2 align-items-center justify-content-between mb-5">
             <Row className="mb-5 pt-5 gap-3 align-items-center justify-content-center">
               {allCategories?.map((category, index) => (
@@ -90,7 +76,7 @@ function Categories() {
                   md={3}
                   lg={2}
                   key={index}
-                  onClick={() => setCurrentCategoryIndex(index)}
+                  onClick={() => handleCategoryClick(index)}
                   className="category-card d-flex flex-column align-items-center justify-content-between text-decoration-none"
                   style={{ cursor: "pointer" }}
                 >
@@ -105,27 +91,21 @@ function Categories() {
                 </Col>
               ))}
             </Row>
-
             <Button
               variant="outline-primary"
-              onClick={handleNext}
+              onClick={handleFetchNextPage}
+              disabled={isFetching}
               style={{
-                display:
-                  allCategories?.length === categories?.data?.count
-                    ? "none"
-                    : "",
+                display: allCategories?.length === count ? "none" : "",
               }}
             >
-              {isLoading ? <Spin /> : "Load More Categories"}
+              {isFetching ? <Spin /> : "Load More Categories"}
             </Button>
           </Container>
-
-          <CustomCarousel imgs={allCategories[currentCategoryIndex]?.images} />
-
-          <Products category={allCategories[currentCategoryIndex]?.id} />
+          <CustomCarousel imgs={allCategories[categoryIndex]?.images} />
+          <Products category={allCategories[categoryIndex]?.id} />
         </Case>
-
-        <Case condition={categories?.length === 0}>
+        <Case condition={allCategories?.length === 0}>
           <NoData />
         </Case>
       </Switch>

@@ -6,8 +6,10 @@ import secure from "../Assets/images/Icon-secure.png";
 
 const navLinks = [
   { id: 1, link: "Home", path: "/" },
-  { id: 3, link: "About Us", path: "/about" },
-  { id: 4, link: "Contact", path: "/contact" },
+  { id: 2, link: "About Us", path: "/about" },
+  { id: 3, link: "Contact", path: "/contact" },
+  { id: 4, path: "/favourites", link: "Favourites" },
+  { id: 5, path: "/orders", link: "Orders" },
 ];
 
 const hife = [
@@ -28,6 +30,8 @@ const desktopNavbar = [
   { id: 1, href: "/", link: "Home" },
   { id: 2, href: "contact", link: "Contact" },
   { id: 3, href: "about", link: "About" },
+  { id: 4, href: "/favourites", link: "Favourites" },
+  { id: 5, href: "/orders", link: "Orders" },
 ];
 
 const publicMobileNavbar = [
@@ -42,6 +46,8 @@ const privateMobileNavbar = [
   { id: 1, href: "/", link: "Home" },
   { id: 2, href: "/contact", link: "Contact" },
   { id: 3, href: "/about", link: "About" },
+  { id: 4, href: "/favourites", link: "Favourites" },
+  { id: 5, href: "/orders", link: "Orders" },
 ];
 
 const services = [
@@ -72,5 +78,5 @@ export {
   desktopNavbar,
   publicMobileNavbar,
   privateMobileNavbar,
-  services
+  services,
 };

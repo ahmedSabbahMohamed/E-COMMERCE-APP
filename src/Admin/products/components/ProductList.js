@@ -30,9 +30,12 @@ function ProductList() {
   } = useQuery({
     queryKey: ["products", currentPage, debouncedSearch],
     queryFn: () =>
-      API.get(
-        `/admin/products?page=${currentPage}&filter[${filterKey}]=${search}`
-      ),
+      API.get(`/admin/products`, {
+        params: {
+          page: currentPage,
+          ...(search ? { [`filter[${filterKey}]`]: search } : {}),
+        },
+      }),
     enabled: !!currentPage,
   });
 

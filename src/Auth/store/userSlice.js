@@ -18,6 +18,7 @@ export const userSlice = createSlice({
       state.isLogin = false;
       state.user = {};
       localStorage.removeItem("token");
+      window.location.pathname = "/"
     },
   },
 });

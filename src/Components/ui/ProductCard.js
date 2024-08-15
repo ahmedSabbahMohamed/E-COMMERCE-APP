@@ -4,12 +4,24 @@ import { FaRegHeart } from "react-icons/fa6";
 import { IoEyeOutline } from "react-icons/io5";
 import "../../Assets/styles/ProductCard.css";
 import CustomRating from "./CustomRating";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function ProductCard({ details, edit = false }) {
+
+  const {isLoging } = useSelector((state) => state.userSlice);
+
+  const handleAddToFavourite = () => {
+    if (isLoging) {
+      toast.success("added to favourites");
+    } else {
+      toast.error("Please login to add to favourites");
+    }
+  }
+
   return (
     <div className="d-flex flex-column gap-3" style={{ width: "16rem" }}>
-      <Link
-        to={`/product/${details?.id}`}
+      <div
         className="card-img rounded overflow-hidden position-relative shadow-lg"
         style={{ height: "15rem" }}
       >
@@ -21,7 +33,8 @@ function ProductCard({ details, edit = false }) {
         />
         <div className="position-absolute top-0 end-0 w-100 h-100 d-none flex-column justify-content-start align-items-end p-2 gap-2 card-icons">
           <button
-            className="btn btn-outline-danger shadow rounded-pill d-flex align-items-center justify-content-center p-0 pt-1"
+          onClick={handleAddToFavourite}
+            className="btn btn-outline-danger shadow rounded-pill d-flex align-items-center justify-content-center p-0 m-0"
             style={{ width: "30px", height: "30px" }}
           >
             <FaRegHeart size={"15px"} />
@@ -34,7 +47,7 @@ function ProductCard({ details, edit = false }) {
             <IoEyeOutline color="" />
           </Link>
         </div>
-      </Link>
+      </div>
 
       <div className="px-2 d-flex flex-row align-items-center justify-content-between">
         <div>
@@ -45,10 +58,10 @@ function ProductCard({ details, edit = false }) {
             {truncateText(details?.name, 15)}
           </Link>
           <h6 className="text-muted fw-bold small fst-italic mb-0 mt-1">
-            $ {truncateText(details?.price.toString(), 5)}
+            $ {truncateText(details?.price?.toString(), 5)}
           </h6>
         </div>
-        <CustomRating value={details?.Rating} />
+        <CustomRating value={details?.Rating} edit={edit} />
       </div>
     </div>
   );

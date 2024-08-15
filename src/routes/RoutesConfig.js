@@ -8,6 +8,11 @@ import ProductPage from "../Pages/ProductPage";
 import About from "../Pages/About";
 import Contact from "../Pages/Contact";
 import Payment from "../Pages/Payment";
+import {default as Favourites} from "../Pages/Favourites/Page";
+import {default as Orders} from "../Pages/Orders/Page";
+import ProtoctedRoute from "./ProtoctedRoute";
+import {default as Cart} from "../Pages/Cart/Page";
+import ProtectedRoute from "./ProtoctedRoute";
 
 const RoutesConfig = () => {
   const { isLogin, user } = useSelector((state) => state.userSlice);
@@ -33,6 +38,16 @@ const RoutesConfig = () => {
       isPublic: false,
       userType: "admin",
       isAuth: true,
+    },
+    {
+      path: "/favourites",
+      element: <ProtoctedRoute component={Favourites} />,
+      isPublic: true,
+    },
+    {
+      path: "/orders",
+      element: <ProtoctedRoute component={Orders} />,
+      isPublic: true,
     },
     {
       path: "/product/:productId",
@@ -63,6 +78,11 @@ const RoutesConfig = () => {
       path: "/signup",
       element: <Signup />,
       isAuth: false,
+    },
+    {
+      path: "/cart",
+      element: <ProtectedRoute component={Cart} />,
+      isPublic: true,
     },
     {
       path: "*",

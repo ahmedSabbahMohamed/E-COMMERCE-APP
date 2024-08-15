@@ -9,6 +9,7 @@ const CustomDataTable = ({
   columns,
   data,
   pagination = false,
+  isPagination = true,
   highlightOnHover = true,
   selectableRows = false,
   onRowSelected = () => {},
@@ -61,13 +62,15 @@ const CustomDataTable = ({
         }
         responsive
       />
-      <div className="mt-5 mb-2 d-flex justify-content-end">
-        <Pagination
-          pageCount={pageCount}
-          onPageChange={onPageChange}
-          currentPage={currentPage}
-        />
-      </div>
+      {isPagination && (
+        <div className="mt-5 mb-2 d-flex justify-content-end">
+          <Pagination
+            pageCount={pageCount}
+            onPageChange={onPageChange}
+            currentPage={currentPage}
+          />
+        </div>
+      )}
     </>
   );
 };

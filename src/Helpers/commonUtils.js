@@ -59,7 +59,7 @@ const showDeleteConfirm = ({ onOK, title = undefined }) => {
 
 const truncateText = (description, length = 70) => {
   const maxLength = length;
-  return description && description.length > maxLength
+  return description && description?.length > maxLength
     ? description.slice(0, maxLength) + "..."
     : description;
 };

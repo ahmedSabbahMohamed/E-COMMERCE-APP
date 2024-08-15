@@ -1,7 +1,33 @@
 import Button from "react-bootstrap/Button";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { API } from "../../Api";
+import { convertToFormData } from "../../Helpers";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function ProductDetails({ product }) {
-  const { name, description, price } = product;
+  const { id, name, description, price } = product;
+  const { isLogin } = useSelector((state) => state.userSlice);
+  const navigate = useNavigate();
+
+  const formData = convertToFormData({ product_id: id, quantity: 1 });
+
+  const { isLoading, mutate } = useMutation({
+    mutationKey: ["add-product"],
+    mutationFn: () => API.post(`/user/cart`, formData),
+    onSuccess: () => toast.success("added product successfully to cart"),
+    onError: (error) => toast.error(error?.toString()),
+  });
+
+  const handleAddToCart = () => {
+    if (isLogin) {
+      return mutate();
+    } else {
+      toast.warning("Please login to add product to cart");
+      navigate("/login")
+    }
+  };
 
   return (
     <div className="text-center text-md-start">
@@ -12,7 +38,7 @@ function ProductDetails({ product }) {
       </h5>
 
       <div className="d-flex align-items-center justify-content-center justify-content-md-start flex-column flex-sm-row gap-3">
-        <Button variant="outline-primary" size="lg">
+        <Button disabled={isLoading} onClick={handleAddToCart} variant="outline-primary" size="lg">
           Add to Cart
         </Button>
       </div>
