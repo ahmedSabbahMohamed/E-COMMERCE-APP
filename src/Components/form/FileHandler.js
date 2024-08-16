@@ -47,7 +47,6 @@ const FileHandler = ({
     });
 
   const handlePreview = async (file) => {
-    console.log(file);
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }

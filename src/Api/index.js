@@ -43,7 +43,6 @@ const handleUploadProgress = (e) => {
       autoClose: 5000,
     });
   }
-  console.log(progress);
 };
 
 const containsFiles = (formData) => {

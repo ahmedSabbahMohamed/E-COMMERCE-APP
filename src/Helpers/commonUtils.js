@@ -52,7 +52,6 @@ const showDeleteConfirm = ({ onOK, title = undefined }) => {
       return onOK;
     },
     onCancel() {
-      console.log("Cancel");
     },
   });
 };

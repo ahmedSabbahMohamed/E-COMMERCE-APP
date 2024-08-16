@@ -113,7 +113,6 @@ function AddCategoryForm({
         setIsSubmit(false);
       });
   };
-  console.log(id, edit);
   return (
     <Switch>
       <Case condition={isLoading}>

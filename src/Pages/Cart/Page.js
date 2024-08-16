@@ -1,58 +1,63 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Container } from "react-bootstrap";
 import { API } from "../../Api";
-import Product from "./Product";
 import CustomDataTable from "../../Components/ui/CustomDataTable";
 import { cartCols } from "./columns";
 import { customStyles } from "./customStyles";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function Page() {
-    const queryClient = useQueryClient();
+  const [quantity, setQuantity] = useState(1);
+  const [productId, setProductId] = useState(undefined);
+  const [debouncedQuantity, setDebouncedQuantity] = useState(quantity);
+
+  const queryClient = useQueryClient();
   const { data } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["cart"],
     queryFn: () => API.get("/user/cart"),
   });
 
-  // const { isLoading, mutate } = useMutation({
-  //   mutationFn: (id) => API.delete(`/user/cart/${id}`,),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("produclskd");
-  //   },
-  // });
+  const { mutate: updateQuantity } = useMutation({
+    mutationFn: (data) => API.post("/user/edit-cart", data),
+  });
 
-  // const handleDeleteProduct = (id) => {
-  //   mutate(id);
-  // }
+  const { mutate: deleteProduct } = useMutation({
+    mutationFn: async (productId) => {
+      await API.delete(`/user/cart/${productId}`);
+    },
+    onSuccess: () => {
+      toast.success("Product deleted from cart successfully");
+      queryClient.invalidateQueries(["cart"]);
+    },
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to delete product from cart. Please try again."
+      );
+    },
+  });
+
+  useEffect(() => {
+    if (productId !== undefined) {
+      const handler = setTimeout(() => {
+        setDebouncedQuantity(quantity);
+        updateQuantity({ product_id: productId, quantity: quantity });
+      }, 1000);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    }
+  }, [quantity]);
 
   return (
     <Container>
-      {/* {data?.data?.cart.map((product) => (
-        <div key={product?.id}>
-          <h3>{product?.products?.name}</h3>
-          <Product data={product?.products} />
-          <h6 className="fw-bold">
-            $ {product?.products?.price}
-          </h6>
-          <div className="d-flex gap-1 align-items-center">
-            <button className="btn">-</button>
-            <span className="fw-bold">{product?.quantity}</span>
-            <button className="btn">+</button>
-          </div>
-          <h5>total: {product?.quantity * product?.product_id?.price}</h5>
-          <button
-            onClick={() => handleDeleteProduct(product?.product_id)}
-            className="btn btn-danger"
-            disabled={isLoading}
-          >
-            delete
-          </button>
-        </div>
-      ))} */}
       <CustomDataTable
         title={"Cart"}
         subHeader={false}
         isPagination={false}
-        columns={cartCols}
+        columns={cartCols(setQuantity, setProductId, deleteProduct)}
         data={data?.data?.cart}
         customStyles={customStyles}
       />

@@ -17,7 +17,6 @@ function SignupForm() {
 
   const handleSubmit = (values) => {
     setisSubmitting(true);
-    console.log(values);
     API.post("/user/register", values)
       .then(() => {
         toast.success("signup successfully").then(() => {

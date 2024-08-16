@@ -10,8 +10,6 @@ function CategoryProducts() {
     queryFn: () => API.get(`/admin/category/${categoryProducts}`),
   });
 
-  console.log(data?.data?.data);
-
   return <div className="container min-vh-100">{categoryProducts}</div>;
 }
 

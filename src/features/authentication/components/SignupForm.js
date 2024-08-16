@@ -37,7 +37,6 @@ function SignupForm() {
 
   const handleSubmit = (values) => {
     setisSubmitting(true);
-    console.log(values);
     API.post("/user/register", values)
       .then(() => {
         swal("signup successfully").then(() => {
