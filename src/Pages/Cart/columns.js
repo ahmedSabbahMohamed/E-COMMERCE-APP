@@ -4,7 +4,8 @@ import Product from "./Product";
 export const cartCols = (
   handleQuantityChange,
   setProductId,
-  deleteProductFromCart
+  deleteProductFromCart,
+  isDeleting
 ) => [
   {
     name: <h5 className="text-dark fw-bold">Product</h5>,
@@ -32,6 +33,7 @@ export const cartCols = (
       );
     },
     center: true,
+    maxWidth: "150px"
   },
   {
     name: <h5 className="text-dark fw-bold">Actions</h5>,
@@ -39,6 +41,8 @@ export const cartCols = (
       <Button
         onClick={() => deleteProductFromCart(row?.product_id)}
         variant="outline-danger"
+        size="sm"
+        disabled={isDeleting}
       >
         Delete
       </Button>

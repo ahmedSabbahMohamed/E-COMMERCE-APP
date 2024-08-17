@@ -104,8 +104,8 @@ function Header() {
 
       {homePage && (
         <div
-          className="position-absolute translate-middle"
-          style={{ left: "50%", bottom: "50px" }}
+          className="position-absolute translate-middle bg-danger"
+          style={{ left: "50%", bottom: "-40px" }}
         >
           <Arrow />
         </div>

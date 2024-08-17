@@ -19,15 +19,19 @@ export const customStyles = {
       textAlign: "center",
     },
   },
-  cells: {
-    style: {
-      border: "none",
-    },
-  },
   rows: {
     style: {
-      border: "none",
-      padding: "1rem 0"
+      minHeight: "48px",
+      "&:not(:last-of-type)": {
+        borderBottomStyle: "none",
+        borderBottomWidth: "0",
+        borderBottomColor: "white",
+        paddingTop: ".5rem",
+        paddingBottom: ".5rem",
+      },
+    },
+    denseStyle: {
+      minHeight: "32px",
     },
   },
 };

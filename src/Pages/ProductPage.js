@@ -14,15 +14,12 @@ import CustomRating from "../Components/ui/CustomRating";
 
 function ProductPage() {
   const [images, setImages] = useState([]);
-  const [cart, setCart] = useState(() => {
-    const myCart = sessionStorage.getItem("cart");
-    return myCart ? JSON.parse(myCart) : [];
-  });
   const { productId } = useParams();
 
   const { data: { data: { data: product } = {} } = {} } = useQuery({
     queryKey: ["product"],
     queryFn: () => API.get(`/admin/product/${productId}`),
+    enabled: !!productId,
   });
 
   const comments = [

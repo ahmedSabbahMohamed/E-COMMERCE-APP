@@ -1,6 +1,5 @@
 import React from "react";
 import "../assets/styles/Arrow.css";
-import { Button } from "react-bootstrap";
 
 const Arrow = () => {
   const handleClick = () => {
@@ -11,15 +10,10 @@ const Arrow = () => {
   };
 
   return (
-    <Button
-    variant=""
-      onClick={handleClick}
-      className="d-block arrow-container"
-    >
-      <div onClick={handleClick} className="chevron"></div>
-      <div onClick={handleClick} className="chevron"></div>
-      <div onClick={handleClick} className="chevron"></div>
-    </Button>
+    <div onClick={handleClick} className="arrow-down">
+      <div className="arrow-part left"></div>
+      <div className="arrow-part right"></div>
+    </div>
   );
 };
 

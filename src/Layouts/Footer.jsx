@@ -16,8 +16,8 @@ function Footer() {
   ];
   return (
     <footer className="pt-5">
-      <FooterWaves />
-      <div className="footer-content">
+      {/* <FooterWaves /> */}
+      <div className="footer-content pt-5">
         <Container>
           <div className="text-center text-md-start mb-5">
             <Logo />
