@@ -22,6 +22,8 @@ export const customStyles = {
   rows: {
     style: {
       minHeight: "48px",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
       "&:not(:last-of-type)": {
         borderBottomStyle: "none",
         borderBottomWidth: "0",

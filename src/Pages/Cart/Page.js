@@ -22,6 +22,7 @@ function Page() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["cart"],
     queryFn: () => API.get("/user/cart"),
+    refetchOnMount: true,
   });
 
   const { mutate: updateQuantity } = useMutation({

@@ -22,6 +22,7 @@ export const cartCols = (
     name: <h5 className="text-dark fw-bold">Quantity</h5>,
     cell: (row) => {
       setProductId(row?.product_id);
+      console.log(row?.quantity);
       return (
         <input
           onChange={(e) => handleQuantityChange(e.target.value)}
@@ -39,7 +40,7 @@ export const cartCols = (
     name: <h5 className="text-dark fw-bold">Actions</h5>,
     cell: (row) => (
       <Button
-        onClick={() => deleteProductFromCart(row?.product_id)}
+        onClick={() => deleteProductFromCart(row?.id)}
         variant="outline-danger"
         size="sm"
         disabled={isDeleting}

@@ -6,12 +6,25 @@ import "../../Assets/styles/ProductCard.css";
 import CustomRating from "./CustomRating";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import {API} from "../../Api";
 
 function ProductCard({ details, edit = false }) {
 
   const {isLoging } = useSelector((state) => state.userSlice);
 
-  const handleAddToFavourite = () => {
+  const {isPending, isError, mutate} = useMutation({
+    mutationFn: (id) => API.post("/user/favourite", {product_id: id}),
+    onSuccess: () => {
+      toast.success("Product added to favourite");
+    },
+    onError: (err) => {
+      toast.error(err?.response?.data?.message || "Faild add to favourite")
+    }
+  })
+
+  const handleAddToFavourite = (e) => {
+    e.preventDefault();
     if (isLoging) {
       toast.success("added to favourites");
     } else {
@@ -21,7 +34,7 @@ function ProductCard({ details, edit = false }) {
 
   return (
     <div className="d-flex flex-column gap-3" style={{ width: "16rem" }}>
-      <div
+      <Link to={`product/${details?.id}`}
         className="card-img rounded overflow-hidden position-relative shadow-lg"
         style={{ height: "15rem" }}
       >
@@ -31,7 +44,7 @@ function ProductCard({ details, edit = false }) {
           src={getSrc(details?.picture)}
           alt={details?.id}
         />
-        <div className="position-absolute top-0 end-0 w-100 h-100 d-none flex-column justify-content-start align-items-end p-2 gap-2 card-icons">
+        <div className="position-absolute z-3 top-0 end-0 w-100 h-100 d-none flex-column justify-content-start align-items-end p-2 gap-2 card-icons">
           <button
           onClick={handleAddToFavourite}
             className="btn btn-outline-danger shadow rounded-pill d-flex align-items-center justify-content-center p-0 m-0"
@@ -47,7 +60,7 @@ function ProductCard({ details, edit = false }) {
             <IoEyeOutline color="" />
           </Link>
         </div>
-      </div>
+      </Link>
 
       <div className="px-2 d-flex flex-row align-items-center justify-content-between">
         <div>

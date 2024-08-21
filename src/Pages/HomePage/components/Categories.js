@@ -67,7 +67,7 @@ function Categories() {
         <Case condition={isError}>
           <Loading queryString={"categories"} />
         </Case>
-        <Case condition={data?.pages}>
+        <Case condition={allCategories?.length > 0}>
           <Container className="d-flex flex-column gap-2 align-items-center justify-content-between mb-5">
             <Row className="mb-5 pt-5 gap-3 align-items-center justify-content-center">
               {allCategories?.map((category, index) => (
@@ -105,7 +105,7 @@ function Categories() {
           <CustomCarousel imgs={allCategories[categoryIndex]?.images} />
           <Products category={allCategories[categoryIndex]?.id} />
         </Case>
-        <Case condition={allCategories?.length === 0}>
+        <Case condition={allCategories?.length < 1}>
           <NoData />
         </Case>
       </Switch>

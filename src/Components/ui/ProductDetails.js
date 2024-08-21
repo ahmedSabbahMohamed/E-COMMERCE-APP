@@ -20,7 +20,7 @@ function ProductDetails({ product }) {
     mutationKey: ["add-product"],
     mutationFn: () => API.post(`/user/cart`, formData),
     onSuccess: () => {
-      queryClient.invalidateQueries(["cart"]);
+      // queryClient.invalidateQueries(["cart"]);
       dispatch(addProduct())
       toast.success("added product successfully to cart");
     },
