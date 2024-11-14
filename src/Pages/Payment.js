@@ -1,13 +1,8 @@
-import React from 'react'
-import { Container } from 'react-bootstrap'
-import CreditCardForm from '../Checkout/components/CreditCard'
+import React from "react";
+import CreditCardForm from "../Checkout/components/CreditCard";
 
 function Payment() {
-  return (
-    <Container>
-        <CreditCardForm />
-    </Container>
-  )
+  return <CreditCardForm />;
 }
 
-export default Payment
+export default Payment;

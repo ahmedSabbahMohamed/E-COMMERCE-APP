@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Rating from "react-rating-stars-component";
-function CustomRating({ edit = false, value = 0 }) {
+
+function CustomRating({ edit = false, value = 0, onRatingChange }) {
   const [ratingValue, setRatingValue] = useState(value);
 
   const handleRatingChange = (newRating) => {
     setRatingValue(newRating);
+    if (onRatingChange) {
+      onRatingChange(newRating); // Send the new rating to the parent
+    }
   };
 
   return (

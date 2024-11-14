@@ -10,7 +10,7 @@ import { Spin } from "antd";
 import Header from "../../Layouts/Header";
 import Footer from "../../Layouts/Footer";
 import { useDispatch } from "react-redux";
-import { removeProduct } from "./store/cartSlice";
+import { cartProductsCount } from "./store/cartSlice";
 
 function Page() {
   const [quantity, setQuantity] = useState(1);
@@ -19,8 +19,8 @@ function Page() {
   const dispatch = useDispatch();
 
   const queryClient = useQueryClient();
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["cart"],
+  const { data, isLoading, isError, isSuccess } = useQuery({
+    queryKey: ["user-cart"],
     queryFn: () => API.get("/user/cart"),
     refetchOnMount: true,
   });
@@ -35,7 +35,6 @@ function Page() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["cart"]);
-      dispatch(removeProduct())
       toast.success("Product deleted from cart successfully");
     },
     onError: (error) => {
@@ -58,6 +57,12 @@ function Page() {
       };
     }
   }, [quantity]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(cartProductsCount(data?.data?.count));
+    }
+  }, [isSuccess, data]);
 
   return (
     <>

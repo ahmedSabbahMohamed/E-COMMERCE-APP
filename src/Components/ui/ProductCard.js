@@ -7,34 +7,34 @@ import CustomRating from "./CustomRating";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
-import {API} from "../../Api";
+import { API } from "../../Api";
 
 function ProductCard({ details, edit = false }) {
+  const { isLogin } = useSelector((state) => state.userSlice);
 
-  const {isLoging } = useSelector((state) => state.userSlice);
-
-  const {isPending, isError, mutate} = useMutation({
-    mutationFn: (id) => API.post("/user/favourite", {product_id: id}),
+  const { isPending, isError, mutate } = useMutation({
+    mutationFn: (id) => API.post("/user/favourite", { product_id: id }),
     onSuccess: () => {
       toast.success("Product added to favourite");
     },
     onError: (err) => {
-      toast.error(err?.response?.data?.message || "Faild add to favourite")
-    }
-  })
+      toast.error(err?.response?.data?.message || "Failed to add to favourite");
+    },
+  });
 
-  const handleAddToFavourite = (e) => {
+  const handleAddToFavourite = (e, id) => {
     e.preventDefault();
-    if (isLoging) {
-      toast.success("added to favourites");
+    if (isLogin) {
+      mutate(id);
     } else {
       toast.error("Please login to add to favourites");
     }
-  }
+  };
 
   return (
     <div className="d-flex flex-column gap-3" style={{ width: "16rem" }}>
-      <Link to={`product/${details?.id}`}
+      <Link
+        to={`product/${details?.id}`}
         className="card-img rounded overflow-hidden position-relative shadow-lg"
         style={{ height: "15rem" }}
       >
@@ -46,7 +46,7 @@ function ProductCard({ details, edit = false }) {
         />
         <div className="position-absolute z-3 top-0 end-0 w-100 h-100 d-none flex-column justify-content-start align-items-end p-2 gap-2 card-icons">
           <button
-          onClick={handleAddToFavourite}
+            onClick={(e) => handleAddToFavourite(e, details?.id)}
             className="btn btn-outline-danger shadow rounded-pill d-flex align-items-center justify-content-center p-0 m-0"
             style={{ width: "30px", height: "30px" }}
           >
@@ -79,4 +79,5 @@ function ProductCard({ details, edit = false }) {
     </div>
   );
 }
+
 export default ProductCard;

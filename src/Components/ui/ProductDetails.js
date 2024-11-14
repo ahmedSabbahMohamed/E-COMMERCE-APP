@@ -3,16 +3,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API } from "../../Api";
 import { convertToFormData } from "../../Helpers";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addProduct } from "../../Pages/Cart/store/cartSlice";
 
 function ProductDetails({ product }) {
   const { id, name, description, price } = product;
   const { isLogin } = useSelector((state) => state.userSlice);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
 
   const formData = convertToFormData({ product_id: id, quantity: 1 });
 
@@ -20,8 +18,7 @@ function ProductDetails({ product }) {
     mutationKey: ["add-product"],
     mutationFn: () => API.post(`/user/cart`, formData),
     onSuccess: () => {
-      // queryClient.invalidateQueries(["cart"]);
-      dispatch(addProduct())
+      queryClient.invalidateQueries("user-cart");
       toast.success("added product successfully to cart");
     },
     onError: (error) => toast.error(error?.toString()),

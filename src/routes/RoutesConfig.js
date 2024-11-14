@@ -4,7 +4,7 @@ import Signup from "../Pages/Signup";
 import Login from "../Pages/Login";
 import NotFoundPage from "../Pages/NotFoundPage";
 import { useSelector } from "react-redux";
-import ProductPage from "../Pages/ProductPage";
+import {default as ProductPage} from "../Pages/ProductPage/Page";
 import About from "../Pages/About";
 import Contact from "../Pages/Contact";
 import Payment from "../Pages/Payment";

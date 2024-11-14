@@ -16,7 +16,7 @@ function Admin() {
 
   const { Content, Sider, Header } = Layout;
 
-  const items = adminLinks.map((link) => ({
+  const menuItems = adminLinks.map((link) => ({
     key: String(link.id),
     icon: link.icon,
     label: (
@@ -38,8 +38,8 @@ function Admin() {
   };
 
   const getDefaultSelectedKey = () => {
-    const link = adminLinks.find((link) => link.path === location.pathname);
-    return link ? String(link.id) : "1";
+    const activeLink = adminLinks.find((link) => link.path === location.pathname);
+    return activeLink ? String(activeLink.id) : "1";
   };
 
   return (
@@ -58,7 +58,7 @@ function Admin() {
         <Menu
           mode="inline"
           defaultSelectedKeys={[getDefaultSelectedKey()]}
-          items={items}
+          items={menuItems}
         />
       </Sider>
 
@@ -74,14 +74,14 @@ function Admin() {
                   <img
                     className="w-100 h-100"
                     src={user.picture}
-                    alt={user.picture}
+                    alt="User avatar"
                   />
                 ) : (
                   <RxAvatar size={"26"} />
                 )
               }
             />
-            {user ? user?.name : "unknown"}
+            {user ? user.name : "unknown"}
           </div>
           <div className="d-flex gap-2 align-items-center justify-content-center">
             <Logout />

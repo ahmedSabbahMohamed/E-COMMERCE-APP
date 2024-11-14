@@ -6,6 +6,7 @@ import { encryptTransform } from "redux-persist-transform-encrypt";
 import { handleLogout } from "../Auth/store";
 
 const baseReducers = combineReducers(reducers);
+
 const encryptionKey = "Auti_Society_M17";
 const transforms = [
   encryptTransform({
@@ -13,6 +14,7 @@ const transforms = [
     onError: function (error) {},
   }),
 ];
+
 const persistedReducer = persistReducer(
   {
     key: "root",
